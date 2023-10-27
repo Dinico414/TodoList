@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "io.dinico.todolist"
+    namespace = "todolist.xenon"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "io.dinico.todolist"
+        applicationId = "todolist.xenon"
         minSdk = 33
         targetSdk = 33
         versionCode = 1

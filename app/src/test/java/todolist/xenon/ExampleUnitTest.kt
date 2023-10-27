@@ -1,4 +1,4 @@
-package io.dinico.todolist
+package todolist.xenon
 
 import org.junit.Test
 
