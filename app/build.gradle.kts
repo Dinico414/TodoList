@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "todolist.xenon"
+    namespace = "com.todolist.xenon"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "todolist.xenon"
-        minSdk = 33
+        applicationId = "com.todolist.xenon"
+        minSdk = 34
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -34,12 +34,18 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
     implementation(libs.core.ktx)
 //    implementation 'com.github.Dinico414:Xenon-Commons:ae8713396b'
+    implementation(libs.constraintlayout)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
