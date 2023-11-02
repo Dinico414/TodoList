@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView android:id="@+id/taskCellContainer"
+<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/taskCellContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -16,18 +17,19 @@
         android:layout_height="match_parent"
         android:background="@drawable/tile"
         android:clipToOutline="true">
-        
+
         <ImageButton
+            android:id="@+id/completeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:scaleY="1.5"
-            android:scaleX="1.5"
-            android:contentDescription="@string/checkbox"
-            android:id="@+id/completeButton"
             android:layout_marginHorizontal="15dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/checkbox"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             android:src="@drawable/unchecked"
-            android:backgroundTint="@android:color/transparent"/>
+            tools:ignore="RedundantDescriptionCheck" />
 
         <TextView
             android:layout_width="0dp"

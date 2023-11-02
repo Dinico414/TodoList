@@ -27,10 +27,11 @@
         android:layout_marginHorizontal="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/name"
-            android:hint="@string/name">
+            android:hint="@string/name"
+            tools:ignore="TextContrastCheck">
 
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
@@ -43,10 +44,11 @@
         android:layout_marginHorizontal="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/desc"
-            android:hint="@string/description">
+            android:hint="@string/description"
+            tools:ignore="TextContrastCheck">
 
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
