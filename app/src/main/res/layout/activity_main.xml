@@ -7,18 +7,30 @@
     tools:context=".MainActivity">
 
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:backgroundTint="@android:color/transparent"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoListRecycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/materialToolbar"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="10dp"
         android:background="@drawable/tile_background"
         android:clipToOutline="true"
         android:fadeScrollbars="true"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@drawable/tile"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"/>
+
+<!--        adding dynamic bottom margin with navbar height-->
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/NewTaskButton"
