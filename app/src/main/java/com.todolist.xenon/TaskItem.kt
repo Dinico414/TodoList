@@ -21,3 +21,5 @@ class TaskItem(
     private fun purple(context: Context) = ContextCompat.getColor(context, R.color.purple_500)
     private fun black(context: Context) = ContextCompat.getColor(context, R.color.black)
 }
+
+// TODO: change colors 
