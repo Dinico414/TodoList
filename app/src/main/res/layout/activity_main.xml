@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="15dp"
-        android:background="@drawable/tile_background"
-        android:backgroundTint="@android:color/transparent"
+        android:background="@drawable/tile_cutout"
         android:clipToOutline="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -29,7 +28,6 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
                 android:fitsSystemWindows="true"
                 app:collapsedTitleGravity="left"
                 app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
