@@ -1,49 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/CoordinatorLayoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tile_background"
+    android:backgroundTint="@android:color/transparent"
+    android:clipToOutline="true"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginBottom="15dp">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:backgroundTint="@android:color/transparent"/>
+        android:layout_height="280dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/Theme.Design"
+        tools:ignore="MissingConstraints">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todoListRecycleView"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@android:color/transparent"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:title="@string/app_name"
+            android:id="@+id/collapsing_toolbar"
+            app:layout_constraintVertical_weight="100"
+            android:background="@null"
+            app:collapsedTitleTextAppearance="@style/ActionBar.MyTitleStyle"
+            app:collapsedTitleGravity="left"
+            app:expandedTitleGravity="center|top"
+            app:titleEnabled="true"
+            app:expandedTitleTextColor="@android:color/transparent"
+            app:titleCollapseMode="fade">
+
+            <TextView
+                android:id="@+id/dialpad_title"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="40dp"
+                android:paddingBottom="60dp"
+                android:text="@string/app_name"
+                android:textAlignment="center"
+                android:textColor="?android:attr/textColorPrimaryNoDisable"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                app:layout_collapseMode="pin" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"/>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/materialToolbar"
-        android:layout_marginHorizontal="15dp"
         android:background="@drawable/tile_background"
         android:clipToOutline="true"
-        android:fadeScrollbars="true"
-        android:scrollbarSize="5dp"
-        android:scrollbarThumbVertical="@drawable/tile"
-        android:scrollbars="vertical"/>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:ignore="ScrollViewCount">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/todoListRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="true"
+                android:scrollbarSize="5dp"
+                android:scrollbarThumbVertical="@drawable/tile"
+                android:scrollbars="vertical"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/NewTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="12dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:padding="5dp"
+                app:icon="@drawable/add"
+                app:iconTint="?attr/colorOnPrimary"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 <!--        adding dynamic bottom margin with navbar height-->
 
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/NewTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/todoListRecycleView"
-        android:layout_alignBottom="@+id/todoListRecycleView"
-        android:layout_margin="12dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:padding="5dp"
-        app:icon="@drawable/add"
-        app:iconTint="?attr/colorOnPrimary"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

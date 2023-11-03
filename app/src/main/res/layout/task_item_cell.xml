@@ -26,8 +26,8 @@
             android:layout_marginHorizontal="15dp"
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/checkbox"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:src="@drawable/unchecked"
             tools:ignore="RedundantDescriptionCheck" />
 
