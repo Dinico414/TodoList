@@ -39,7 +39,7 @@ class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
             binding.taskTitle.text = "New Task"
         }
 
-        taskViewModel = ViewModelProvider(activity).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(activity)[TaskViewModel::class.java]
         binding.saveButton.setOnClickListener {
             saveAction()
         }
@@ -62,7 +62,7 @@ class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
         binding.timePickerButton.text = String.format("%02d:%02d", dueTime!!.hour, dueTime!!.minute)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentNewTaskSheetBinding.inflate(inflater,container,false)
         return binding.root
     }

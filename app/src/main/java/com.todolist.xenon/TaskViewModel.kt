@@ -30,12 +30,19 @@ class TaskViewModel: ViewModel()
         task.dueTime = dueTime
         taskItems.postValue(list)
     }
-    fun setCompleted(taskItem: TaskItem)
+
+    fun setCompleted(taskItem: TaskItem, enabled: Boolean)
     {
         val list = taskItems.value
         val task = list!!.find { it.id == taskItem.id }!!
-        if (task.completedDate == null)
+        if (task.completedDate == null && enabled)
             task.completedDate = LocalDate.now()
+        else if (!enabled)
+            task.completedDate = null
         taskItems.postValue(list)
+    }
+
+    fun toggleCompleted(taskItem: TaskItem) {
+        setCompleted(taskItem, !taskItem.isCompleted())
     }
 }
