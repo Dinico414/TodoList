@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:fitsSystemWindows="true"
-            android:theme="@style/Theme.Design"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             tools:ignore="MissingConstraints">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -32,35 +32,21 @@
                 android:background="@null"
                 android:fitsSystemWindows="true"
                 app:collapsedTitleGravity="left"
-                app:collapsedTitleTextAppearance="@style/ActionBar.MyTitleStyle"
-                app:contentScrim="@android:color/transparent"
-                app:expandedTitleGravity="center|top"
-                app:expandedTitleTextColor="@android:color/transparent"
+                app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
+                app:expandedTitleTextAppearance="@style/ActionBar.XenonExpanedTitleStyle"
+                app:expandedTitleGravity="center|center"
                 app:layout_constraintVertical_weight="100"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
                 app:title="@string/app_name"
-                app:titleCollapseMode="fade"
+                app:titleCollapseMode="scale"
                 app:titleEnabled="true">
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="60dp"
-                    android:text="@string/app_name"
-                    android:textAlignment="center"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:layout_collapseMode="pin" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:buttonGravity="bottom"
                     app:layout_collapseMode="pin" />
 
 
