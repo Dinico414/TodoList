@@ -3,9 +3,9 @@
     android:id="@+id/taskCellContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginVertical="5dp"
     android:backgroundTint="@android:color/transparent"
     android:outlineSpotShadowColor="@android:color/transparent"
     android:outlineAmbientShadowColor="@android:color/transparent"
@@ -34,6 +34,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
             android:id="@+id/name"
             android:text="@string/place_holder"
             style="@style/TextAppearance.AppCompat.Title"
@@ -43,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
+            android:layout_marginHorizontal="20dp"
             android:id="@+id/dueTime"
             android:text="@string/place_holder"
             style="@style/TextAppearance.AppCompat.Title"
