@@ -1,4 +1,4 @@
-package com.todolist.xenon
+package com.xenon.todolist
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import java.util.UUID
 
 class TaskViewModel: ViewModel()
 {
-    var taskItems = MutableLiveData<MutableList<TaskItem>>()
+    var taskItems = MutableLiveData<MutableList<TaskItem>?>()
 
     init {
         taskItems.value = mutableListOf()

@@ -1,9 +1,9 @@
-package com.todolist.xenon
+package com.xenon.todolist
 
 import android.content.Context
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
-import com.todolist.xenon.databinding.TaskItemCellBinding
+import com.xenon.todolist.databinding.TaskItemCellBinding
 import java.time.format.DateTimeFormatter
 
 class TaskItemViewHolder(

@@ -1,11 +1,10 @@
-package com.todolist.xenon
+package com.xenon.todolist
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.todolist.xenon.databinding.ActivityMainBinding
+import com.xenon.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener
 {
@@ -15,7 +14,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
         binding.NewTaskButton.setOnClickListener {
             NewTaskSheet(null).show(supportFragmentManager, "newTaskTag")
         }
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener
         {
             binding.todoListRecycleView.apply {
                 layoutManager = LinearLayoutManager(applicationContext)
-                adapter = TaskItemAdapter(it, mainActivity)
+                adapter = it?.let { it1 -> TaskItemAdapter(it1, mainActivity) }
             }
         }
     }
@@ -44,4 +43,3 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener
         taskViewModel.toggleCompleted(taskItem)
     }
 }
-

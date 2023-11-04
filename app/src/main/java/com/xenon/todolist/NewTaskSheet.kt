@@ -1,7 +1,6 @@
-package com.todolist.xenon
+package com.xenon.todolist
 
 import android.app.TimePickerDialog
-import android.location.GnssAntennaInfo.Listener
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -9,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.todolist.xenon.databinding.FragmentNewTaskSheetBinding
+import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.time.LocalTime
 
 class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
