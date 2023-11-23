@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Move view initialization here
         val todoListRecycleView: RecyclerView = findViewById(R.id.todoListRecycleView)
         val noTasksTextView: TextView = findViewById(R.id.noTasks)
 
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
         setRecyclerView()
 
-        // Rest of your code
     }
 
     private fun setRecyclerView() {
@@ -41,7 +39,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 adapter = taskItems?.let { TaskItemAdapter(it, mainActivity) }
             }
 
-            // Update visibility based on the item count
             if (taskItems?.isEmpty() == true) {
                 binding.noTasks.visibility = View.VISIBLE
             } else {
