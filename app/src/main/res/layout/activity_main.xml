@@ -64,6 +64,7 @@
             tools:ignore="ScrollViewCount">
 
             <TextView
+                android:id="@+id/noTasks"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="@string/no_tasks"
@@ -71,7 +72,8 @@
                 android:textStyle="italic"
                 android:textColor="?attr/colorOnSurface"
                 android:alpha="0.5"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:visibility="gone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/todoListRecycleView"
