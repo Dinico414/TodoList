@@ -23,7 +23,8 @@ class TaskItemViewHolder(
             binding.dueTime.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
         else {
-
+            binding.name.paintFlags = 0
+            binding.dueTime.paintFlags = 0
         }
 
         binding.completeButton.setImageResource(taskItem.imageResource())

@@ -15,7 +15,8 @@ class TaskItemAdapter(
         return TaskItemViewHolder(parent.context, binding, clickListener)
     }
     override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
+        taskItems[position].idx = position
         holder.bindTaskItem(taskItems[position])
     }
     override fun getItemCount(): Int =taskItems.size
-    }
+}

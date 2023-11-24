@@ -11,11 +11,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.time.LocalTime
 
-class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
+class NewTaskSheet(var mainActivity: MainActivity, var taskItem: TaskItem?) : BottomSheetDialogFragment()
 {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
-    private lateinit var taskViewModel: TaskViewModel
     private var dueTime: LocalTime? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,7 +37,6 @@ class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
             binding.taskTitle.text = "New Task"
         }
 
-        taskViewModel = ViewModelProvider(activity)[TaskViewModel::class.java]
         binding.saveButton.setOnClickListener {
             saveAction()
         }
@@ -73,11 +71,14 @@ class NewTaskSheet(var taskItem: TaskItem?) : BottomSheetDialogFragment()
         if(taskItem == null)
         {
             val newTask = TaskItem(name, desc, dueTime, null)
-            taskViewModel.addTaskItem(newTask)
+            mainActivity.addTaskItem(newTask)
         }
         else
         {
-            taskViewModel.updateTaskItem(taskItem!!.id, name, desc, dueTime)
+            taskItem!!.name = name
+            taskItem!!.desc = desc
+            if (dueTime != null) taskItem!!.dueTime = dueTime
+            mainActivity.updateTaskItem(taskItem!!)
         }
         binding.name.setText("")
         binding.desc.setText("")

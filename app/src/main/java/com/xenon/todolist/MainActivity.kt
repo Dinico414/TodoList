@@ -11,47 +11,55 @@ import com.xenon.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var taskViewModel: TaskViewModel
+    private var taskItems = ArrayList<TaskItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val todoListRecycleView: RecyclerView = findViewById(R.id.todoListRecycleView)
-        val noTasksTextView: TextView = findViewById(R.id.noTasks)
-
-        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
-
         binding.NewTaskButton.setOnClickListener {
-            NewTaskSheet(null).show(supportFragmentManager, "newTaskTag")
+            NewTaskSheet(this, null).show(supportFragmentManager, "newTaskTag")
         }
 
         setRecyclerView()
-
     }
 
     private fun setRecyclerView() {
         val mainActivity = this
-        taskViewModel.taskItems.observe(this) { taskItems ->
-            binding.todoListRecycleView.apply {
-                layoutManager = LinearLayoutManager(applicationContext)
-                adapter = taskItems?.let { TaskItemAdapter(it, mainActivity) }
-            }
-
-            if (taskItems?.isEmpty() == true) {
-                binding.noTasks.visibility = View.VISIBLE
-            } else {
-                binding.noTasks.visibility = View.GONE
-            }
+        binding.todoListRecycleView.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = TaskItemAdapter(taskItems, mainActivity)
         }
+
+        onTaskItemsMoved()
     }
 
     override fun editTaskItem(taskItem: TaskItem) {
-        NewTaskSheet(taskItem).show(supportFragmentManager, "newTaskTag")
+        NewTaskSheet(this, taskItem).show(supportFragmentManager, "newTaskTag")
     }
 
     override fun completeTaskItem(taskItem: TaskItem) {
-        taskViewModel.toggleCompleted(taskItem)
+        taskItem.toggleCompleted()
+        updateTaskItem(taskItem)
+    }
+
+    fun addTaskItem(taskItem: TaskItem) {
+        taskItems.add(taskItem)
+        binding.todoListRecycleView.adapter?.notifyItemInserted(taskItems.size - 1)
+        onTaskItemsMoved()
+    }
+
+    fun updateTaskItem(taskItem: TaskItem) {
+        val idx = if (taskItem.idx >= 0) taskItem.idx else taskItems.indexOf(taskItem)
+        binding.todoListRecycleView.adapter?.notifyItemChanged(idx)
+    }
+
+    private fun onTaskItemsMoved() {
+        if (taskItems.isEmpty()) {
+            binding.noTasks.visibility = View.VISIBLE
+        } else {
+            binding.noTasks.visibility = View.GONE
+        }
     }
 }
