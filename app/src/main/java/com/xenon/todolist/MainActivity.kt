@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.databinding.ActivityMainBinding
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
@@ -52,6 +55,21 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             adapter = TaskItemAdapter(taskItems, mainActivity)
         }
 
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val taskItem = taskItems[viewHolder.adapterPosition]
+                mainActivity.removeTaskItem(taskItem)
+            }
+        }).attachToRecyclerView(binding.todoListRecycleView)
+
         onTaskItemsChanged()
     }
 
@@ -68,6 +86,22 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         taskItems.add(taskItem)
         binding.todoListRecycleView.adapter?.notifyItemInserted(taskItems.size - 1)
         onTaskItemsChanged()
+    }
+
+    fun removeTaskItem(taskItem: TaskItem, showUndo: Boolean = true) {
+        taskItems.remove(taskItem)
+        binding.todoListRecycleView.adapter?.notifyItemRemoved(taskItem.idx)
+        onTaskItemsChanged()
+
+        if (showUndo) {
+            Snackbar.make(binding.NewTaskButton, "Task deleted", Snackbar.LENGTH_SHORT)
+                .setAction("Undo") {
+                    taskItems.add(taskItem.idx, taskItem)
+                    binding.todoListRecycleView.adapter?.notifyItemInserted(taskItem.idx)
+                    onTaskItemsChanged()
+                }
+                .show()
+        }
     }
 
     fun updateTaskItem(taskItem: TaskItem) {
