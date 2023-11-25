@@ -4,6 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple_500">#ff00ff</color>
     <color name="red_500">#ff00ff</color>
-    <color name="primary">?attr/colorPrimary</color>
     <color name="delete_red">#800000</color>
 </resources>

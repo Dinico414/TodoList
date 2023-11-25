@@ -23,8 +23,8 @@ data class TaskItem(
     }
 
     fun imageResource(): Int = if (isCompleted()) R.drawable.checked else R.drawable.unchecked
-    fun imageColor(context: Context): Int = if (isCompleted()) purple(context) else black(context)
+    fun imageColor(context: Context): Int = if (isCompleted()) checked(context) else unchecked(context)
 
-    private fun purple(context: Context) = ContextCompat.getColor(context, R.color.purple_500)
-    private fun black(context: Context) = ContextCompat.getColor(context, R.color.black)
+    private fun checked(context: Context) = ContextCompat.getColor(context, R.color.primary)
+    private fun unchecked(context: Context) = ContextCompat.getColor(context, R.color.color_on_surface_0_5)
 }
