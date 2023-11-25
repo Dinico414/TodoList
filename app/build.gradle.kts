@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 android {
@@ -43,7 +44,7 @@ android {
 }
 
 dependencies {
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation(libs.core.ktx)
     implementation(libs.accesspoint)
     implementation(libs.constraintlayout)

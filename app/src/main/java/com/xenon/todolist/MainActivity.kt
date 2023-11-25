@@ -1,17 +1,21 @@
 package com.xenon.todolist
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.ActivityMainBinding
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private var taskItems = ArrayList<TaskItem>()
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +26,23 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             NewTaskSheet(this, null).show(supportFragmentManager, "newTaskTag")
         }
 
+        sharedPref = getPreferences(Context.MODE_PRIVATE)
+
+        loadTaskItems()
         setRecyclerView()
+    }
+
+    private fun loadTaskItems() {
+        val json = sharedPref.getString("taskItems", "[]")
+        taskItems = json?.let { Json.decodeFromString(it) }!!
+    }
+
+    private fun saveTaskItems() {
+        val json = Json.encodeToString(taskItems)
+        with (sharedPref.edit()) {
+            putString("taskItems", json)
+            apply()
+        }
     }
 
     private fun setRecyclerView() {
@@ -32,7 +52,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             adapter = TaskItemAdapter(taskItems, mainActivity)
         }
 
-        onTaskItemsMoved()
+        onTaskItemsChanged()
     }
 
     override fun editTaskItem(taskItem: TaskItem) {
@@ -47,15 +67,17 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     fun addTaskItem(taskItem: TaskItem) {
         taskItems.add(taskItem)
         binding.todoListRecycleView.adapter?.notifyItemInserted(taskItems.size - 1)
-        onTaskItemsMoved()
+        onTaskItemsChanged()
     }
 
     fun updateTaskItem(taskItem: TaskItem) {
         val idx = if (taskItem.idx >= 0) taskItem.idx else taskItems.indexOf(taskItem)
         binding.todoListRecycleView.adapter?.notifyItemChanged(idx)
+        saveTaskItems()
     }
 
-    private fun onTaskItemsMoved() {
+    private fun onTaskItemsChanged() {
+        saveTaskItems()
         if (taskItems.isEmpty()) {
             binding.noTasks.visibility = View.VISIBLE
         } else {

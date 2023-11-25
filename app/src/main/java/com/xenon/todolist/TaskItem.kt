@@ -2,23 +2,21 @@ package com.xenon.todolist
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
-class TaskItem(
+@Serializable
+data class TaskItem(
     var name: String,
     var desc: String,
-    var dueTime: LocalTime?,
-    var completedDate: LocalDate?,
-    var id: UUID = UUID.randomUUID(),
+    var dueTime: Long,
+    var completedDate: Long,
 )
 {
     var idx: Int = -1
 
-    fun isCompleted() = completedDate != null
+    fun isCompleted() = completedDate >= 0
     fun setCompleted(b: Boolean) {
-        this.completedDate = if(b) LocalDate.now() else null
+        this.completedDate = if(b) System.currentTimeMillis() else -1
     }
     fun toggleCompleted() {
         setCompleted(!isCompleted())
