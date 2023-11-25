@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     }
 
     fun removeTaskItem(taskItem: TaskItem, showUndo: Boolean = true) {
-        taskItems.remove(taskItem)
+        taskItems.removeAt(taskItem.idx)
         binding.todoListRecycleView.adapter?.notifyItemRemoved(taskItem.idx)
         onTaskItemsChanged()
 
