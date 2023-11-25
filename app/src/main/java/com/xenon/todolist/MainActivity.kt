@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     private fun saveTaskItems() {
         val json = Json.encodeToString(taskItems)
-        with (sharedPref.edit()) {
+        with(sharedPref.edit()) {
             putString("taskItems", json)
             apply()
         }

@@ -64,7 +64,8 @@
                 android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/description" />
+                android:hint="@string/description"
+                tools:ignore="TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -73,7 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:text="@string/select_time" />
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/select_time"
+            android:textColor="?attr/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"

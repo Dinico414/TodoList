@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskCellContainer"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
     android:layout_marginTop="10dp"
     android:backgroundTint="@android:color/transparent"
-    android:outlineSpotShadowColor="@android:color/transparent"
+    android:elevation="0dp"
     android:outlineAmbientShadowColor="@android:color/transparent"
-    android:elevation="0dp">
+    android:outlineSpotShadowColor="@android:color/transparent">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/tile"
-        android:clipToOutline="true">
+        android:clipToOutline="true"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/completeButton"
@@ -32,23 +32,22 @@
             tools:ignore="RedundantDescriptionCheck" />
 
         <TextView
+            android:id="@+id/name"
+            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingVertical="20dp"
-            android:id="@+id/name"
-            android:text="@string/place_holder"
-            style="@style/TextAppearance.AppCompat.Title"
             android:layout_gravity="center"
             android:layout_weight="1"
-            />
+            android:paddingVertical="20dp"
+            android:text="@string/place_holder" />
+
         <TextView
+            android:id="@+id/dueTime"
+            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:id="@+id/dueTime"
-            android:text="@string/place_holder"
-            style="@style/TextAppearance.AppCompat.Title"
             android:layout_gravity="center"
-            />
+            android:layout_marginHorizontal="20dp"
+            android:text="@string/place_holder" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

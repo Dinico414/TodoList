@@ -4,5 +4,4 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple_500">#ff00ff</color>
     <color name="primary">?attr/colorPrimary</color>
-    <color name="mainBackground">#fffeff</color>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,9 +20,9 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="280dp"
+            android:backgroundTint="@android:color/transparent"
             android:fitsSystemWindows="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:backgroundTint="@android:color/transparent"
             tools:ignore="MissingConstraints">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,11 +30,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
+                android:textColor="?attr/colorOnSurface"
                 app:collapsedTitleGravity="left"
                 app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
-                app:expandedTitleTextAppearance="@style/ActionBar.XenonExpanedTitleStyle"
-                android:textColor="?attr/colorOnSurface"
                 app:expandedTitleGravity="center|center"
+                app:expandedTitleTextAppearance="@style/ActionBar.XenonExpanedTitleStyle"
                 app:layout_constraintVertical_weight="100"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
                 app:title="@string/app_name"
@@ -69,13 +68,13 @@
                 android:id="@+id/noTasks"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="@string/no_tasks"
-                android:textAlignment="center"
-                android:textStyle="italic"
-                android:textColor="?attr/colorOnSurface"
                 android:alpha="0.5"
                 android:gravity="center"
-                android:visibility="gone"/>
+                android:text="@string/no_tasks"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="italic"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/todoListRecycleView"
