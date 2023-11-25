@@ -14,7 +14,7 @@ data class TaskItem(
     var idx: Int = -1
 
     fun isCompleted() = completedDate >= 0
-    fun setCompleted(b: Boolean) {
+    private fun setCompleted(b: Boolean) {
         this.completedDate = if (b) System.currentTimeMillis() else -1
     }
 

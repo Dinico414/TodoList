@@ -10,4 +10,6 @@
     <string name="todo_list">ToDo-List</string>
     <string name="app_name">Todo-List</string>
     <string name="no_tasks">no Tasks</string>
+    <string name="delete">delete</string>
+    <string name="edit_task">Edit Task</string>
 </resources>

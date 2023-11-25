@@ -1,24 +1,28 @@
+@file:Suppress("DEPRECATION")
+
 package com.xenon.todolist
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.databinding.ActivityMainBinding
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private var taskItems = ArrayList<TaskItem>()
     private lateinit var sharedPref: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             adapter = TaskItemAdapter(taskItems, mainActivity)
         }
 
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -67,6 +71,19 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val taskItem = taskItems[viewHolder.adapterPosition]
                 mainActivity.removeTaskItem(taskItem)
+            }
+
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+                RecyclerViewSwipeDecorator.Builder(
+                    this@MainActivity, c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.delete_red))
+                    .addSwipeLeftActionIcon(R.drawable.baseline_auto_delete_24)
+                    .addSwipeLeftPadding(1, 15.0f, 10.0f, 15.0f)
+                    .addSwipeLeftCornerRadius(1, 20.0f)
+                    .create()
+                    .decorate()
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         }).attachToRecyclerView(binding.todoListRecycleView)
 
@@ -103,6 +120,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 .show()
         }
     }
+
 
     fun updateTaskItem(taskItem: TaskItem) {
         val idx = if (taskItem.idx >= 0) taskItem.idx else taskItems.indexOf(taskItem)

@@ -5,7 +5,6 @@ import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class TaskItemViewHolder(

@@ -21,7 +21,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
         val activity = requireActivity()
 
         if (taskItem != null) {
-            binding.taskTitle.text = "Edit Task"
+            binding.taskTitle.text = getString(R.string.edit_task)
             val editable = Editable.Factory.getInstance()
             binding.name.text = editable.newEditable(taskItem!!.name)
             binding.desc.text = editable.newEditable(taskItem!!.desc)
@@ -30,7 +30,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
                 updateTimeButtonText()
             }
         } else {
-            binding.taskTitle.text = "New Task"
+            binding.taskTitle.text = getString(R.string.new_task)
         }
 
         binding.saveButton.setOnClickListener {
