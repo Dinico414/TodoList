@@ -4,14 +4,19 @@ package com.xenon.todolist
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnLayout
+import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.databinding.ActivityMainBinding
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -35,8 +40,27 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
         sharedPref = getPreferences(Context.MODE_PRIVATE)
 
+        updateAppbar()
         loadTaskItems()
         setRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateAppbar()
+    }
+
+    private fun updateAppbar() {
+//        val lp = binding.appbar.layoutParams as CoordinatorLayout.LayoutParams
+//        lp.height = (resources.displayMetrics.heightPixels * 0.25).toInt()
+        val orientation = resources.configuration.orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.appbar.setExpanded(false, false)
+            binding.todoListRecycleView.isNestedScrollingEnabled = false
+        }
+        else {
+            binding.todoListRecycleView.isNestedScrollingEnabled = true
+        }
     }
 
     private fun loadTaskItems() {
