@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="delete_red">#800000</color>
-
+    <color name="icon">#dedede</color>
 </resources>
