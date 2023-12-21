@@ -9,4 +9,7 @@
     <string name="select_time">Zeit wählen</string>
     <string name="todo_list">ToDo-Liste</string>
     <string name="no_tasks">keine Aufgaben</string>
+    <string name="task_due">Aufgaben fälligkeit</string>
+    <string name="delete">löschen</string>
+    <string name="edit_task">Aufgabe bearbeiten</string>
 </resources>

@@ -1,103 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
-    android:layout_gravity="bottom"
     android:orientation="vertical">
 
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="15dp"
-    app:cardCornerRadius="30dp"
-    app:cardElevation="0dp"
-    android:background="@drawable/tile_popup"
-    android:backgroundTint="?attr/colorSurface">
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".NewTaskSheet">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/tile_popup"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp">
 
-        <ImageView
-            android:id="@+id/view"
-            android:layout_width="45dp"
-            android:layout_height="6dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:alpha="0.5"
-            android:background="@drawable/handle"
-            android:backgroundTint="?attr/colorOnSurface" />
-
-        <TextView
-            android:id="@+id/taskTitle"
-            style="@style/TextAppearance.AppCompat.Title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/new_task"
-            android:textAlignment="center"
-            android:textSize="30sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".NewTaskSheet">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
+            <ImageView
+                android:id="@+id/view"
+                android:layout_width="45dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:alpha="0.5"
+                android:background="@drawable/handle"
+                android:backgroundTint="?attr/colorOnSurface"
+                android:importantForAccessibility="no" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name"
+            <TextView
+                android:id="@+id/taskTitle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/name"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/new_task"
+                android:textAlignment="center"
+                android:textColor="@color/icon"
+                android:textSize="30sp"
                 tools:ignore="TextContrastCheck" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/desc"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/description"
-                tools:ignore="TextContrastCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/timePickerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="20dp"
-            android:backgroundTint="@android:color/transparent"
-            android:text="@string/select_time"
-            android:textColor="?attr/colorPrimary" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/name"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:text="@string/save"
-            android:textColor="?colorOnPrimary" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp">
 
-</LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/description"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/timePickerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/select_time"
+                android:textColor="?attr/colorPrimary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:text="@string/save"
+                android:textColor="?colorOnPrimary" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

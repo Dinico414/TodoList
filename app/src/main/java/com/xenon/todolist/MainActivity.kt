@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var sharedPref: SharedPreferences
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -54,8 +53,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             binding.appbar.setExpanded(false, false)
             binding.todoListRecycleView.isNestedScrollingEnabled = false
-        }
-        else {
+        } else {
             binding.todoListRecycleView.isNestedScrollingEnabled = true
         }
     }
@@ -94,17 +92,46 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 mainActivity.removeTaskItem(taskItem)
             }
 
-            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
                 RecyclerViewSwipeDecorator.Builder(
-                    this@MainActivity, c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.delete_red))
+                    this@MainActivity,
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+                    .addSwipeLeftBackgroundColor(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.delete_red
+                        )
+                    )
                     .addSwipeLeftActionIcon(R.drawable.baseline_auto_delete_24)
                     .addSwipeLeftPadding(1, 15.0f, 10.0f, 15.0f)
                     .addSwipeLeftCornerRadius(1, 20.0f)
                     .create()
                     .decorate()
 
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
             }
         }).attachToRecyclerView(binding.todoListRecycleView)
 

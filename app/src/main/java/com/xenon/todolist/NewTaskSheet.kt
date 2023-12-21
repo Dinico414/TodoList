@@ -1,17 +1,26 @@
 package com.xenon.todolist
 
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.format.DateFormat
+import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
 class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem: TaskItem?) :
     BottomSheetDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.FloatingBottomSheetDialogTheme)
+    }
+
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private var dueTime: Long = -1
@@ -42,44 +51,46 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
     }
 
     private fun openTimePicker() {
-        if (dueTime < 0)
-            dueTime = System.currentTimeMillis()
-        val listener = TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-            val cal = Calendar.getInstance()
-            cal.timeInMillis = System.currentTimeMillis()
+        val isSystem24Hour = is24HourFormat(requireContext())
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+        val cal = Calendar.getInstance()
+
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(clockFormat)
+            .setHour(cal.get(Calendar.HOUR_OF_DAY))
+            .setMinute(cal.get(Calendar.MINUTE))
+            .setTitleText(getString(R.string.task_due))
+            .build()
+
+        picker.addOnPositiveButtonClickListener {
             cal.set(Calendar.MILLISECOND, 0)
             cal.set(Calendar.SECOND, 0)
-            if (cal.get(Calendar.HOUR) > selectedHour || cal.get(Calendar.HOUR) == selectedHour && cal.get(
-                    Calendar.MINUTE
-                ) >= selectedMinute
-            ) {
+            cal.set(Calendar.MINUTE, picker.minute)
+            cal.set(Calendar.HOUR_OF_DAY, picker.hour)
+
+            if (cal.timeInMillis < System.currentTimeMillis()) {
                 cal.add(Calendar.DAY_OF_WEEK, 1)
             }
-            cal.set(Calendar.MINUTE, selectedMinute)
-            cal.set(Calendar.HOUR, selectedHour)
-            dueTime = cal.timeInMillis
 
+            dueTime = cal.timeInMillis
             updateTimeButtonText()
         }
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = dueTime
-        val dialog = TimePickerDialog(
-            activity,
-            listener,
-            cal.get(Calendar.HOUR),
-            cal.get(Calendar.MINUTE),
-            true
-        )
-        dialog.setTitle("Task Due")
-        dialog.show()
+
+        picker.show(childFragmentManager, "TAG")
     }
+
 
     private fun updateTimeButtonText() {
         val cal = Calendar.getInstance()
         cal.timeInMillis = dueTime
-        binding.timePickerButton.text =
-            String.format("%02d:%02d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE))
+
+        val timeFormat = DateFormat.getTimeFormat(requireContext())
+        val formattedTime = timeFormat.format(cal.time)
+
+        binding.timePickerButton.text = formattedTime
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

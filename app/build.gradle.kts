@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 
@@ -55,7 +55,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation (libs.recyclerview.swipedecorator)
-    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
-    implementation(libs.androidx.material3)
+    implementation(libs.recyclerview.swipedecorator)
 }
