@@ -33,7 +33,7 @@
                 android:layout_marginBottom="5dp"
                 android:alpha="0.5"
                 android:background="@drawable/handle"
-                android:backgroundTint="?attr/colorOnSurface"
+                android:backgroundTint="@android:color/system_neutral1_500"
                 android:importantForAccessibility="no"
                 />
 
@@ -88,7 +88,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:backgroundTint="@android:color/transparent"
                 android:text="@string/select_time"
-                android:textColor="?attr/colorPrimary" />
+                android:textColor="@android:color/system_accent1_500" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="?attr/colorPrimary"
+                android:backgroundTint="@android:color/system_accent1_500"
                 android:text="@string/save"
                 android:textColor="?colorOnPrimary" />
 
