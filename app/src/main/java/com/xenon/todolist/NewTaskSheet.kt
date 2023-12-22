@@ -61,6 +61,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
             .setHour(cal.get(Calendar.HOUR_OF_DAY))
             .setMinute(cal.get(Calendar.MINUTE))
             .setTitleText(getString(R.string.task_due))
+            .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
             .build()
 
         picker.addOnPositiveButtonClickListener {

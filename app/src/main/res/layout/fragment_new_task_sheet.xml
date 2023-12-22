@@ -10,12 +10,11 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="25dp"
         android:background="@drawable/tile_popup"
         android:backgroundTint="?attr/colorSurfaceContainer"
         app:cardCornerRadius="20dp"
-        app:cardElevation="0dp">
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +32,8 @@
                 android:alpha="0.5"
                 android:background="@drawable/handle"
                 android:backgroundTint="?attr/colorOnSurface"
-                android:importantForAccessibility="no" />
+                android:importantForAccessibility="no"
+                />
 
             <TextView
                 android:id="@+id/taskTitle"
