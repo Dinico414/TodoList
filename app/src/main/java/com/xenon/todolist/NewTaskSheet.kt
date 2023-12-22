@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
@@ -27,10 +28,10 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val activity = requireActivity()
+        requireActivity()
 
         if (taskItem != null) {
-            binding.taskTitle.text = getString(R.string.edit_task)
+            binding.taskTitle.text = getString(com.xenon.todolist.R.string.edit_task)
             val editable = Editable.Factory.getInstance()
             binding.name.text = editable.newEditable(taskItem!!.name)
             binding.desc.text = editable.newEditable(taskItem!!.desc)
@@ -39,7 +40,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
                 updateTimeButtonText()
             }
         } else {
-            binding.taskTitle.text = getString(R.string.new_task)
+            binding.taskTitle.text = getString(com.xenon.todolist.R.string.new_task)
         }
 
         binding.saveButton.setOnClickListener {
@@ -60,7 +61,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
             .setTimeFormat(clockFormat)
             .setHour(cal.get(Calendar.HOUR_OF_DAY))
             .setMinute(cal.get(Calendar.MINUTE))
-            .setTitleText(getString(R.string.task_due))
+            .setTitleText(getString(com.xenon.todolist.R.string.task_due))
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
             .build()
 
