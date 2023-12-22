@@ -5,10 +5,14 @@ package com.xenon.todolist
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +33,9 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val yourView = findViewById<View>(R.id.CoordinatorLayoutMain)
+        adjustBottomMargin(yourView, this)
 
         binding.NewTaskButton.setOnClickListener {
             NewTaskSheet(this, null).show(supportFragmentManager, "newTaskTag")
@@ -184,4 +191,48 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             binding.noTasks.visibility = View.GONE
         }
     }
+
+
+
+
+//    bottom margin test
+    fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
+        val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+
+        // Add a global layout listener to get notified when the layout is ready
+        rootView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                // Remove the listener to avoid multiple calls
+                rootView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                // Get the height of the navigation bar
+                val navigationBarHeight = getNavigationBarHeight(activity)
+
+                // Calculate the desired bottom margin
+                val desiredMargin = if (navigationBarHeight > 15.dpToPx()) 0 else (15 - navigationBarHeight).dpToPx()
+
+                // Set the bottom margin for the view
+                val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
+                layoutParams.bottomMargin = desiredMargin
+                view.layoutParams = layoutParams
+            }
+        })
+    }
+
+    // Extension function to convert dp to pixels
+    fun Int.dpToPx(): Int {
+        return (this * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    // Function to get the height of the navigation bar
+    fun getNavigationBarHeight(activity: AppCompatActivity): Int {
+        val resources = activity.resources
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+
+        return if (resourceId > 0) {
+            resources.getDimensionPixelSize(resourceId)
+        } else 0
+    }
+
+
 }

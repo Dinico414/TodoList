@@ -14,6 +14,7 @@ import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
+
 class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem: TaskItem?) :
     BottomSheetDialogFragment() {
 
@@ -28,8 +29,6 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity()
-
         if (taskItem != null) {
             binding.taskTitle.text = getString(com.xenon.todolist.R.string.edit_task)
             val editable = Editable.Factory.getInstance()
@@ -119,4 +118,5 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
         binding.desc.setText("")
         dismiss()
     }
+
 }
