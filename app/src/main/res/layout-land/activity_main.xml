@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="27dp"
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="@color/primary"
         android:padding="5dp"
         app:icon="@drawable/add"
         app:iconTint="?attr/colorOnPrimary"

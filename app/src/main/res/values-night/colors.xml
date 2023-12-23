@@ -2,4 +2,5 @@
 <resources>
     <color name="delete_red">#800000</color>
     <color name="icon">#dedede</color>
+    <color name="primary">@android:color/system_accent1_200</color>
 </resources>
