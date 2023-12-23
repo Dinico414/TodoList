@@ -29,11 +29,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                android:textColor="?attr/colorOnSurface"
                 app:collapsedTitleGravity="left"
                 app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
+                app:collapsedTitleTextColor="@color/textOnPrimary"
                 app:expandedTitleGravity="center|center"
                 app:expandedTitleTextAppearance="@style/ActionBar.XenonExpanedTitleStyle"
+                app:expandedTitleTextColor="@color/primary"
                 app:layout_constraintVertical_weight="100"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
                 app:title="@string/app_name"
@@ -59,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/tile_background"
+            android:backgroundTint="@color/surface"
             android:clipToOutline="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             tools:ignore="ScrollViewCount">
@@ -80,8 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fadeScrollbars="true"
-                android:scrollbarSize="5dp"
-                android:scrollbarThumbVertical="@drawable/tile"
+                android:scrollbarSize="6dp"
+                android:scrollbarThumbVertical="@drawable/scrollhandle"
                 android:scrollbars="vertical" />
 
         </RelativeLayout>

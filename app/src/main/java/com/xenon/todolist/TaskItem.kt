@@ -2,6 +2,7 @@ package com.xenon.todolist
 
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,8 +24,15 @@ data class TaskItem(
     }
 
     fun imageResource(): Int = if (isCompleted()) R.drawable.checked else R.drawable.unchecked
-    fun imageColor(context: Context): Int = if (isCompleted()) checked(context) else unchecked(context)
+    fun imageColor(context: Context): Int =
+        if (isCompleted()) checked(context) else unchecked(context)
 
     private fun checked(context: Context) = ContextCompat.getColor(context, R.color.primary)
-    private fun unchecked(context: Context) = ContextCompat.getColor(context, R.color.color_on_surface_0_5)
+    private fun unchecked(context: Context): Int {
+        // Get the original color
+        val originalColor = ContextCompat.getColor(context, R.color.checkbox)
+
+        // Apply transparency (alpha value of 0.5)
+        return ColorUtils.setAlphaComponent(originalColor, (255 * 0.5f).toInt())
+    }
 }
