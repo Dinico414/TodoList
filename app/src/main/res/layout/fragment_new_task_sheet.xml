@@ -14,7 +14,7 @@
         android:layout_marginHorizontal="25dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/tile_popup"
-        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:backgroundTint="@color/surfaceContainer"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp">
 
@@ -35,7 +35,7 @@
                 android:background="@drawable/handle"
                 android:backgroundTint="@android:color/system_neutral1_500"
                 android:importantForAccessibility="no"
-                />
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/taskTitle"
@@ -50,34 +50,46 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                style="@style/XenonInputFilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp">
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/tile_inputbox"
+                android:backgroundTint="@color/surface"
+                android:clipToOutline="true"
+                app:cursorColor="@color/primary"
+                app:endIconTint="@color/primary"
+                app:startIconTint="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
+                    style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/name"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    android:hint="@string/name" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                style="@style/XenonInputFilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp">
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/tile_inputbox"
+                android:backgroundTint="@color/secondaryContainer"
+                android:clipToOutline="true"
+                app:cursorColor="@color/primary"
+                app:endIconTint="@color/primary"
+                app:startIconTint="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/desc"
+                    style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/description"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    android:hint="@string/description" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton

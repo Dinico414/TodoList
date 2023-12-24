@@ -3,5 +3,10 @@
         <item name="fontFamily">@font/product_sans_regular</item>
     </style>
 
-    <style name="Theme.TodoList" parent="Base.Theme.TodoList" />
+    <style name="Theme.TodoList" parent="Base.Theme.TodoList" >
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
 </resources>

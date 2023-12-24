@@ -62,7 +62,9 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
             .setMinute(cal.get(Calendar.MINUTE))
             .setTitleText(getString(com.xenon.todolist.R.string.task_due))
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+            .setTheme(com.xenon.commons.accesspoint.R.style.MyTimePickerStyle)
             .build()
+
 
         picker.addOnPositiveButtonClickListener {
             cal.set(Calendar.MILLISECOND, 0)

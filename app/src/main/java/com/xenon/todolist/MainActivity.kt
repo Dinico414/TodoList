@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.databinding.ActivityMainBinding
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.serialization.encodeToString
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val yourView = findViewById<View>(R.id.CoordinatorLayoutMain)
+        val yourView = findViewById<View>(com.xenon.todolist.R.id.CoordinatorLayoutMain)
         adjustBottomMargin(yourView, this)
 
         binding.NewTaskButton.setOnClickListener {
@@ -124,7 +125,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                             R.color.delete_red
                         )
                     )
-                    .addSwipeLeftActionIcon(R.drawable.baseline_auto_delete_24)
+                    .addSwipeLeftActionIcon(com.xenon.todolist.R.drawable.baseline_auto_delete_24)
                     .addSwipeLeftPadding(1, 15.0f, 10.0f, 15.0f)
                     .addSwipeLeftCornerRadius(1, 20.0f)
                     .create()
