@@ -1,14 +1,18 @@
 package com.xenon.todolist
 
+import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
 
 class TaskItemAdapter(
+    private val context: Context,
     private val taskItems: List<TaskItem>,
     private val clickListener: TaskItemClickListener
 ) : RecyclerView.Adapter<TaskItemViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskItemViewHolder {
         val from = LayoutInflater.from(parent.context)
         val binding = TaskItemCellBinding.inflate(from, parent, false)
@@ -18,7 +22,35 @@ class TaskItemAdapter(
     override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
         taskItems[position].idx = position
         holder.bindTaskItem(taskItems[position])
+
+        val margin = 10
+
+        // Apply the top margin only to the first item
+        val topMargin: Int = if (position == 0) {
+            10
+        } else {
+            0
+        }
+
+        val bottomMargin: Int = 10
+
+        val marginInPx = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            margin.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
+
+        val topMarginInPx = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            topMargin.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
+
+        val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
+        layoutParams.setMargins(marginInPx, topMarginInPx, marginInPx, marginInPx)
+        holder.itemView.layoutParams = layoutParams
     }
+
 
     override fun getItemCount(): Int = taskItems.size
 }

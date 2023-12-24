@@ -82,7 +82,8 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         val mainActivity = this
         binding.todoListRecycleView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
-            adapter = TaskItemAdapter(taskItems, mainActivity)
+            adapter = TaskItemAdapter(this@MainActivity, taskItems, mainActivity)
+
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
