@@ -2,6 +2,7 @@
 
 package com.xenon.todolist
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -55,9 +56,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     }
 
     private fun updateAppbar() {
-//        val lp = binding.appbar.layoutParams as CoordinatorLayout.LayoutParams
-//        lp.height = (resources.displayMetrics.heightPixels * 0.25).toInt()
-        val orientation = resources.configuration.orientation;
+        val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             binding.appbar.setExpanded(false, false)
             binding.todoListRecycleView.isNestedScrollingEnabled = false
@@ -167,8 +166,12 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         onTaskItemsChanged()
 
         if (showUndo) {
-            Snackbar.make(binding.NewTaskButton, "Task deleted", Snackbar.LENGTH_SHORT)
-                .setAction("Undo") {
+            Snackbar.make(
+                binding.NewTaskButton,
+                getString(com.xenon.todolist.R.string.task_deleted),
+                Snackbar.LENGTH_SHORT
+            )
+                .setAction(getString(com.xenon.todolist.R.string.undo)) {
                     taskItems.add(taskItem.idx, taskItem)
                     binding.todoListRecycleView.adapter?.notifyItemInserted(taskItem.idx)
                     onTaskItemsChanged()
@@ -194,25 +197,21 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     }
 
 
-
-
-//    bottom margin test
-    fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
+    //    bottom margin test
+    private fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
 
-        // Add a global layout listener to get notified when the layout is ready
-        rootView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        rootView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                // Remove the listener to avoid multiple calls
+
                 rootView.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                // Get the height of the navigation bar
                 val navigationBarHeight = getNavigationBarHeight(activity)
 
-                // Calculate the desired bottom margin
-                val desiredMargin = if (navigationBarHeight > 15.dpToPx()) 0 else (15 - navigationBarHeight).dpToPx()
+                val desiredMargin =
+                    if (navigationBarHeight > 15.dpToPx()) 0 else (15 - navigationBarHeight).dpToPx()
 
-                // Set the bottom margin for the view
                 val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
                 layoutParams.bottomMargin = desiredMargin
                 view.layoutParams = layoutParams
@@ -220,12 +219,11 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         })
     }
 
-    // Extension function to convert dp to pixels
     fun Int.dpToPx(): Int {
         return (this * Resources.getSystem().displayMetrics.density).toInt()
     }
 
-    // Function to get the height of the navigation bar
+    @SuppressLint("DiscouragedApi", "InternalInsetResource")
     fun getNavigationBarHeight(activity: AppCompatActivity): Int {
         val resources = activity.resources
         val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")

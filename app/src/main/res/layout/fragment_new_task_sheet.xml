@@ -67,7 +67,8 @@
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/name" />
+                    android:hint="@string/name"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +90,8 @@
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/description" />
+                    android:hint="@string/description"
+                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -100,7 +102,8 @@
                 android:layout_marginHorizontal="20dp"
                 android:backgroundTint="@android:color/transparent"
                 android:text="@string/select_time"
-                android:textColor="@color/primary" />
+                android:textColor="@color/primary"
+                tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
@@ -111,7 +114,8 @@
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/primary"
                 android:text="@string/save"
-                android:textColor="?colorOnPrimary" />
+                android:textColor="?colorOnPrimary"
+                tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

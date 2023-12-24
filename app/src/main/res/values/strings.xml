@@ -13,4 +13,6 @@
     <string name="delete">delete</string>
     <string name="edit_task">Edit Task</string>
     <string name="task_due">Task Due</string>
+    <string name="task_deleted">Task deleted</string>
+    <string name="undo">Undo</string>
 </resources>

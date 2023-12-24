@@ -24,16 +24,16 @@ data class TaskItem(
         setCompleted(!isCompleted())
     }
 
-    fun imageResource(): Int = if (isCompleted()) com.xenon.todolist.R.drawable.checked else com.xenon.todolist.R.drawable.unchecked
+    fun imageResource(): Int =
+        if (isCompleted()) com.xenon.todolist.R.drawable.checked else com.xenon.todolist.R.drawable.unchecked
+
     fun imageColor(context: Context): Int =
         if (isCompleted()) checked(context) else unchecked(context)
 
     private fun checked(context: Context) = ContextCompat.getColor(context, R.color.primary)
     private fun unchecked(context: Context): Int {
-        // Get the original color
         val originalColor = ContextCompat.getColor(context, R.color.checkbox)
 
-        // Apply transparency (alpha value of 0.5)
         return ColorUtils.setAlphaComponent(originalColor, (255 * 0.5f).toInt())
     }
 }
