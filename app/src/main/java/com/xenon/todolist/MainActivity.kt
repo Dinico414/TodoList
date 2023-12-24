@@ -109,12 +109,19 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
+
+                val thresholdInDp = 100.0f
+
+                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
+
+                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
+
                 RecyclerViewSwipeDecorator.Builder(
                     this@MainActivity,
                     c,
                     recyclerView,
                     viewHolder,
-                    dX,
+                    limitedDX,
                     dY,
                     actionState,
                     isCurrentlyActive
@@ -135,7 +142,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     c,
                     recyclerView,
                     viewHolder,
-                    dX,
+                    limitedDX,
                     dY,
                     actionState,
                     isCurrentlyActive
@@ -198,7 +205,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     }
 
 
-    //    bottom margin test
     private fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
 
