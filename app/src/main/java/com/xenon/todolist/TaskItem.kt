@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TaskItem(
+    var id: Int,
     var name: String,
     var desc: String,
     var dueTime: Long,
     var completedDate: Long,
 ) {
-    var idx: Int = -1
 
     fun isCompleted() = completedDate >= 0
     private fun setCompleted(b: Boolean) {

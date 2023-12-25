@@ -20,7 +20,6 @@ class TaskItemAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
-        taskItems[position].idx = position
         holder.bindTaskItem(taskItems[position])
 
         val margin = 10

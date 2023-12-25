@@ -12,6 +12,7 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private var taskItems = ArrayList<TaskItem>()
     private lateinit var sharedPref: SharedPreferences
+
+    private var maxTaskId = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +73,14 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     private fun loadTaskItems() {
         val json = sharedPref.getString("taskItems", "[]")
-        taskItems = json?.let { Json.decodeFromString(it) }!!
+        taskItems = try {
+            json?.let { Json.decodeFromString(it) }!!
+        } catch (e: Exception) {
+            ArrayList()
+        }
+        if (taskItems.size > 0) {
+            maxTaskId = taskItems.maxBy { taskItem -> taskItem.id }.id
+        }
     }
 
     private fun saveTaskItems() {
@@ -193,15 +203,23 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         updateTaskItem(taskItem)
     }
 
-    fun addTaskItem(taskItem: TaskItem) {
-        taskItems.add(taskItem)
-        binding.todoListRecycleView.adapter?.notifyItemInserted(taskItems.size - 1)
+    fun addTaskItem(taskItem: TaskItem, idx: Int = -1) {
+        val _idx = if (idx < 0) { taskItems.size } else { idx }
+
+        maxTaskId++
+        taskItem.id = maxTaskId
+        taskItems.add(_idx, taskItem)
+        Log.d("ADDED", "$idx $taskItems")
+
+        binding.todoListRecycleView.adapter?.notifyItemInserted(_idx)
         onTaskItemsChanged()
     }
 
     fun removeTaskItem(taskItem: TaskItem, showUndo: Boolean = true) {
-        taskItems.removeAt(taskItem.idx)
-        binding.todoListRecycleView.adapter?.notifyItemRemoved(taskItem.idx)
+        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
+        taskItems.removeAt(idx)
+        Log.d("REMOVED", "$idx $taskItems")
+        binding.todoListRecycleView.adapter?.notifyItemRemoved(idx)
         onTaskItemsChanged()
 
         if (showUndo) {
@@ -211,9 +229,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 Snackbar.LENGTH_SHORT
             )
                 .setAction(getString(com.xenon.todolist.R.string.undo)) {
-                    taskItems.add(taskItem.idx, taskItem)
-                    binding.todoListRecycleView.adapter?.notifyItemInserted(taskItem.idx)
-                    onTaskItemsChanged()
+                    addTaskItem(taskItem, idx)
                 }
                 .show()
         }
@@ -221,7 +237,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
 
     fun updateTaskItem(taskItem: TaskItem) {
-        val idx = if (taskItem.idx >= 0) taskItem.idx else taskItems.indexOf(taskItem)
+        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
         binding.todoListRecycleView.adapter?.notifyItemChanged(idx)
         saveTaskItems()
     }

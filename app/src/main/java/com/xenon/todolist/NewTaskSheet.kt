@@ -108,7 +108,7 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
         val name = binding.name.text.toString()
         val desc = binding.desc.text.toString()
         if (taskItem == null) {
-            val newTask = TaskItem(name, desc, dueTime, -1)
+            val newTask = TaskItem(0, name, desc, dueTime, -1)
             mainActivity.addTaskItem(newTask)
         } else {
             taskItem!!.name = name
