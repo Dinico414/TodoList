@@ -8,6 +8,9 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Canvas
+import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -109,12 +112,46 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-
                 val thresholdInDp = 100.0f
-
                 val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
-
                 val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
+
+
+                val backgroundDrawable = ContextCompat.getDrawable(
+                    this@MainActivity,
+                    com.xenon.todolist.R.drawable.deletebackground
+                )
+
+
+                val marginInDp = resources.getDimension(R.dimen.floating_margin)
+                val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
+
+
+                backgroundDrawable?.setBounds(
+                    (viewHolder.itemView.right + limitedDX + marginInPixels).toInt(),
+                    viewHolder.itemView.top + marginInPixels * 2,
+                    viewHolder.itemView.right - marginInPixels * 2,
+                    viewHolder.itemView.bottom - marginInPixels * 2
+                )
+
+
+                backgroundDrawable?.colorFilter = PorterDuffColorFilter(
+                    ContextCompat.getColor(this@MainActivity, android.R.color.holo_red_light),
+                    PorterDuff.Mode.SRC_IN
+                )
+
+                val clipPath = Path()
+                clipPath.addRect(
+                    viewHolder.itemView.right.toFloat(),
+                    viewHolder.itemView.top.toFloat(),
+                    viewHolder.itemView.right + limitedDX + marginInPixels,
+                    viewHolder.itemView.bottom.toFloat(),
+                    Path.Direction.CW
+                )
+
+                c.clipPath(clipPath)
+
+                backgroundDrawable?.draw(c)
 
                 RecyclerViewSwipeDecorator.Builder(
                     this@MainActivity,
@@ -126,15 +163,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     actionState,
                     isCurrentlyActive
                 )
-                    .addSwipeLeftBackgroundColor(
-                        ContextCompat.getColor(
-                            this@MainActivity,
-                            R.color.delete_red
-                        )
-                    )
                     .addSwipeLeftActionIcon(com.xenon.todolist.R.drawable.baseline_auto_delete_24)
-                    .addSwipeLeftPadding(1, 15.0f, 10.0f, 15.0f)
-                    .addSwipeLeftCornerRadius(1, 20.0f)
                     .create()
                     .decorate()
 
@@ -148,6 +177,8 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     isCurrentlyActive
                 )
             }
+
+
         }).attachToRecyclerView(binding.todoListRecycleView)
 
         onTaskItemsChanged()

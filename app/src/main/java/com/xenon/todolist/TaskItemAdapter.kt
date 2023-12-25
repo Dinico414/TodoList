@@ -25,14 +25,11 @@ class TaskItemAdapter(
 
         val margin = 10
 
-        // Apply the top margin only to the first item
         val topMargin: Int = if (position == 0) {
             10
         } else {
             0
         }
-
-        val bottomMargin: Int = 10
 
         val marginInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
