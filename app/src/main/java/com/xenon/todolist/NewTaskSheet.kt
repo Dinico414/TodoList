@@ -15,8 +15,16 @@ import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
 
-class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem: TaskItem?) :
-    BottomSheetDialogFragment() {
+class NewTaskSheet : BottomSheetDialogFragment() {
+    companion object {
+        private var taskItemViewModel: TaskItemViewModel? = null
+        private var taskItem: TaskItem? = null
+        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheet? {
+            this.taskItemViewModel = taskItemViewModel
+            this.taskItem = taskItem
+            return NewTaskSheet()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,12 +117,12 @@ class NewTaskSheet(private var mainActivity: MainActivity, private var taskItem:
         val desc = binding.desc.text.toString()
         if (taskItem == null) {
             val newTask = TaskItem(0, name, desc, dueTime, -1)
-            mainActivity.addTaskItem(newTask)
+            taskItemViewModel?.add(newTask)
         } else {
             taskItem!!.name = name
             taskItem!!.desc = desc
             if (dueTime >= 0) taskItem!!.dueTime = dueTime
-            mainActivity.updateTaskItem(taskItem!!)
+            taskItemViewModel?.update(taskItem!!)
         }
         binding.name.setText("")
         binding.desc.setText("")

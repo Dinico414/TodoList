@@ -19,6 +19,7 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,10 +32,10 @@ import kotlinx.serialization.json.Json
 
 class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
-    private var taskItems = ArrayList<TaskItem>()
+    private lateinit var taskItemsModel: TaskItemViewModel
     private lateinit var sharedPref: SharedPreferences
 
-    private var maxTaskId = 0
+    private var newTaskSheet: NewTaskSheet? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +43,15 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
         val yourView = findViewById<View>(com.xenon.todolist.R.id.CoordinatorLayoutMain)
         adjustBottomMargin(yourView, this)
 
         binding.NewTaskButton.setOnClickListener {
-            NewTaskSheet(this, null).show(supportFragmentManager, "newTaskTag")
+            if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
+                newTaskSheet = NewTaskSheet.getInstance(taskItemsModel, null)
+                newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+            }
         }
 
         sharedPref = getPreferences(Context.MODE_PRIVATE)
@@ -73,18 +78,15 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     private fun loadTaskItems() {
         val json = sharedPref.getString("taskItems", "[]")
-        taskItems = try {
+        taskItemsModel.setList(try {
             json?.let { Json.decodeFromString(it) }!!
         } catch (e: Exception) {
             ArrayList()
-        }
-        if (taskItems.size > 0) {
-            maxTaskId = taskItems.maxBy { taskItem -> taskItem.id }.id
-        }
+        })
     }
 
     private fun saveTaskItems() {
-        val json = Json.encodeToString(taskItems)
+        val json = Json.encodeToString(taskItemsModel.getList())
         with(sharedPref.edit()) {
             putString("taskItems", json)
             apply()
@@ -95,8 +97,37 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         val mainActivity = this
         binding.todoListRecycleView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
-            adapter = TaskItemAdapter(this@MainActivity, taskItems, mainActivity)
+            adapter = TaskItemAdapter(this@MainActivity, taskItemsModel.getList(), mainActivity)
+        }
 
+        taskItemsModel.taskStatus.observe(this) {change ->
+            Log.d("Alla", "${change.type} ${change.idx} ${change.taskItem}")
+            when (change.type) {
+                TaskItemViewModel.TaskChangedType.ADD -> {
+                    binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
+                }
+                TaskItemViewModel.TaskChangedType.REMOVE -> {
+                    binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
+
+                    Snackbar.make(
+                        binding.NewTaskButton,
+                        getString(com.xenon.todolist.R.string.task_deleted),
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .setAction(getString(com.xenon.todolist.R.string.undo)) {
+//                            addTaskItem(change.taskItem!!, change.idx)
+                            taskItemsModel.add(change.taskItem!!, change.idx)
+                        }
+                        .show()
+                }
+                TaskItemViewModel.TaskChangedType.UPDATE -> {
+                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
+                }
+                TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
+                    binding.todoListRecycleView.adapter?.notifyDataSetChanged()
+                }
+            }
+            onTaskItemsChanged()
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -109,8 +140,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val taskItem = taskItems[viewHolder.adapterPosition]
-                mainActivity.removeTaskItem(taskItem)
+                taskItemsModel.remove(viewHolder.bindingAdapterPosition)
             }
 
             override fun onChildDraw(
@@ -195,56 +225,20 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     }
 
     override fun editTaskItem(taskItem: TaskItem) {
-        NewTaskSheet(this, taskItem).show(supportFragmentManager, "newTaskTag")
+        if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
+            newTaskSheet = NewTaskSheet.getInstance(taskItemsModel, taskItem)
+            newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+        }
     }
 
     override fun completeTaskItem(taskItem: TaskItem) {
         taskItem.toggleCompleted()
-        updateTaskItem(taskItem)
-    }
-
-    fun addTaskItem(taskItem: TaskItem, idx: Int = -1) {
-        val _idx = if (idx < 0) { taskItems.size } else { idx }
-
-        maxTaskId++
-        taskItem.id = maxTaskId
-        taskItems.add(_idx, taskItem)
-        Log.d("ADDED", "$idx $taskItems")
-
-        binding.todoListRecycleView.adapter?.notifyItemInserted(_idx)
-        onTaskItemsChanged()
-    }
-
-    fun removeTaskItem(taskItem: TaskItem, showUndo: Boolean = true) {
-        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        taskItems.removeAt(idx)
-        Log.d("REMOVED", "$idx $taskItems")
-        binding.todoListRecycleView.adapter?.notifyItemRemoved(idx)
-        onTaskItemsChanged()
-
-        if (showUndo) {
-            Snackbar.make(
-                binding.NewTaskButton,
-                getString(com.xenon.todolist.R.string.task_deleted),
-                Snackbar.LENGTH_SHORT
-            )
-                .setAction(getString(com.xenon.todolist.R.string.undo)) {
-                    addTaskItem(taskItem, idx)
-                }
-                .show()
-        }
-    }
-
-
-    fun updateTaskItem(taskItem: TaskItem) {
-        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        binding.todoListRecycleView.adapter?.notifyItemChanged(idx)
-        saveTaskItems()
+        taskItemsModel.update(taskItem)
     }
 
     private fun onTaskItemsChanged() {
         saveTaskItems()
-        if (taskItems.isEmpty()) {
+        if (taskItemsModel.getList().isEmpty()) {
             binding.noTasks.visibility = View.VISIBLE
         } else {
             binding.noTasks.visibility = View.GONE
@@ -286,6 +280,4 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             resources.getDimensionPixelSize(resourceId)
         } else 0
     }
-
-
 }
