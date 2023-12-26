@@ -50,6 +50,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_input"
                 style="@style/XenonInputFilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,28 +59,25 @@
                 android:background="@drawable/tile_inputbox"
                 android:backgroundTint="@color/surface"
                 android:clipToOutline="true"
+                app:counterEnabled="false"
                 app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:cursorColor="@color/primary"
-                app:endIconTint="@color/primary"
-                app:helperText="Required"
-                app:helperTextEnabled="true"
-                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:helperTextTextColor="@color/design_default_color_error"
-                app:startIconTint="@color/primary">
+                app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/name"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:hint="@string/name"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    android:inputType="text"
+                    android:autofillHints="" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/XenonInputFilledBox"
+                android:id="@+id/desc_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -91,13 +89,14 @@
                 app:endIconTint="@color/primary"
                 app:startIconTint="@color/primary">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/desc"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/description"
-                    tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    android:inputType="text|textMultiLine"
+                    android:autofillHints="" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -111,16 +110,17 @@
                 android:textColor="@color/primary"
                 tools:ignore="TextContrastCheck" />
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/primary"
+                android:backgroundTint="@color/enable_disable_button_color"
+                android:enabled="false"
                 android:text="@string/save"
-                android:textColor="?colorOnPrimary"
+                android:textColor="@color/enable_disable_text_color"
                 tools:ignore="TextContrastCheck" />
 
         </LinearLayout>
