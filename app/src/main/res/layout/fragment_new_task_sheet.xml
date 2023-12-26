@@ -58,8 +58,13 @@
                 android:background="@drawable/tile_inputbox"
                 android:backgroundTint="@color/surface"
                 android:clipToOutline="true"
+                app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:cursorColor="@color/primary"
                 app:endIconTint="@color/primary"
+                app:helperText="Required"
+                app:helperTextEnabled="true"
+                app:helperTextTextAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:helperTextTextColor="@color/design_default_color_error"
                 app:startIconTint="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -67,6 +72,7 @@
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     android:hint="@string/name"
                     tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 

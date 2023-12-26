@@ -12,7 +12,6 @@ import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -93,6 +92,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setRecyclerView() {
         val mainActivity = this
         binding.todoListRecycleView.apply {
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
                 val backgroundDrawable = ContextCompat.getDrawable(
                     this@MainActivity,
-                    com.xenon.todolist.R.drawable.deletebackground
+                    R.drawable.delete_button
                 )
 
                 val marginInDp = resources.getDimension(R.dimen.floating_margin)
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     actionState,
                     isCurrentlyActive
                 )
-                    .addSwipeLeftActionIcon(com.xenon.todolist.R.drawable.baseline_auto_delete_24)
+                    .addSwipeLeftActionIcon(R.drawable.delete)
                     .create()
                     .decorate()
 
