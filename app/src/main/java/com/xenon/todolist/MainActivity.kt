@@ -11,7 +11,9 @@ import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -98,6 +100,28 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         binding.todoListRecycleView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = TaskItemAdapter(this@MainActivity, taskItemsModel.getList(), mainActivity)
+            class TodoListItemDecoration : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    val verticalMarginInPx = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        5.toFloat(),
+                        context.resources.displayMetrics
+                    ).toInt()
+                    if (parent.getChildAdapterPosition(view) == 0) {
+                        outRect.top = verticalMarginInPx
+                    }
+                    else if (parent.getChildAdapterPosition(view) == parent.adapter!!.itemCount - 1) {
+                        outRect.bottom = verticalMarginInPx
+                    }
+                }
+            }
+            addItemDecoration(TodoListItemDecoration())
         }
 
         taskItemsModel.taskStatus.observe(this) {change ->

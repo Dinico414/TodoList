@@ -81,7 +81,6 @@
                 android:id="@+id/todoListRecycleView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingVertical="5dp"
                 android:fadeScrollbars="true"
                 android:scrollbarSize="6dp"
                 android:scrollbarThumbVertical="@drawable/scrollhandle"
