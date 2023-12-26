@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         setContentView(binding.root)
 
         taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
-        val yourView = findViewById<View>(com.xenon.todolist.R.id.CoordinatorLayoutMain)
-        adjustBottomMargin(yourView, this)
+
+        adjustBottomMargin(binding.CoordinatorLayoutMain, this)
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
@@ -101,7 +101,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
 
         taskItemsModel.taskStatus.observe(this) {change ->
-            Log.d("Alla", "${change.type} ${change.idx} ${change.taskItem}")
             when (change.type) {
                 TaskItemViewModel.TaskChangedType.ADD -> {
                     binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
@@ -115,7 +114,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                         Snackbar.LENGTH_SHORT
                     )
                         .setAction(getString(com.xenon.todolist.R.string.undo)) {
-//                            addTaskItem(change.taskItem!!, change.idx)
                             taskItemsModel.add(change.taskItem!!, change.idx)
                         }
                         .show()
@@ -156,16 +154,13 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
                 val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
 
-
                 val backgroundDrawable = ContextCompat.getDrawable(
                     this@MainActivity,
                     com.xenon.todolist.R.drawable.deletebackground
                 )
 
-
                 val marginInDp = resources.getDimension(R.dimen.floating_margin)
                 val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
-
 
                 backgroundDrawable?.setBounds(
                     (viewHolder.itemView.right + limitedDX + marginInPixels).toInt(),
@@ -173,7 +168,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     viewHolder.itemView.right - marginInPixels * 2,
                     viewHolder.itemView.bottom - marginInPixels * 2
                 )
-
 
                 backgroundDrawable?.colorFilter = PorterDuffColorFilter(
                     ContextCompat.getColor(this@MainActivity, android.R.color.holo_red_light),
@@ -244,7 +238,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             binding.noTasks.visibility = View.GONE
         }
     }
-
 
     private fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)

@@ -22,31 +22,22 @@ class TaskItemAdapter(
     override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
         holder.bindTaskItem(taskItems[position])
 
-        val margin = 10
-
-        val topMargin: Int = if (position == 0) {
-            10
-        } else {
-            0
-        }
-
-        val marginInPx = TypedValue.applyDimension(
+        val horizontalMarginInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            margin.toFloat(),
+            10.toFloat(),
             context.resources.displayMetrics
         ).toInt()
 
-        val topMarginInPx = TypedValue.applyDimension(
+        val verticalMarginInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            topMargin.toFloat(),
+            5.toFloat(),
             context.resources.displayMetrics
         ).toInt()
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        layoutParams.setMargins(marginInPx, topMarginInPx, marginInPx, marginInPx)
+        layoutParams.setMargins(horizontalMarginInPx, verticalMarginInPx, horizontalMarginInPx, verticalMarginInPx)
         holder.itemView.layoutParams = layoutParams
     }
-
 
     override fun getItemCount(): Int = taskItems.size
 }
