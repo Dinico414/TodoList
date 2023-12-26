@@ -60,7 +60,7 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         binding.name.addTextChangedListener {text ->
             binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
         }
-        binding.saveButton.isEnabled = false
+        binding.saveButton.isEnabled = binding.name.text.isNotEmpty()
     }
 
     private fun openTimePicker() {
