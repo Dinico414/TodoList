@@ -15,4 +15,5 @@
     <string name="task_due">Task Due</string>
     <string name="task_deleted">Task deleted</string>
     <string name="undo">Undo</string>
+    <string name="set_name_hint">Please set the name of the task</string>
 </resources>
