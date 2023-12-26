@@ -7,6 +7,7 @@ import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -56,6 +57,10 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
         }
+        binding.name.addTextChangedListener {text ->
+            binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
+        }
+        binding.saveButton.isEnabled = false
     }
 
     private fun openTimePicker() {
