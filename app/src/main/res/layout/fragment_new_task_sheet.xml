@@ -64,7 +64,7 @@
                 app:cursorColor="@color/primary"
                 app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                 app:endIconTint="@color/primary"
                 app:startIconTint="@color/primary">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/desc"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"

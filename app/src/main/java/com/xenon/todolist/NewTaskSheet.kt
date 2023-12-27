@@ -1,5 +1,6 @@
 package com.xenon.todolist
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
@@ -7,7 +8,10 @@ import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -61,7 +65,12 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         binding.name.addTextChangedListener { text ->
             binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
         }
-        binding.saveButton.isEnabled = binding.name.text.isNotEmpty()
+        binding.saveButton.isEnabled = binding.name.text?.isNotEmpty() ?: false
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//        dialog?.window?.setDecorFitsSystemWindows(false)
+//        view.setOnApplyWindowInsetsListener { v, insets ->
+//            return insets
+//        }
 
         // Get the screen width in pixels
         val screenWidth = resources.displayMetrics.widthPixels
@@ -81,6 +90,15 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         layoutParams.marginStart = dynamicMargin
         layoutParams.marginEnd = dynamicMargin
         binding.cardView.layoutParams = layoutParams
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        if (dialog is BottomSheetDialog) {
+            dialog.behavior.skipCollapsed = true
+            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dialog
     }
 
 
