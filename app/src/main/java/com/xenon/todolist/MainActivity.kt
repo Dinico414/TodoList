@@ -135,9 +135,12 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             when (change.type) {
                 TaskItemViewModel.TaskChangedType.ADD -> {
                     binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
-//                    if (change.idx == 0 || change.idx == taskItemsModel.getList().size - 1) {
-//                        binding.todoListRecycleView.scrollToPosition(change.idx)
-//                    }
+
+                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (change.idx == 0 && firstIdx == 0 || change.idx == taskItemsModel.getList().size - 1 && lastIdx == change.idx - 1) {
+                        binding.todoListRecycleView.scrollToPosition(change.idx)
+                    }
                 }
                 TaskItemViewModel.TaskChangedType.REMOVE -> {
                     binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
@@ -153,6 +156,12 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
                 TaskItemViewModel.TaskChangedType.MOVED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
+
+                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (change.idx2 == 0 && firstIdx == 0 || change.idx2 == taskItemsModel.getList().size - 1 && lastIdx == change.idx2 - 1) {
+                        binding.todoListRecycleView.scrollToPosition(change.idx2)
+                    }
                 }
                 TaskItemViewModel.TaskChangedType.UPDATE -> {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
@@ -160,6 +169,12 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 TaskItemViewModel.TaskChangedType.MOVED_AND_UPDATED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
+
+                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (change.idx2 == 0 && firstIdx == 0 || change.idx2 == taskItemsModel.getList().size - 1 && lastIdx == change.idx2 - 1) {
+                        binding.todoListRecycleView.scrollToPosition(change.idx2)
+                    }
                 }
                 TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
                     binding.todoListRecycleView.adapter?.notifyDataSetChanged()
