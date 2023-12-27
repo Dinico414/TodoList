@@ -20,7 +20,7 @@ class NewTaskSheet : BottomSheetDialogFragment() {
     companion object {
         private var taskItemViewModel: TaskItemViewModel? = null
         private var taskItem: TaskItem? = null
-        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheet? {
+        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheet {
             this.taskItemViewModel = taskItemViewModel
             this.taskItem = taskItem
             return NewTaskSheet()
@@ -67,7 +67,6 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         val screenWidth = resources.displayMetrics.widthPixels
 
         // Define the minimum and maximum margins
-        val minMargin = 25 // dp
         val maxMargin = 56 // dp
 
         // Calculate the dynamic margin based on screen width

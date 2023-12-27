@@ -303,13 +303,13 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
                 // Calculate the desired margin based on the condition
                 desiredMargin = if (navigationBarHeight > 15.dpToPx()) {
-                    12.dpToPx()
+                    0.dpToPx()
                 } else {
                     (15 - navigationBarHeight).dpToPx()
                 }
 
                 val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
-                val desiredMargin2 = desiredMargin +13.dpToPx()
+                val desiredMargin2 = desiredMargin +14.dpToPx()
                 layoutParams.bottomMargin = desiredMargin
                 view.layoutParams = layoutParams
 

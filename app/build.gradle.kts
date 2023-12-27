@@ -12,8 +12,8 @@ android {
         applicationId = "com.xenon.todolist"
         minSdk = 32
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.2.1-beta"
+        versionCode = 5
+        versionName = "0.3.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -57,7 +57,4 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.recyclerview.swipedecorator)
     implementation(libs.androidx.recyclerview)
-    implementation ("androidx.transition:transition:1.4.1")
-    implementation ("jp.wasabeef:glide-transformations:4.3.0")
-
 }

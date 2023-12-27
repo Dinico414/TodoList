@@ -32,7 +32,7 @@ class TaskItemViewModel : ViewModel() {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.OVERWRITTEN))
     }
 
-    fun setSortType(type: SortType) {
+    private fun setSortType(type: SortType) {
         if (type == SortType.BY_COMPLETENESS) {
             taskItems.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
         }
