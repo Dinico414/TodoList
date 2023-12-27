@@ -2,12 +2,13 @@ package com.xenon.todolist
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.util.Collections
 
 class TaskItemViewModel : ViewModel() {
     val taskStatus = MutableLiveData<TaskStatusChange>()
-    class TaskStatusChange(val type: TaskChangedType, val idx: Int = -1, val taskItem: TaskItem? = null)
+    class TaskStatusChange(val type: TaskChangedType, val taskItem: TaskItem? = null, val idx: Int = -1, val idx2: Int = -1)
     enum class TaskChangedType {
-        ADD, REMOVE, UPDATE, OVERWRITTEN
+        ADD, REMOVE, MOVED, UPDATE, OVERWRITTEN
     }
 
     private var maxTaskId = -1
@@ -29,7 +30,7 @@ class TaskItemViewModel : ViewModel() {
         maxTaskId++
         taskItem.id = maxTaskId
         taskItems.add(_idx, taskItem)
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.ADD, _idx, taskItem))
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.ADD, taskItem, _idx))
     }
 
     fun remove(taskItem: TaskItem) {
@@ -37,17 +38,23 @@ class TaskItemViewModel : ViewModel() {
         if (idx < 0)
             return
         taskItems.removeAt(idx)
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, idx, taskItem))
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, taskItem, idx))
     }
 
     fun remove(idx: Int) {
         val taskItem = taskItems.removeAt(idx)
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, idx, taskItem))
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, taskItem, idx))
+    }
+
+    fun move(from: Int, to: Int) {
+//        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
+        Collections.swap(taskItems, from, to)
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED, null, from, to))
     }
 
     fun update(taskItem: TaskItem) {
         val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
         taskItems[idx] = taskItem
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, idx, taskItem))
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, taskItem, idx))
     }
 }

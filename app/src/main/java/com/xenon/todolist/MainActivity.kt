@@ -137,13 +137,12 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             when (change.type) {
                 TaskItemViewModel.TaskChangedType.ADD -> {
                     binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
-                    if (change.idx == 0 || change.idx == taskItemsModel.getList().size - 1) {
-                        binding.todoListRecycleView.scrollToPosition(change.idx)
-                    }
+//                    if (change.idx == 0 || change.idx == taskItemsModel.getList().size - 1) {
+//                        binding.todoListRecycleView.scrollToPosition(change.idx)
+//                    }
                 }
                 TaskItemViewModel.TaskChangedType.REMOVE -> {
                     binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
-
                     Snackbar.make(
                         binding.NewTaskButton,
                         getString(com.xenon.todolist.R.string.task_deleted),
@@ -153,6 +152,9 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                             taskItemsModel.add(change.taskItem!!, change.idx)
                         }
                         .show()
+                }
+                TaskItemViewModel.TaskChangedType.MOVED -> {
+                    binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
                 }
                 TaskItemViewModel.TaskChangedType.UPDATE -> {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
@@ -165,12 +167,22 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.START)
+            }
+
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
+                val fromIdx = viewHolder.bindingAdapterPosition
+                val targetIdx = target.bindingAdapterPosition
+                taskItemsModel.move(fromIdx, targetIdx)
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
