@@ -154,10 +154,13 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
                 TaskItemViewModel.TaskChangedType.MOVED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
-                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
                 }
                 TaskItemViewModel.TaskChangedType.UPDATE -> {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
+                }
+                TaskItemViewModel.TaskChangedType.MOVED_AND_UPDATED -> {
+                    binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
                 }
                 TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
                     binding.todoListRecycleView.adapter?.notifyDataSetChanged()
@@ -181,6 +184,9 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             ): Boolean {
                 val fromIdx = viewHolder.bindingAdapterPosition
                 val targetIdx = target.bindingAdapterPosition
+                if (taskItemsModel.getList()[fromIdx].isCompleted() != taskItemsModel.getList()[targetIdx].isCompleted()) {
+                    return false
+                }
                 taskItemsModel.move(fromIdx, targetIdx)
                 return true
             }
@@ -279,15 +285,15 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         if (taskItem.isCompleted()) {
             var targetIdx = 0
             for ((i, item) in taskItemsModel.getList().reversed().withIndex()) {
-                if (!item.isCompleted()) {
+                if (!item.isCompleted() || item == taskItem) {
                     targetIdx = taskItemsModel.getList().size - i - 1
                     break
                 }
             }
-            taskItemsModel.move(taskItem, targetIdx)
+            taskItemsModel.moveAndUpdate(taskItem, targetIdx)
         }
         else {
-            taskItemsModel.move(taskItem, 0)
+            taskItemsModel.moveAndUpdate(taskItem, 0)
         }
     }
 
