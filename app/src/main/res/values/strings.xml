@@ -5,7 +5,7 @@
     <string name="new_task">New Task</string>
     <string name="save">Save</string>
     <string name="description">Description</string>
-    <string name="name">Name</string>
+    <string name="name">Name*</string>
     <string name="select_time">select Time</string>
     <string name="todo_list">ToDo-List</string>
     <string name="app_name">Todo-List</string>
@@ -15,5 +15,4 @@
     <string name="task_due">Task Due</string>
     <string name="task_deleted">Task deleted</string>
     <string name="undo">Undo</string>
-    <string name="set_name_hint">Please set the name of the task</string>
 </resources>

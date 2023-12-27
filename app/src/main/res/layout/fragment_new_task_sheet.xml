@@ -123,15 +123,6 @@
                 android:textColor="@color/enable_disable_text_color"
                 tools:ignore="TextContrastCheck" />
 
-            <TextView
-                android:id="@+id/set_name_hint_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:text="@string/set_name_hint"
-                android:textColor="@color/secondary" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
