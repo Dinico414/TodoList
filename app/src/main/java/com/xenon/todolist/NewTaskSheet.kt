@@ -38,6 +38,7 @@ class NewTaskSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if (taskItem != null) {
             binding.taskTitle.text = getString(com.xenon.todolist.R.string.edit_task)
             val editable = Editable.Factory.getInstance()
@@ -57,11 +58,32 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
         }
-        binding.name.addTextChangedListener {text ->
+        binding.name.addTextChangedListener { text ->
             binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
         }
         binding.saveButton.isEnabled = binding.name.text.isNotEmpty()
+
+        // Get the screen width in pixels
+        val screenWidth = resources.displayMetrics.widthPixels
+
+        // Define the minimum and maximum margins
+        val minMargin = 25 // dp
+        val maxMargin = 56 // dp
+
+        // Calculate the dynamic margin based on screen width
+        val dynamicMargin = if (screenWidth > 900 + 2 * maxMargin) {
+            (screenWidth - 900) / 2
+        } else {
+            maxMargin
+        }
+
+        // Set the dynamic margin to the CardView
+        val layoutParams = binding.cardView.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.marginStart = dynamicMargin
+        layoutParams.marginEnd = dynamicMargin
+        binding.cardView.layoutParams = layoutParams
     }
+
 
     private fun openTimePicker() {
         val isSystem24Hour = is24HourFormat(requireContext())

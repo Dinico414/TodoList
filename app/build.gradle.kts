@@ -57,4 +57,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.recyclerview.swipedecorator)
     implementation(libs.androidx.recyclerview)
+    implementation ("androidx.transition:transition:1.4.1")
+    implementation ("jp.wasabeef:glide-transformations:4.3.0")
+
 }
