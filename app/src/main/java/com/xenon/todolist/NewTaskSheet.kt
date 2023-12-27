@@ -69,21 +69,28 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         binding.saveButton.isEnabled = binding.name.text?.isNotEmpty() ?: false
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
+
+
         val screenWidth = resources.displayMetrics.widthPixels
+        val density = resources.displayMetrics.density
 
-
+        val screenWidthDp = (screenWidth / density).toInt()
+        val minMargin =25 //dp
         val maxMargin = 56 // dp
 
-
-        val dynamicMargin = if (screenWidth > 1000 + 2 * maxMargin) {
-            (screenWidth - 900) / 2
+        val dynamicMarginDp = if (screenWidthDp > 640) {
+            ((screenWidthDp - 640) / 2).coerceAtLeast(maxMargin)
         } else {
-            maxMargin
+            minMargin
         }
 
         val layoutParams = binding.cardView.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.marginStart = dynamicMargin
-        layoutParams.marginEnd = dynamicMargin
+
+        val dynamicMarginPx = (dynamicMarginDp * density).toInt()
+
+
+        layoutParams.marginStart = dynamicMarginPx
+        layoutParams.marginEnd = dynamicMarginPx
         binding.cardView.layoutParams = layoutParams
     }
 
