@@ -288,8 +288,10 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
     }
 
-    private fun adjustBottomMargin(view: View, activity: AppCompatActivity) {
+    private fun adjustBottomMargin(view: View, activity: AppCompatActivity): Int {
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+
+        var desiredMargin = 15 // Default margin
 
         rootView.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -299,14 +301,31 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
                 val navigationBarHeight = getNavigationBarHeight(activity)
 
-                val desiredMargin =
-                    if (navigationBarHeight > 15.dpToPx()) 0 else (15 - navigationBarHeight).dpToPx()
+                // Calculate the desired margin based on the condition
+                desiredMargin = if (navigationBarHeight > 15.dpToPx()) {
+                    12.dpToPx()
+                } else {
+                    (15 - navigationBarHeight).dpToPx()
+                }
 
                 val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
+                val desiredMargin2 = desiredMargin +13.dpToPx()
                 layoutParams.bottomMargin = desiredMargin
                 view.layoutParams = layoutParams
+
+                // Return the calculated margin value
+                setNewTaskButtonMargin(desiredMargin2)
             }
         })
+
+        return desiredMargin
+    }
+
+    // Function to set the bottom margin for the NewTaskButton
+    private fun setNewTaskButtonMargin(margin: Int) {
+        val layoutParams = binding.NewTaskButton.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParams.bottomMargin = margin
+        binding.NewTaskButton.layoutParams = layoutParams
     }
 
     fun Int.dpToPx(): Int {
