@@ -16,11 +16,10 @@ class TaskItemViewModel : ViewModel() {
     private var sortType = SortType.BY_COMPLETENESS
 
     enum class SortType {
-        BY_ID, BY_COMPLETENESS
+        BY_COMPLETENESS
     }
 
     fun getList(): ArrayList<TaskItem> {
-        // returned list should not be modified
         return taskItems
     }
     fun setList(list: ArrayList<TaskItem>) {
@@ -60,13 +59,6 @@ class TaskItemViewModel : ViewModel() {
         taskItem.id = maxTaskId
         taskItems.add(_idx, taskItem)
         taskStatus.postValue(TaskStatusChange(TaskChangedType.ADD, taskItem, _idx))
-    }
-
-    fun remove(taskItem: TaskItem) {
-        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        if (idx < 0)
-            return
-        remove(idx)
     }
 
     fun remove(idx: Int) {

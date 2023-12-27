@@ -20,6 +20,7 @@ import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
 
+@Suppress("DEPRECATION")
 class NewTaskSheet : BottomSheetDialogFragment() {
     companion object {
         private var taskItemViewModel: TaskItemViewModel? = null
@@ -67,25 +68,19 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         }
         binding.saveButton.isEnabled = binding.name.text?.isNotEmpty() ?: false
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-//        dialog?.window?.setDecorFitsSystemWindows(false)
-//        view.setOnApplyWindowInsetsListener { v, insets ->
-//            return insets
-//        }
 
-        // Get the screen width in pixels
         val screenWidth = resources.displayMetrics.widthPixels
 
-        // Define the minimum and maximum margins
+
         val maxMargin = 56 // dp
 
-        // Calculate the dynamic margin based on screen width
-        val dynamicMargin = if (screenWidth > 900 + 2 * maxMargin) {
+
+        val dynamicMargin = if (screenWidth > 1000 + 2 * maxMargin) {
             (screenWidth - 900) / 2
         } else {
             maxMargin
         }
 
-        // Set the dynamic margin to the CardView
         val layoutParams = binding.cardView.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.marginStart = dynamicMargin
         layoutParams.marginEnd = dynamicMargin
