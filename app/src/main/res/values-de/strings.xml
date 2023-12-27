@@ -14,4 +14,6 @@
     <string name="edit_task">Aufgabe bearbeiten</string>
     <string name="task_deleted">Aufgabe gelöscht</string>
     <string name="undo">Rückgangig</string>
+    <string name="search">Suche</string>
+    <string name="sort_by">Sortiere</string>
 </resources>

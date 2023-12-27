@@ -15,4 +15,6 @@
     <string name="task_due">Task Due</string>
     <string name="task_deleted">Task deleted</string>
     <string name="undo">Undo</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort by</string>
 </resources>
