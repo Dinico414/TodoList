@@ -184,11 +184,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             ): Boolean {
                 val fromIdx = viewHolder.bindingAdapterPosition
                 val targetIdx = target.bindingAdapterPosition
-                if (taskItemsModel.getList()[fromIdx].isCompleted() != taskItemsModel.getList()[targetIdx].isCompleted()) {
-                    return false
-                }
-                taskItemsModel.move(fromIdx, targetIdx)
-                return true
+                return taskItemsModel.move(fromIdx, targetIdx)
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -281,20 +277,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     override fun completeTaskItem(taskItem: TaskItem) {
         taskItem.toggleCompleted()
-
-        if (taskItem.isCompleted()) {
-            var targetIdx = 0
-            for ((i, item) in taskItemsModel.getList().reversed().withIndex()) {
-                if (!item.isCompleted() || item == taskItem) {
-                    targetIdx = taskItemsModel.getList().size - i - 1
-                    break
-                }
-            }
-            taskItemsModel.moveAndUpdate(taskItem, targetIdx)
-        }
-        else {
-            taskItemsModel.moveAndUpdate(taskItem, 0)
-        }
+        taskItemsModel.moveAndUpdate(taskItem)
     }
 
     private fun onTaskItemsChanged() {

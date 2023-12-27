@@ -14,6 +14,13 @@ class TaskItemViewModel : ViewModel() {
 
     private var maxTaskId = -1
     private var taskItems = ArrayList<TaskItem>()
+
+    private var sortType = SortType.BY_COMPLETENESS
+
+    enum class SortType {
+        BY_ID, BY_COMPLETENESS
+    }
+
     fun getList(): ArrayList<TaskItem> {
         // returned list should not be modified
         return taskItems
@@ -23,11 +30,34 @@ class TaskItemViewModel : ViewModel() {
         if (list.size > 0) {
             maxTaskId = list.maxBy { taskItem -> taskItem.id }.id
         }
+        setSortType(sortType)
         taskStatus.postValue(TaskStatusChange(TaskChangedType.OVERWRITTEN))
     }
 
+    fun setSortType(type: SortType) {
+        if (type == SortType.BY_COMPLETENESS) {
+            taskItems.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
+        }
+        sortType = type
+    }
+
     fun add(taskItem: TaskItem, idx: Int = -1) {
-        val _idx = if (idx < 0) { taskItems.size } else { idx }
+        var _idx = if (idx < 0) { taskItems.size } else { idx }
+        if (sortType == SortType.BY_COMPLETENESS) {
+            for ((i, item) in taskItems.reversed().withIndex()) {
+                if (taskItem.isCompleted() && taskItems.size - i <= _idx) {
+                    break
+                }
+                if (!item.isCompleted()) {
+                    _idx = if (taskItem.isCompleted()) {
+                        maxOf(taskItems.size - i, _idx)
+                    } else {
+                        minOf(taskItems.size - i, _idx)
+                    }
+                    break
+                }
+            }
+        }
         maxTaskId++
         taskItem.id = maxTaskId
         taskItems.add(_idx, taskItem)
@@ -38,8 +68,7 @@ class TaskItemViewModel : ViewModel() {
         val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
         if (idx < 0)
             return
-        taskItems.removeAt(idx)
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, taskItem, idx))
+        remove(idx)
     }
 
     fun remove(idx: Int) {
@@ -47,8 +76,26 @@ class TaskItemViewModel : ViewModel() {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, taskItem, idx))
     }
 
-    fun moveAndUpdate(taskItem: TaskItem, to: Int) {
+    fun moveAndUpdate(taskItem: TaskItem) {
+        // Updates taskItem and sets to correct position as per sorting
         val from = taskItems.indexOfFirst { item -> taskItem.id == item.id }
+        var to = 0
+        if (sortType == SortType.BY_COMPLETENESS) {
+            if (taskItem.isCompleted()) {
+                for ((i, item) in taskItems.reversed().withIndex()) {
+                    if (!item.isCompleted() || item == taskItem) {
+                        to = taskItems.size - i - 1
+                        break
+                    }
+                }
+            }
+            else {
+                to = 0
+            }
+        }
+        else {
+            to = taskItems.size - 1
+        }
         if (from == to) {
             update(from)
             return
@@ -57,9 +104,15 @@ class TaskItemViewModel : ViewModel() {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED_AND_UPDATED, taskItem, from, to))
     }
 
-    fun move(from: Int, to: Int) {
+    fun move(from: Int, to: Int): Boolean {
+        if (sortType == SortType.BY_COMPLETENESS) {
+            if (taskItems[from].isCompleted() != taskItems[to].isCompleted()) {
+                return false
+            }
+        }
         taskItems.add(to, taskItems.removeAt(from))
         taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED, taskItems[from], from, to))
+        return true
     }
 
     fun update(taskItem: TaskItem) {
