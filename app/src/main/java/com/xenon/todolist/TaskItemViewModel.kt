@@ -1,9 +1,7 @@
 package com.xenon.todolist
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.util.Collections
 
 class TaskItemViewModel : ViewModel() {
     val taskStatus = MutableLiveData<TaskStatusChange>()
@@ -119,7 +117,7 @@ class TaskItemViewModel : ViewModel() {
         update(taskItems.indexOfFirst { item -> taskItem.id == item.id })
     }
 
-    fun update(idx: Int) {
+    private fun update(idx: Int) {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, taskItems[idx], idx))
     }
 }
