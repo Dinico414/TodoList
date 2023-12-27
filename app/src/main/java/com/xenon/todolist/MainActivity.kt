@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     if (position == RecyclerView.NO_POSITION) {
                         val oldPosition = parent.getChildViewHolder(view)?.oldPosition
                         if (oldPosition == 0) {
-                            outRect.top = 2 * marginInPx
+                            outRect.top = marginInPx
                         }
                     }
                     else if (position == 0) {

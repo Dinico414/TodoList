@@ -144,7 +144,7 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         val desc = binding.desc.text.toString()
         if (taskItem == null) {
             val newTask = TaskItem(0, name, desc, dueTime, -1)
-            taskItemViewModel?.add(newTask)
+            taskItemViewModel?.add(newTask, 0)
         } else {
             taskItem!!.name = name
             taskItem!!.desc = desc
