@@ -108,16 +108,17 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     state: RecyclerView.State
                 ) {
                     super.getItemOffsets(outRect, view, parent, state)
-                    val verticalMarginInPx = TypedValue.applyDimension(
+
+                    // Calculate the top margin in pixels
+                    val topMarginInPx = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
-                        5.toFloat(),
-                        context.resources.displayMetrics
+                        10.toFloat(),
+                        view.context.resources.displayMetrics
                     ).toInt()
+
+                    // Add top margin only to the first item
                     if (parent.getChildAdapterPosition(view) == 0) {
-                        outRect.top = verticalMarginInPx
-                    }
-                    else if (parent.getChildAdapterPosition(view) == parent.adapter!!.itemCount - 1) {
-                        outRect.bottom = verticalMarginInPx
+                        outRect.top = topMarginInPx
                     }
                 }
             }

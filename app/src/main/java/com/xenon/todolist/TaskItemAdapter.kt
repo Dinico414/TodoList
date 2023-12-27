@@ -28,14 +28,9 @@ class TaskItemAdapter(
             context.resources.displayMetrics
         ).toInt()
 
-        val verticalMarginInPx = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            5.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
-
+        // Set only horizontal margin, remove vertical margin
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        layoutParams.setMargins(horizontalMarginInPx, verticalMarginInPx, horizontalMarginInPx, verticalMarginInPx)
+        layoutParams.setMargins(horizontalMarginInPx, 0, horizontalMarginInPx, horizontalMarginInPx)
         holder.itemView.layoutParams = layoutParams
     }
 
