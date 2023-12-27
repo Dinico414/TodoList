@@ -2,6 +2,7 @@
 
 package com.xenon.todolist
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,6 +14,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -110,15 +112,21 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     super.getItemOffsets(outRect, view, parent, state)
 
                     // Calculate the top margin in pixels
-                    val topMarginInPx = TypedValue.applyDimension(
+                    val marginInPx = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
                         10.toFloat(),
                         view.context.resources.displayMetrics
                     ).toInt()
 
-                    // Add top margin only to the first item
-                    if (parent.getChildAdapterPosition(view) == 0) {
-                        outRect.top = topMarginInPx
+                    val position = parent.getChildAdapterPosition(view)
+                    if (position == RecyclerView.NO_POSITION) {
+                        val oldPosition = parent.getChildViewHolder(view)?.oldPosition
+                        if (oldPosition == 0) {
+                            outRect.top = 2 * marginInPx
+                        }
+                    }
+                    else if (position == 0) {
+                        outRect.top = marginInPx
                     }
                 }
             }
@@ -129,6 +137,9 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             when (change.type) {
                 TaskItemViewModel.TaskChangedType.ADD -> {
                     binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
+                    if (change.idx == 0 || change.idx == taskItemsModel.getList().size - 1) {
+                        binding.todoListRecycleView.scrollToPosition(change.idx)
+                    }
                 }
                 TaskItemViewModel.TaskChangedType.REMOVE -> {
                     binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)

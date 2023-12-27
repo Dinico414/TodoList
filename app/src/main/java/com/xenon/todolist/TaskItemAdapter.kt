@@ -10,7 +10,7 @@ import com.xenon.todolist.databinding.TaskItemCellBinding
 class TaskItemAdapter(
     private val context: Context,
     private val taskItems: List<TaskItem>,
-    private val clickListener: TaskItemClickListener
+    private val clickListener: TaskItemClickListener,
 ) : RecyclerView.Adapter<TaskItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskItemViewHolder {
