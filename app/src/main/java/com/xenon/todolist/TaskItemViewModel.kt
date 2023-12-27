@@ -1,5 +1,6 @@
 package com.xenon.todolist
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.Collections
@@ -46,15 +47,28 @@ class TaskItemViewModel : ViewModel() {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.REMOVE, taskItem, idx))
     }
 
+    fun move(taskItem: TaskItem, to: Int) {
+        Log.d("tttt", "taskItem: ${taskItem.id} $taskItem")
+        move(taskItems.indexOfFirst { item -> taskItem.id == item.id }, to)
+    }
+
     fun move(from: Int, to: Int) {
-//        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        Collections.swap(taskItems, from, to)
+        Log.d("ajaj", "$from $to")
+        if (from == to) {
+            update(from)
+            return
+        }
+        Log.d("aa", "before: $taskItems")
+        taskItems.add(to, taskItems.removeAt(from))
+        Log.d("aa", "after: $taskItems")
         taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED, null, from, to))
     }
 
     fun update(taskItem: TaskItem) {
-        val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        taskItems[idx] = taskItem
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, taskItem, idx))
+        update(taskItems.indexOfFirst { item -> taskItem.id == item.id })
+    }
+
+    fun update(idx: Int) {
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, taskItems[idx], idx))
     }
 }

@@ -2,7 +2,6 @@
 
 package com.xenon.todolist
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -155,6 +154,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
                 TaskItemViewModel.TaskChangedType.MOVED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
                 }
                 TaskItemViewModel.TaskChangedType.UPDATE -> {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
@@ -275,7 +275,20 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     override fun completeTaskItem(taskItem: TaskItem) {
         taskItem.toggleCompleted()
-        taskItemsModel.update(taskItem)
+
+        if (taskItem.isCompleted()) {
+            var targetIdx = 0
+            for ((i, item) in taskItemsModel.getList().reversed().withIndex()) {
+                if (!item.isCompleted()) {
+                    targetIdx = taskItemsModel.getList().size - i - 1
+                    break
+                }
+            }
+            taskItemsModel.move(taskItem, targetIdx)
+        }
+        else {
+            taskItemsModel.move(taskItem, 0)
+        }
     }
 
     private fun onTaskItemsChanged() {
