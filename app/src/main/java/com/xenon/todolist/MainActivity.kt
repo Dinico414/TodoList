@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 )
 
                 backgroundDrawable?.colorFilter = PorterDuffColorFilter(
-                    ContextCompat.getColor(this@MainActivity, android.R.color.holo_red_light),
+                    ContextCompat.getColor(this@MainActivity, R.color.delete_red),
                     PorterDuff.Mode.SRC_IN
                 )
 
