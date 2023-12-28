@@ -150,7 +150,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 ) {
                     super.getItemOffsets(outRect, view, parent, state)
 
-                    // Calculate the top margin in pixels
                     val marginInPx = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
                         10.toFloat(),
@@ -176,12 +175,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             when (change.type) {
                 TaskItemViewModel.TaskChangedType.ADD -> {
                     binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
-
-                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    if (change.idx == 0 && firstIdx == 0 || change.idx == taskItemsModel.getList().size - 1 && lastIdx == change.idx - 1) {
-                        binding.todoListRecycleView.scrollToPosition(change.idx)
-                    }
                 }
                 TaskItemViewModel.TaskChangedType.REMOVE -> {
                     binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
@@ -197,12 +190,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
                 TaskItemViewModel.TaskChangedType.MOVED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
-
-                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    if (change.idx2 == 0 && firstIdx == 0 || change.idx2 == taskItemsModel.getList().size - 1 && lastIdx == change.idx2 - 1) {
-                        binding.todoListRecycleView.scrollToPosition(change.idx2)
-                    }
                 }
                 TaskItemViewModel.TaskChangedType.UPDATE -> {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
@@ -210,12 +197,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 TaskItemViewModel.TaskChangedType.MOVED_AND_UPDATED -> {
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
-
-                    val firstIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    val lastIdx = (binding.todoListRecycleView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                    if (change.idx2 == 0 && firstIdx == 0 || change.idx2 == taskItemsModel.getList().size - 1 && lastIdx == change.idx2 - 1) {
-                        binding.todoListRecycleView.scrollToPosition(change.idx2)
-                    }
                 }
                 TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
                     binding.todoListRecycleView.adapter?.notifyDataSetChanged()
@@ -347,7 +328,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     private fun adjustBottomMargin(view: View, activity: AppCompatActivity): Int {
         val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
 
-        var desiredMargin = 15 // Default margin
+        var desiredMargin = 15
 
         rootView.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -357,7 +338,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
                 val navigationBarHeight = getNavigationBarHeight(activity)
 
-                // Calculate the desired margin based on the condition
                 desiredMargin = if (navigationBarHeight > 15.dpToPx()) {
                     0.dpToPx()
                 } else {
@@ -369,7 +349,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 layoutParams.bottomMargin = desiredMargin
                 view.layoutParams = layoutParams
 
-                // Return the calculated margin value
+
                 setNewTaskButtonMargin(desiredMargin2)
             }
         })
@@ -377,7 +357,6 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         return desiredMargin
     }
 
-    // Function to set the bottom margin for the NewTaskButton
     private fun setNewTaskButtonMargin(margin: Int) {
         val layoutParams = binding.NewTaskButton.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.bottomMargin = margin

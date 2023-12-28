@@ -18,122 +18,122 @@
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context=".NewTaskSheet">
+            android:layout_height="wrap_content"
+            android:scrollbarSize="6dp"
+            android:scrollbarThumbVertical="@drawable/scrollhandle"
+            android:scrollbarTrackVertical="@color/surface"
+            >
 
-            <ImageView
-                android:id="@+id/view"
-                android:layout_width="45dp"
-                android:layout_height="6dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:alpha="0.5"
-                android:background="@drawable/handle"
-                android:backgroundTint="@android:color/system_neutral1_500"
-                android:importantForAccessibility="no"
-                tools:ignore="ImageContrastCheck" />
-
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:context=".NewTaskSheet">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/view"
+                    android:layout_width="45dp"
+                    android:layout_height="6dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/handle"
+                    android:backgroundTint="@android:color/system_neutral1_500"
+                    android:importantForAccessibility="no"
+                    tools:ignore="ImageContrastCheck" />
+
+
+                <TextView
+                    android:id="@+id/taskTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/new_task"
+                    android:textAlignment="center"
+                    android:textColor="@color/icon"
+                    android:textSize="30sp"
+                    tools:ignore="TextContrastCheck" />
 
-                    <TextView
-                        android:id="@+id/taskTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/new_task"
-                        android:textAlignment="center"
-                        android:textColor="@color/icon"
-                        android:textSize="30sp"
-                        tools:ignore="TextContrastCheck" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_input"
+                    style="@style/XenonInputFilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@drawable/tile_inputbox"
+                    android:backgroundTint="@color/surface"
+                    android:clipToOutline="true"
+                    app:counterEnabled="false"
+                    app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:cursorColor="@color/primary"
+                    app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name_input"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name"
                         style="@style/XenonInputFilledBox"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="@drawable/tile_inputbox"
-                        android:backgroundTint="@color/surface"
-                        android:clipToOutline="true"
-                        app:counterEnabled="false"
-                        app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                        app:cursorColor="@color/primary"
-                        app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
+                        android:layout_height="match_parent"
+                        android:autofillHints=""
+                        android:hint="@string/name"
+                        android:inputType="text" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/name"
-                            style="@style/XenonInputFilledBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/name"
-                            android:inputType="text"
-                            android:autofillHints="" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/desc_input"
+                    style="@style/XenonInputFilledBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@drawable/tile_inputbox"
+                    android:backgroundTint="@color/secondaryContainer"
+                    android:clipToOutline="true"
+                    app:cursorColor="@color/primary"
+                    app:endIconTint="@color/primary"
+                    app:startIconTint="@color/primary">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/desc"
                         style="@style/XenonInputFilledBox"
-                        android:id="@+id/desc_input"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="@drawable/tile_inputbox"
-                        android:backgroundTint="@color/secondaryContainer"
-                        android:clipToOutline="true"
-                        app:cursorColor="@color/primary"
-                        app:endIconTint="@color/primary"
-                        app:startIconTint="@color/primary">
+                        android:layout_height="match_parent"
+                        android:autofillHints=""
+                        android:hint="@string/description"
+                        android:inputType="text|textMultiLine"
+                        android:maxHeight="500dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/desc"
-                            style="@style/XenonInputFilledBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/description"
-                            android:inputType="text|textMultiLine"
-                            android:autofillHints="" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/timePickerButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:text="@string/select_time"
+                    android:textColor="@color/primary"
+                    tools:ignore="TextContrastCheck" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/timePickerButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/select_time"
-                        android:textColor="@color/primary"
-                        tools:ignore="TextContrastCheck" />
-
-                    <Button
-                        android:id="@+id/saveButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="@color/enable_disable_button_color"
-                        android:enabled="false"
-                        android:text="@string/save"
-                        android:textColor="@color/enable_disable_text_color"
-                        tools:ignore="TextContrastCheck" />
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/enable_disable_button_color"
+                    android:enabled="false"
+                    android:text="@string/save"
+                    android:textColor="@color/enable_disable_text_color"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
