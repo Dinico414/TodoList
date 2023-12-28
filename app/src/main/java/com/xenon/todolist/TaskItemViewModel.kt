@@ -16,7 +16,7 @@ class TaskItemViewModel : ViewModel() {
     private var sortType = SortType.BY_COMPLETENESS
 
     enum class SortType {
-        BY_ID, BY_COMPLETENESS
+        NONE, BY_COMPLETENESS, BY_CREATION_DATE
     }
 
     fun getList(): ArrayList<TaskItem> {
@@ -32,11 +32,21 @@ class TaskItemViewModel : ViewModel() {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.OVERWRITTEN))
     }
 
-    private fun setSortType(type: SortType) {
-        if (type == SortType.BY_COMPLETENESS) {
-            taskItems.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
+    fun getSortType(): SortType {
+        return sortType
+    }
+    fun setSortType(type: SortType) {
+        if (type == sortType) {
+            return
         }
         sortType = type
+
+        when (type) {
+            SortType.BY_COMPLETENESS -> taskItems.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
+            SortType.BY_CREATION_DATE -> taskItems.sortBy { taskItem -> taskItem.createdDate }
+            else -> {}
+        }
+        setList(taskItems)
     }
 
     fun add(taskItem: TaskItem, idx: Int = -1) {
@@ -52,6 +62,14 @@ class TaskItemViewModel : ViewModel() {
                     } else {
                         minOf(taskItems.size - i, _idx)
                     }
+                    break
+                }
+            }
+        }
+        else if (sortType == SortType.BY_CREATION_DATE) {
+            for ((i, item) in taskItems.withIndex()) {
+                if (taskItem.createdDate > item.createdDate) {
+                    _idx = maxOf(i - 1, 0)
                     break
                 }
             }
@@ -91,8 +109,11 @@ class TaskItemViewModel : ViewModel() {
                 to = 0
             }
         }
+        else if (sortType == SortType.BY_CREATION_DATE) {
+            to = from
+        }
         else {
-            to = taskItems.size - 1
+            to = from
         }
         if (from == to) {
             update(from)
@@ -108,6 +129,9 @@ class TaskItemViewModel : ViewModel() {
                 return false
             }
         }
+        else if (sortType == SortType.BY_CREATION_DATE) {
+            return false
+        }
         taskItems.add(to, taskItems.removeAt(from))
         taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED, taskItems[from], from, to))
         return true
@@ -117,7 +141,7 @@ class TaskItemViewModel : ViewModel() {
         update(taskItems.indexOfFirst { item -> taskItem.id == item.id })
     }
 
-    private fun update(idx: Int) {
+    fun update(idx: Int) {
         taskStatus.postValue(TaskStatusChange(TaskChangedType.UPDATE, taskItems[idx], idx))
     }
 }

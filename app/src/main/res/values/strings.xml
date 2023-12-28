@@ -17,4 +17,9 @@
     <string name="undo">Undo</string>
     <string name="search">Search</string>
     <string name="sort_by">Sort by</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="sort_by_none">No sorting</string>
+    <string name="sort_by_completeness">Completeness</string>
+    <string name="sort_by_creation_date">Creation date</string>
 </resources>

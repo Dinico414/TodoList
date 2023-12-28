@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sorting_dialog_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/sorting_dialog_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/border_margin"
+        android:paddingTop="@dimen/border_margin">
+
+        <RadioGroup
+            android:id="@+id/sorting_dialog_radio_sorting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/border_margin">
+
+            <RadioButton
+                android:id="@+id/sorting_dialog_radio_by_creation_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/border_margin"
+                android:paddingBottom="@dimen/border_margin"
+                android:text="@string/sort_by_creation_date" />
+
+            <RadioButton
+                android:id="@+id/sorting_dialog_radio_by_completeness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/border_margin"
+                android:paddingBottom="@dimen/border_margin"
+                android:text="@string/sort_by_completeness" />
+
+        </RadioGroup>
+    </LinearLayout>
+</ScrollView>

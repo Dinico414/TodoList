@@ -15,5 +15,10 @@
     <string name="task_deleted">Aufgabe gelöscht</string>
     <string name="undo">Rückgangig</string>
     <string name="search">Suche</string>
-    <string name="sort_by">Sortiere</string>
+    <string name="sort_by">Sortiere nach</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Abbruch</string>
+    <string name="sort_by_completeness">Fertigstellung</string>
+    <string name="sort_by_none">Keine Sortierung</string>
+    <string name="sort_by_creation_date">Erstelldatum</string>
 </resources>

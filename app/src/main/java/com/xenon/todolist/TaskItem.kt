@@ -11,6 +11,7 @@ data class TaskItem(
     var name: String,
     var desc: String,
     var dueTime: Long,
+    var createdDate: Long,
     var completedDate: Long,
 ) {
 

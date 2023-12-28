@@ -13,10 +13,12 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -24,6 +26,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.databinding.ActivityMainBinding
@@ -44,7 +48,10 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        sharedPref = getPreferences(Context.MODE_PRIVATE)
+
         taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
+        taskItemsModel.setSortType(TaskItemViewModel.SortType.valueOf(sharedPref.getString("sortType", "NONE")!!))
 
         adjustBottomMargin(binding.CoordinatorLayoutMain, this)
 
@@ -55,7 +62,41 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             }
         }
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
+        val activity = this
+        (binding.toolbar as MaterialToolbar).setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                com.xenon.todolist.R.id.search -> {}
+                com.xenon.todolist.R.id.sort -> {
+                    val view = layoutInflater.inflate(com.xenon.todolist.R.layout.dialog_set_sorting, null)
+                    val radioView = view.findViewById<RadioGroup>(com.xenon.todolist.R.id.sorting_dialog_radio_sorting)
+                    radioView.check(when(taskItemsModel.getSortType()) {
+                        TaskItemViewModel.SortType.BY_CREATION_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date
+                        else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
+                    })
+
+                    MaterialAlertDialogBuilder(activity)
+                        .setPositiveButton(com.xenon.todolist.R.string.ok) { dialog, which ->
+                            val sortType = when (radioView.checkedRadioButtonId) {
+                                com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
+                                com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
+                                else -> TaskItemViewModel.SortType.NONE
+                            }
+                            with (sharedPref.edit()) {
+                                putString("sortType", sortType.name)
+                                apply()
+                            }
+                            taskItemsModel.setSortType(sortType)
+                        }
+                        .setNegativeButton(com.xenon.todolist.R.string.cancel, null)
+                        .setTitle(com.xenon.todolist.R.string.sort_by)
+                        .setView(view)
+                        .show()
+                }
+                com.xenon.todolist.R.id.settings -> {}
+                else -> return@setOnMenuItemClickListener false
+            }
+            return@setOnMenuItemClickListener true
+        }
 
         updateAppbar()
         loadTaskItems()
