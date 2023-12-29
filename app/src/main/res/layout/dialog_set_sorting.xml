@@ -19,12 +19,28 @@
             android:layout_marginBottom="@dimen/border_margin">
 
             <RadioButton
+                android:id="@+id/sorting_dialog_radio_by_none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/border_margin"
+                android:paddingBottom="@dimen/border_margin"
+                android:text="@string/sort_by_none" />
+            
+            <RadioButton
                 android:id="@+id/sorting_dialog_radio_by_creation_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/border_margin"
                 android:paddingBottom="@dimen/border_margin"
                 android:text="@string/sort_by_creation_date" />
+
+            <RadioButton
+                android:id="@+id/sorting_dialog_radio_by_due_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/border_margin"
+                android:paddingBottom="@dimen/border_margin"
+                android:text="@string/sort_by_due_date" />
 
             <RadioButton
                 android:id="@+id/sorting_dialog_radio_by_completeness"

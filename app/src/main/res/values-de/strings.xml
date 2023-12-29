@@ -21,4 +21,6 @@
     <string name="sort_by_completeness">Fertigstellung</string>
     <string name="sort_by_none">Keine Sortierung</string>
     <string name="sort_by_creation_date">Erstelldatum</string>
+    <string name="sort_by_due_date">Fälligkeitsdatum</string>
+    <string name="done">Erledigt</string>
 </resources>
