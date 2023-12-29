@@ -71,8 +71,10 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     val view = layoutInflater.inflate(com.xenon.todolist.R.layout.dialog_set_sorting, null)
                     val radioView = view.findViewById<RadioGroup>(com.xenon.todolist.R.id.sorting_dialog_radio_sorting)
                     radioView.check(when(taskItemsModel.getSortType()) {
+                        TaskItemViewModel.SortType.BY_COMPLETENESS ->com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
                         TaskItemViewModel.SortType.BY_CREATION_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date
-                        else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
+                        TaskItemViewModel.SortType.BY_DUE_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date
+                        else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_none
                     })
 
                     MaterialAlertDialogBuilder(activity)
@@ -80,6 +82,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                             val sortType = when (radioView.checkedRadioButtonId) {
                                 com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
                                 com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
+                                com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
                                 else -> TaskItemViewModel.SortType.NONE
                             }
                             with (sharedPref.edit()) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R
@@ -109,6 +111,13 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
         val cal = Calendar.getInstance()
+        if (taskItem != null) {
+            cal.timeInMillis = taskItem?.dueTime ?: System.currentTimeMillis()
+        }
+
+//        val picker = MaterialDatePicker.Builder() {
+//
+//        }
 
         val picker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
@@ -167,8 +176,9 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         } else {
             taskItem!!.name = name
             taskItem!!.desc = desc
+            Log.d("", "updated to $dueTime")
             if (dueTime >= 0) taskItem!!.dueTime = dueTime
-            taskItemViewModel?.update(taskItem!!)
+            taskItemViewModel?.moveAndUpdate(taskItem!!)
         }
         binding.name.setText("")
         binding.desc.setText("")

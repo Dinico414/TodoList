@@ -1,5 +1,6 @@
 package com.xenon.todolist
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -16,7 +17,7 @@ class TaskItemViewModel : ViewModel() {
     private var sortType = SortType.BY_COMPLETENESS
 
     enum class SortType {
-        NONE, BY_COMPLETENESS, BY_CREATION_DATE
+        NONE, BY_COMPLETENESS, BY_CREATION_DATE, BY_DUE_DATE
     }
 
     fun getList(): ArrayList<TaskItem> {
@@ -44,6 +45,7 @@ class TaskItemViewModel : ViewModel() {
         when (type) {
             SortType.BY_COMPLETENESS -> taskItems.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
             SortType.BY_CREATION_DATE -> taskItems.sortBy { taskItem -> taskItem.createdDate }
+            SortType.BY_DUE_DATE -> taskItems.sortBy { taskItem -> taskItem.dueTime }
             else -> {}
         }
         setList(taskItems)
@@ -68,7 +70,15 @@ class TaskItemViewModel : ViewModel() {
         }
         else if (sortType == SortType.BY_CREATION_DATE) {
             for ((i, item) in taskItems.withIndex()) {
-                if (taskItem.createdDate > item.createdDate) {
+                if (taskItem.createdDate < item.createdDate) {
+                    _idx = maxOf(i - 1, 0)
+                    break
+                }
+            }
+        }
+        else if (sortType == SortType.BY_DUE_DATE) {
+            for ((i, item) in taskItems.withIndex()) {
+                if (taskItem.dueTime < item.dueTime) {
                     _idx = maxOf(i - 1, 0)
                     break
                 }
@@ -110,7 +120,30 @@ class TaskItemViewModel : ViewModel() {
             }
         }
         else if (sortType == SortType.BY_CREATION_DATE) {
-            to = from
+            for ((i, item) in taskItems.withIndex()) {
+                if (taskItem.createdDate == item.createdDate && taskItem.id == item.id) {
+                    to = i
+                    break
+                }
+                if (taskItem.createdDate < item.createdDate) {
+                    to = maxOf(i - 1, 0)
+                    break
+                }
+            }
+        }
+        else if (sortType == SortType.BY_DUE_DATE) {
+            for ((i, item) in taskItems.withIndex()) {
+                Log.d("", "$i ${taskItem.dueTime} < ${item.dueTime}")
+                if (taskItem.dueTime == item.dueTime && taskItem.id == item.id) {
+                    to = i
+                    break
+                }
+                if (taskItem.dueTime < item.dueTime) {
+                    to = maxOf(i - 1, 0)
+                    break
+                }
+            }
+            Log.d("", "to $to")
         }
         else {
             to = from
@@ -129,7 +162,10 @@ class TaskItemViewModel : ViewModel() {
                 return false
             }
         }
-        else if (sortType == SortType.BY_CREATION_DATE) {
+        else if (sortType == SortType.BY_CREATION_DATE && taskItems[from].createdDate != taskItems[to].createdDate) {
+            return false
+        }
+        else if (sortType == SortType.BY_DUE_DATE && taskItems[from].dueTime != taskItems[to].dueTime) {
             return false
         }
         taskItems.add(to, taskItems.removeAt(from))
