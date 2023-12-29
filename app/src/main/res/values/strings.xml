@@ -19,7 +19,7 @@
     <string name="sort_by">Sort by</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="sort_by_none">No sorting</string>
+    <string name="sort_by_none">Free sorting</string>
     <string name="sort_by_completeness">Completeness</string>
     <string name="sort_by_creation_date">Creation date</string>
     <string name="sort_by_due_date">Due date</string>

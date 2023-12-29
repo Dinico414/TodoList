@@ -24,7 +24,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/border_margin"
                 android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_none" />
+                android:text="@string/sort_by_none"
+                style="@style/Widget.App.RadioButton"/>
             
             <RadioButton
                 android:id="@+id/sorting_dialog_radio_by_creation_date"
@@ -32,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/border_margin"
                 android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_creation_date" />
+                android:text="@string/sort_by_creation_date"
+                style="@style/Widget.App.RadioButton"/>
 
             <RadioButton
                 android:id="@+id/sorting_dialog_radio_by_due_date"
@@ -40,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/border_margin"
                 android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_due_date" />
+                android:text="@string/sort_by_due_date"
+                style="@style/Widget.App.RadioButton"/>
 
             <RadioButton
                 android:id="@+id/sorting_dialog_radio_by_completeness"
@@ -48,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/border_margin"
                 android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_completeness" />
+                android:text="@string/sort_by_completeness"
+                style="@style/Widget.App.RadioButton"/>
 
         </RadioGroup>
     </LinearLayout>

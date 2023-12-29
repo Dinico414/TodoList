@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:dialogCornerRadius">20dp</item>
+        <item name="android:colorBackground">@color/surface</item>
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="android:textColor">@color/onSurface</item>
+        <item name="android:borderlessButtonStyle">@style/MyBorderlessButton</item>
+        <item name="android:buttonBarStyle">@style/MyBorderlessButton</item>
+    </style>
+
+    <style name="MyBorderlessButton" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:color">@color/primary</item>
+    </style>
+
+    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/button_tint</item>
+        <item name="android:textColor">@color/onSurface</item>
+    </style>
+
+
+
+</resources>

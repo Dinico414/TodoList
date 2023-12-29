@@ -116,6 +116,5 @@
         app:layout_anchor="@+id/CoordinatorLayoutMain"
         app:layout_anchorGravity="end|bottom"
         tools:ignore="SpeakableTextPresentCheck" />
-    <!--        adding dynamic bottom margin with navbar height-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

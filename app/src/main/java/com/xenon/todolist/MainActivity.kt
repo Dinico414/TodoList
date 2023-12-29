@@ -13,7 +13,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.commons.accesspoint.R
@@ -77,7 +75,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                         else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_none
                     })
 
-                    MaterialAlertDialogBuilder(activity)
+                    MaterialAlertDialogBuilder(activity, com.xenon.todolist.R.style.MyAlertDialogTheme)
                         .setPositiveButton(com.xenon.todolist.R.string.ok) { dialog, which ->
                             val sortType = when (radioView.checkedRadioButtonId) {
                                 com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
@@ -139,7 +137,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
     private fun setRecyclerView() {
         val mainActivity = this
         binding.todoListRecycleView.apply {
@@ -182,6 +180,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                 }
                 TaskItemViewModel.TaskChangedType.REMOVE -> {
                     binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
+
                     Snackbar.make(
                         binding.NewTaskButton,
                         getString(com.xenon.todolist.R.string.task_deleted),
@@ -190,6 +189,10 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                         .setAction(getString(com.xenon.todolist.R.string.undo)) {
                             taskItemsModel.add(change.taskItem!!, change.idx)
                         }
+
+                        .setTextColor(ContextCompat.getColor(this, R.color.onSurface))
+                        .setActionTextColor(ContextCompat.getColor(this, R.color.primary))
+                        .setBackgroundTint(ContextCompat.getColor(this, R.color.surface))
                         .show()
                 }
                 TaskItemViewModel.TaskChangedType.MOVED -> {
