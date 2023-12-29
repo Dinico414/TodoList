@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         }
 
         val activity = this
-        (binding.toolbar as MaterialToolbar).setOnMenuItemClickListener { menuItem ->
+        (binding.toolbar as Toolbar).setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 com.xenon.todolist.R.id.search -> {}
                 com.xenon.todolist.R.id.sort -> {
@@ -195,8 +196,11 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
                     binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
                 }
                 TaskItemViewModel.TaskChangedType.MOVED_AND_UPDATED -> {
+                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
                     binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
-                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx2)
+                    if (change.idx == 0) {
+                        binding.todoListRecycleView.scrollToPosition(0)
+                    }
                 }
                 TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
                     binding.todoListRecycleView.adapter?.notifyDataSetChanged()
