@@ -325,7 +325,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
 
     override fun completeTaskItem(taskItem: TaskItem) {
         taskItem.toggleCompleted()
-        taskItemsModel.moveAndUpdate(taskItem)
+        taskItemsModel.moveAndUpdate(taskItem, true)
     }
 
     private fun onTaskItemsChanged() {

@@ -105,12 +105,19 @@ class TaskItemViewModel : ViewModel() {
     }
 
     fun moveAndUpdate(taskItem: TaskItem) {
+        moveAndUpdate(taskItem, false)
+    }
+
+    fun moveAndUpdate(taskItem: TaskItem, completedStateChanged: Boolean) {
         // Updates taskItem and sets to correct position as per sorting
         val from = taskItems.indexOfFirst { item -> taskItem.id == item.id }
         if (from < 0) return
-        var to = calculateItemPosition(taskItem, from)
-        // Move newly uncompleted items to top
-        if (sortType == SortType.BY_COMPLETENESS && !taskItem.isCompleted() && to == from) to = 0
+        val to = if (completedStateChanged && sortType == SortType.BY_COMPLETENESS && !taskItem.isCompleted()) {
+            // Move newly uncompleted items to top
+            0
+        } else {
+            calculateItemPosition(taskItem, from)
+        }
         if (from == to) {
             update(from)
             return
