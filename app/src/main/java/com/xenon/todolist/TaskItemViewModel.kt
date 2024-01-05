@@ -1,6 +1,5 @@
 package com.xenon.todolist
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -51,49 +50,52 @@ class TaskItemViewModel : ViewModel() {
         setList(taskItems)
     }
 
+    private fun calculateItemPosition(taskItem: TaskItem, oldIdx: Int): Int {
+        val newIdx: Int
+        when (sortType) {
+            SortType.BY_COMPLETENESS -> {
+                var pivotIdx = taskItems.indexOfFirst { item -> item.isCompleted() && item != taskItem }
+                if (pivotIdx > 0) pivotIdx -= 1
+                else if (pivotIdx < 0) pivotIdx = taskItems.size - 1
+
+                newIdx = if (taskItem.isCompleted() && oldIdx < pivotIdx) pivotIdx else oldIdx
+            }
+            SortType.BY_CREATION_DATE -> {
+                var pivotIdx = taskItems.indexOfFirst { item ->
+                    item.createdDate > taskItem.createdDate || item.dueTime == taskItem.dueTime && item != taskItem
+                }
+                if (pivotIdx > 0) pivotIdx -= 1
+                else if (pivotIdx < 0) pivotIdx = taskItems.size - 1
+
+                newIdx = if (oldIdx < pivotIdx) pivotIdx else oldIdx
+            }
+            SortType.BY_DUE_DATE -> {
+                var pivotIdx = taskItems.indexOfFirst { item ->
+                    item.dueTime > taskItem.dueTime || item.dueTime == taskItem.dueTime && item != taskItem
+                }
+                if (pivotIdx > 0) pivotIdx -= 1
+                else if (pivotIdx < 0) pivotIdx = taskItems.size - 1
+
+                newIdx = if (oldIdx < pivotIdx) pivotIdx else oldIdx
+            }
+            else -> {
+                newIdx = oldIdx
+            }
+        }
+        return newIdx
+    }
+
     fun add(taskItem: TaskItem, idx: Int = -1) {
-        var _idx = if (idx < 0) { taskItems.size } else { idx }
-        if (sortType == SortType.BY_COMPLETENESS) {
-            for ((i, item) in taskItems.reversed().withIndex()) {
-                if (taskItem.isCompleted() && taskItems.size - i <= _idx) {
-                    break
-                }
-                if (!item.isCompleted()) {
-                    _idx = if (taskItem.isCompleted()) {
-                        maxOf(taskItems.size - i, _idx)
-                    } else {
-                        minOf(taskItems.size - i, _idx)
-                    }
-                    break
-                }
-            }
-        }
-        else if (sortType == SortType.BY_CREATION_DATE) {
-            for ((i, item) in taskItems.withIndex()) {
-                if (taskItem.createdDate < item.createdDate) {
-                    _idx = maxOf(i - 1, 0)
-                    break
-                }
-            }
-        }
-        else if (sortType == SortType.BY_DUE_DATE) {
-            for ((i, item) in taskItems.withIndex()) {
-                if (taskItem.dueTime < item.dueTime) {
-                    _idx = maxOf(i - 1, 0)
-                    break
-                }
-            }
-        }
+        val to = calculateItemPosition(taskItem, if (idx < 0) taskItems.size else idx)
         maxTaskId++
         taskItem.id = maxTaskId
-        taskItems.add(_idx, taskItem)
-        taskStatus.postValue(TaskStatusChange(TaskChangedType.ADD, taskItem, _idx))
+        taskItems.add(to, taskItem)
+        taskStatus.postValue(TaskStatusChange(TaskChangedType.ADD, taskItem, to))
     }
 
     fun remove(taskItem: TaskItem) {
         val idx = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        if (idx < 0)
-            return
+        if (idx < 0) return
         remove(idx)
     }
 
@@ -105,49 +107,10 @@ class TaskItemViewModel : ViewModel() {
     fun moveAndUpdate(taskItem: TaskItem) {
         // Updates taskItem and sets to correct position as per sorting
         val from = taskItems.indexOfFirst { item -> taskItem.id == item.id }
-        var to = 0
-        if (sortType == SortType.BY_COMPLETENESS) {
-            if (taskItem.isCompleted()) {
-                for ((i, item) in taskItems.reversed().withIndex()) {
-                    if (!item.isCompleted() || item == taskItem) {
-                        to = taskItems.size - i - 1
-                        break
-                    }
-                }
-            }
-            else {
-                to = 0
-            }
-        }
-        else if (sortType == SortType.BY_CREATION_DATE) {
-            for ((i, item) in taskItems.withIndex()) {
-                if (taskItem.createdDate == item.createdDate && taskItem.id == item.id) {
-                    to = i
-                    break
-                }
-                if (taskItem.createdDate < item.createdDate) {
-                    to = maxOf(i - 1, 0)
-                    break
-                }
-            }
-        }
-        else if (sortType == SortType.BY_DUE_DATE) {
-            for ((i, item) in taskItems.withIndex()) {
-                Log.d("", "$i ${taskItem.dueTime} < ${item.dueTime}")
-                if (taskItem.dueTime == item.dueTime && taskItem.id == item.id) {
-                    to = i
-                    break
-                }
-                if (taskItem.dueTime < item.dueTime) {
-                    to = maxOf(i - 1, 0)
-                    break
-                }
-            }
-            Log.d("", "to $to")
-        }
-        else {
-            to = from
-        }
+        if (from < 0) return
+        var to = calculateItemPosition(taskItem, from)
+        // Move newly uncompleted items to top
+        if (sortType == SortType.BY_COMPLETENESS && !taskItem.isCompleted() && to == from) to = 0
         if (from == to) {
             update(from)
             return
@@ -157,10 +120,8 @@ class TaskItemViewModel : ViewModel() {
     }
 
     fun move(from: Int, to: Int): Boolean {
-        if (sortType == SortType.BY_COMPLETENESS) {
-            if (taskItems[from].isCompleted() != taskItems[to].isCompleted()) {
-                return false
-            }
+        if (sortType == SortType.BY_COMPLETENESS && taskItems[from].isCompleted() != taskItems[to].isCompleted()) {
+            return false
         }
         else if (sortType == SortType.BY_CREATION_DATE && taskItems[from].createdDate != taskItems[to].createdDate) {
             return false
@@ -168,6 +129,7 @@ class TaskItemViewModel : ViewModel() {
         else if (sortType == SortType.BY_DUE_DATE && taskItems[from].dueTime != taskItems[to].dueTime) {
             return false
         }
+        // Allow moving item
         taskItems.add(to, taskItems.removeAt(from))
         taskStatus.postValue(TaskStatusChange(TaskChangedType.MOVED, taskItems[from], from, to))
         return true

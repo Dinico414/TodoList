@@ -50,7 +50,9 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         sharedPref = getPreferences(Context.MODE_PRIVATE)
 
         taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
-        taskItemsModel.setSortType(TaskItemViewModel.SortType.valueOf(sharedPref.getString("sortType", "NONE")!!))
+        val currentSortType = sharedPref.getString("sortType", null)
+        if (currentSortType != null)
+            taskItemsModel.setSortType(TaskItemViewModel.SortType.valueOf(currentSortType))
 
         adjustBottomMargin(binding.CoordinatorLayoutMain, this)
 
