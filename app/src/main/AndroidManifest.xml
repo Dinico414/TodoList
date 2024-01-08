@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoList"
         android:enableOnBackInvokedCallback="true"
+        android:localeConfig="@xml/locale_config"
         tools:targetApi="tiramisu">
         <activity
             android:name=".MainActivity"
@@ -19,8 +20,18 @@
             android:theme="@style/Theme.TodoList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:configChanges="orientation"
+            android:exported="true"
+            android:label="@string/settings"
+            android:parentActivityName=".activities.SettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

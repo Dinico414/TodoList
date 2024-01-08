@@ -23,4 +23,7 @@
     <string name="sort_by_creation_date">Erstelldatum</string>
     <string name="sort_by_due_date">Fälligkeitsdatum</string>
     <string name="done">Erledigt</string>
+    <string name="settings">Einstellungen</string>
+    <string name="general">Allgemein</string>
+    <string name="language">Sprache</string>
 </resources>

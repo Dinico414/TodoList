@@ -4,23 +4,20 @@ package com.xenon.todolist
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.RadioGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -29,12 +26,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.activities.BaseActivity
+import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class MainActivity : AppCompatActivity(), TaskItemClickListener {
+class MainActivity : BaseActivity(), TaskItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var taskItemsModel: TaskItemViewModel
     private lateinit var sharedPref: SharedPreferences
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         if (currentSortType != null)
             taskItemsModel.setSortType(TaskItemViewModel.SortType.valueOf(currentSortType))
 
-        adjustBottomMargin(binding.CoordinatorLayoutMain, this)
+        adjustBottomMargin(binding.CoordinatorLayoutMain, binding.NewTaskButton)
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
@@ -63,45 +62,7 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
             }
         }
 
-        val activity = this
-        (binding.toolbar as Toolbar).setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                com.xenon.todolist.R.id.search -> {}
-                com.xenon.todolist.R.id.sort -> {
-                    val view = layoutInflater.inflate(com.xenon.todolist.R.layout.dialog_set_sorting, null)
-                    val radioView = view.findViewById<RadioGroup>(com.xenon.todolist.R.id.sorting_dialog_radio_sorting)
-                    radioView.check(when(taskItemsModel.getSortType()) {
-                        TaskItemViewModel.SortType.BY_COMPLETENESS ->com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
-                        TaskItemViewModel.SortType.BY_CREATION_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date
-                        TaskItemViewModel.SortType.BY_DUE_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date
-                        else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_none
-                    })
-
-                    MaterialAlertDialogBuilder(activity, com.xenon.todolist.R.style.MyAlertDialogTheme)
-                        .setPositiveButton(com.xenon.todolist.R.string.ok) { dialog, which ->
-                            val sortType = when (radioView.checkedRadioButtonId) {
-                                com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
-                                com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
-                                com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
-                                else -> TaskItemViewModel.SortType.NONE
-                            }
-                            with (sharedPref.edit()) {
-                                putString("sortType", sortType.name)
-                                apply()
-                            }
-                            taskItemsModel.setSortType(sortType)
-                        }
-                        .setNegativeButton(com.xenon.todolist.R.string.cancel, null)
-                        .setTitle(com.xenon.todolist.R.string.sort_by)
-                        .setView(view)
-                        .show()
-                }
-                com.xenon.todolist.R.id.settings -> {}
-                else -> return@setOnMenuItemClickListener false
-            }
-            return@setOnMenuItemClickListener true
-        }
-
+        setupToolbar()
         updateAppbar()
         loadTaskItems()
         setRecyclerView()
@@ -110,6 +71,52 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
     override fun onResume() {
         super.onResume()
         updateAppbar()
+    }
+
+    private fun setupToolbar() {
+        (binding.toolbar as Toolbar).setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                com.xenon.todolist.R.id.search -> {}
+                com.xenon.todolist.R.id.sort -> openSortDialog()
+                com.xenon.todolist.R.id.settings -> openSettingsActivity()
+                else -> return@setOnMenuItemClickListener false
+            }
+            return@setOnMenuItemClickListener true
+        }
+    }
+
+    private fun openSortDialog() {
+        val view = layoutInflater.inflate(com.xenon.todolist.R.layout.dialog_set_sorting, null)
+        val radioView = view.findViewById<RadioGroup>(com.xenon.todolist.R.id.sorting_dialog_radio_sorting)
+        radioView.check(when(taskItemsModel.getSortType()) {
+            TaskItemViewModel.SortType.BY_COMPLETENESS ->com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
+            TaskItemViewModel.SortType.BY_CREATION_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date
+            TaskItemViewModel.SortType.BY_DUE_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date
+            else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_none
+        })
+
+        MaterialAlertDialogBuilder(this, com.xenon.todolist.R.style.MyAlertDialogTheme)
+            .setPositiveButton(com.xenon.todolist.R.string.ok) { dialog, which ->
+                val sortType = when (radioView.checkedRadioButtonId) {
+                    com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
+                    com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
+                    com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
+                    else -> TaskItemViewModel.SortType.NONE
+                }
+                with (sharedPref.edit()) {
+                    putString("sortType", sortType.name)
+                    apply()
+                }
+                taskItemsModel.setSortType(sortType)
+            }
+            .setNegativeButton(com.xenon.todolist.R.string.cancel, null)
+            .setTitle(com.xenon.todolist.R.string.sort_by)
+            .setView(view)
+            .show()
+    }
+
+    private fun openSettingsActivity() {
+        startActivity(Intent(applicationContext, SettingsActivity::class.java))
     }
 
     private fun updateAppbar() {
@@ -335,57 +342,5 @@ class MainActivity : AppCompatActivity(), TaskItemClickListener {
         } else {
             binding.noTasks.visibility = View.GONE
         }
-    }
-
-    private fun adjustBottomMargin(view: View, activity: AppCompatActivity): Int {
-        val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
-
-        var desiredMargin = 15
-
-        rootView.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-
-                rootView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                val navigationBarHeight = getNavigationBarHeight(activity)
-
-                desiredMargin = if (navigationBarHeight > 15.dpToPx()) {
-                    0.dpToPx()
-                } else {
-                    (15 - navigationBarHeight).dpToPx()
-                }
-
-                val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
-                val desiredMargin2 = desiredMargin +14.dpToPx()
-                layoutParams.bottomMargin = desiredMargin
-                view.layoutParams = layoutParams
-
-
-                setNewTaskButtonMargin(desiredMargin2)
-            }
-        })
-
-        return desiredMargin
-    }
-
-    private fun setNewTaskButtonMargin(margin: Int) {
-        val layoutParams = binding.NewTaskButton.layoutParams as CoordinatorLayout.LayoutParams
-        layoutParams.bottomMargin = margin
-        binding.NewTaskButton.layoutParams = layoutParams
-    }
-
-    fun Int.dpToPx(): Int {
-        return (this * Resources.getSystem().displayMetrics.density).toInt()
-    }
-
-    @SuppressLint("DiscouragedApi", "InternalInsetResource")
-    fun getNavigationBarHeight(activity: AppCompatActivity): Int {
-        val resources = activity.resources
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-
-        return if (resourceId > 0) {
-            resources.getDimensionPixelSize(resourceId)
-        } else 0
     }
 }
