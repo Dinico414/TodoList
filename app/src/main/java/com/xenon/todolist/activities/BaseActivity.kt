@@ -19,12 +19,12 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun adjustBottomMargin(layoutMain: View, floatingButton: ExtendedFloatingActionButton?) {
-        val desiredMargin = 15
+        val layoutParams = layoutMain.layoutParams as MarginLayoutParams
+        val desiredMargin = layoutParams.leftMargin
 
         val navigationBarHeight = getNavigationBarHeight()
-        val targetMargin = max(0, desiredMargin.dpToPx() - navigationBarHeight)
+        val targetMargin = max(0, desiredMargin - navigationBarHeight)
 
-        val layoutParams = layoutMain.layoutParams as MarginLayoutParams
         layoutParams.bottomMargin = targetMargin
         layoutMain.layoutParams = layoutParams
 
