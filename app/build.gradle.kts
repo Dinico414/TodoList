@@ -57,4 +57,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.recyclerview.swipedecorator)
     implementation(libs.androidx.recyclerview)
+    implementation (libs.play.services.auth)
+
 }
