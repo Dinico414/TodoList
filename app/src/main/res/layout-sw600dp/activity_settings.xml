@@ -63,32 +63,57 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     style="@style/SettingsTitle"
-                    android:text="@string/general"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/general"
+                    android:textAlignment="center" />
+
 
                 <LinearLayout
                     android:id="@+id/language_selection_holder"
+                    style="@style/SettingsTile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/SettingsTile"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         style="@style/SettingsSelectionTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/language" />
 
                     <TextView
                         android:id="@+id/language_selection_value"
+                        style="@style/SettingsSelectionValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/SettingsSelectionValue"
                         android:text="English" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/theme_selection_holder"
+                    style="@style/SettingsTile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/SettingsSelectionTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Theme" />
+
+                    <TextView
+                        android:id="@+id/theme_selection_value"
+                        style="@style/SettingsSelectionValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="System" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
