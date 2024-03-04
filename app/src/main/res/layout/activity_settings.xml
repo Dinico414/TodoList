@@ -43,6 +43,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/ic_arrow_left_vector"
                     app:buttonGravity="bottom"
                     app:layout_collapseMode="pin" />
 

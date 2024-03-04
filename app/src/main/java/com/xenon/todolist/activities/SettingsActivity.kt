@@ -41,8 +41,12 @@ class SettingsActivity : BaseActivity() {
             }
             .setCancelable(false)
 
-        binding.themeSelectionHolder?.setOnClickListener {
+        binding.themeSelectionHolder.setOnClickListener {
             themeDialog.show()
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
         }
     }
 
