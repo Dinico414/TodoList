@@ -18,7 +18,7 @@
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbarSize="6dp"
@@ -133,7 +133,7 @@
                     android:textColor="@color/enable_disable_text_color"
                     tools:ignore="TextContrastCheck" />
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
