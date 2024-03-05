@@ -24,7 +24,9 @@ class TaskItemViewModel : ViewModel() {
         return taskItems
     }
     fun setList(list: ArrayList<TaskItem>) {
-        taskItems = list
+//        taskItems = list
+        taskItems.clear()
+        taskItems.addAll(list)
         if (list.size > 0) {
             maxTaskId = list.maxBy { taskItem -> taskItem.id }.id
         }

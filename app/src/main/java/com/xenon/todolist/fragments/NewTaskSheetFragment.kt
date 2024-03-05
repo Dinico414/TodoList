@@ -1,4 +1,4 @@
-package com.xenon.todolist
+package com.xenon.todolist.fragments
 
 import android.app.Dialog
 import android.os.Bundle
@@ -14,23 +14,24 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.TaskItem
+import com.xenon.todolist.TaskItemViewModel
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
 
 @Suppress("DEPRECATION")
-class NewTaskSheet : BottomSheetDialogFragment() {
+class NewTaskSheetFragment : BottomSheetDialogFragment() {
     companion object {
         private var taskItemViewModel: TaskItemViewModel? = null
         private var taskItem: TaskItem? = null
-        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheet {
-            this.taskItemViewModel = taskItemViewModel
-            this.taskItem = taskItem
-            return NewTaskSheet()
+        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheetFragment {
+            Companion.taskItemViewModel = taskItemViewModel
+            Companion.taskItem = taskItem
+            return NewTaskSheetFragment()
         }
     }
 
@@ -171,7 +172,7 @@ class NewTaskSheet : BottomSheetDialogFragment() {
         val name = binding.name.text.toString()
         val desc = binding.desc.text.toString()
         if (taskItem == null) {
-            val newTask = TaskItem(0, name, desc, dueTime, System.currentTimeMillis(), -1)
+            val newTask = TaskItem(0, name, desc, dueTime, System.currentTimeMillis(), -1, ArrayList())
             taskItemViewModel?.add(newTask)
         } else {
             taskItem!!.name = name

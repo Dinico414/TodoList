@@ -13,6 +13,7 @@ data class TaskItem(
     var dueTime: Long,
     var createdDate: Long,
     var completedDate: Long,
+    val children: ArrayList<TaskItem>
 ) {
 
     fun isCompleted() = completedDate >= 0

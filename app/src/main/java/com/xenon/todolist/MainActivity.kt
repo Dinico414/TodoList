@@ -1,44 +1,33 @@
-@file:Suppress("DEPRECATION")
-
 package com.xenon.todolist
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.Canvas
-import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.widget.RadioGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import com.xenon.todolist.fragments.NewTaskSheetFragment
+import com.xenon.todolist.fragments.TaskRecyclerViewFragment
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class MainActivity : BaseActivity(), TaskItemClickListener {
+class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var taskItemsModel: TaskItemViewModel
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var taskItemsModel: TaskItemViewModel
+    private lateinit var subTaskItemsModel: TaskItemViewModel
 
-    private var newTaskSheet: NewTaskSheet? = null
+    private var newTaskSheet: NewTaskSheetFragment? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,39 +35,38 @@ class MainActivity : BaseActivity(), TaskItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
-
-        taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
-        val currentSortType = sharedPref.getString("sortType", null)
-        if (currentSortType != null)
-            taskItemsModel.setSortType(TaskItemViewModel.SortType.valueOf(currentSortType))
+        sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
+        setupTaskFragment()
 
         adjustBottomMargin(binding.CoordinatorLayoutMain, binding.NewTaskButton)
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                newTaskSheet = NewTaskSheet.getInstance(taskItemsModel, null)
+                newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, null)
                 newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
             }
         }
 
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            binding.appbar.setExpanded(false, false)
+
+        setSubItemDrawerView()
         setupToolbar()
-        updateAppbar()
         loadTaskItems()
-        setRecyclerView()
     }
 
     override fun onResume() {
         super.onResume()
-        updateAppbar()
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            binding.appbar.setExpanded(false, false)
     }
 
     private fun setupToolbar() {
         (binding.toolbar as Toolbar).setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                com.xenon.todolist.R.id.search -> {}
-                com.xenon.todolist.R.id.sort -> openSortDialog()
-                com.xenon.todolist.R.id.settings -> openSettingsActivity()
+                R.id.search -> {}
+                R.id.sort -> openSortDialog()
+                R.id.settings -> openSettingsActivity()
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true
@@ -86,21 +74,21 @@ class MainActivity : BaseActivity(), TaskItemClickListener {
     }
 
     private fun openSortDialog() {
-        val view = layoutInflater.inflate(com.xenon.todolist.R.layout.dialog_set_sorting, null)
-        val radioView = view.findViewById<RadioGroup>(com.xenon.todolist.R.id.sorting_dialog_radio_sorting)
+            val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
+        val radioView = view.findViewById<RadioGroup>(R.id.sorting_dialog_radio_sorting)
         radioView.check(when(taskItemsModel.getSortType()) {
-            TaskItemViewModel.SortType.BY_COMPLETENESS ->com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness
-            TaskItemViewModel.SortType.BY_CREATION_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date
-            TaskItemViewModel.SortType.BY_DUE_DATE ->com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date
-            else -> com.xenon.todolist.R.id.sorting_dialog_radio_by_none
+            TaskItemViewModel.SortType.BY_COMPLETENESS ->R.id.sorting_dialog_radio_by_completeness
+            TaskItemViewModel.SortType.BY_CREATION_DATE ->R.id.sorting_dialog_radio_by_creation_date
+            TaskItemViewModel.SortType.BY_DUE_DATE ->R.id.sorting_dialog_radio_by_due_date
+            else -> R.id.sorting_dialog_radio_by_none
         })
 
-        MaterialAlertDialogBuilder(this, com.xenon.todolist.R.style.MyAlertDialogTheme)
-            .setPositiveButton(com.xenon.todolist.R.string.ok) { dialog, which ->
+        MaterialAlertDialogBuilder(this, R.style.MyAlertDialogTheme)
+            .setPositiveButton(R.string.ok) { dialog, which ->
                 val sortType = when (radioView.checkedRadioButtonId) {
-                    com.xenon.todolist.R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
-                    com.xenon.todolist.R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
-                    com.xenon.todolist.R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
+                    R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
+                    R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
+                    R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
                     else -> TaskItemViewModel.SortType.NONE
                 }
                 with (sharedPref.edit()) {
@@ -108,25 +96,16 @@ class MainActivity : BaseActivity(), TaskItemClickListener {
                     apply()
                 }
                 taskItemsModel.setSortType(sortType)
+                subTaskItemsModel.setSortType(sortType)
             }
-            .setNegativeButton(com.xenon.todolist.R.string.cancel, null)
-            .setTitle(com.xenon.todolist.R.string.sort_by)
+            .setNegativeButton(R.string.cancel, null)
+            .setTitle(R.string.sort_by)
             .setView(view)
             .show()
     }
 
     private fun openSettingsActivity() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
-    }
-
-    private fun updateAppbar() {
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.appbar.setExpanded(false, false)
-            binding.todoListRecycleView.isNestedScrollingEnabled = false
-        } else {
-            binding.todoListRecycleView.isNestedScrollingEnabled = true
-        }
     }
 
     private fun loadTaskItems() {
@@ -146,201 +125,54 @@ class MainActivity : BaseActivity(), TaskItemClickListener {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
-    private fun setRecyclerView() {
-        val mainActivity = this
-        binding.todoListRecycleView.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
-            adapter = TaskItemAdapter(this@MainActivity, taskItemsModel.getList(), mainActivity)
-            class TodoListItemDecoration : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    super.getItemOffsets(outRect, view, parent, state)
-
-                    val marginInPx = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        10.toFloat(),
-                        view.context.resources.displayMetrics
-                    ).toInt()
-
-                    val position = parent.getChildAdapterPosition(view)
-                    if (position == RecyclerView.NO_POSITION) {
-                        val oldPosition = parent.getChildViewHolder(view)?.oldPosition
-                        if (oldPosition == 0) {
-                            outRect.top = marginInPx
-                        }
-                    }
-                    else if (position == 0) {
-                        outRect.top = marginInPx
-                    }
-                }
-            }
-            addItemDecoration(TodoListItemDecoration())
-        }
-
+    private fun setupTaskFragment() {
+        val taskFragment = binding.taskItemFragment.getFragment<TaskRecyclerViewFragment>()
+        taskItemsModel = taskFragment.getViewModel()
         taskItemsModel.taskStatus.observe(this) {change ->
-            when (change.type) {
-                TaskItemViewModel.TaskChangedType.ADD -> {
-                    binding.todoListRecycleView.adapter?.notifyItemInserted(change.idx)
-                }
-                TaskItemViewModel.TaskChangedType.REMOVE -> {
-                    binding.todoListRecycleView.adapter?.notifyItemRemoved(change.idx)
-
-                    Snackbar.make(
-                        binding.NewTaskButton,
-                        getString(com.xenon.todolist.R.string.task_deleted),
-                        Snackbar.LENGTH_SHORT
-                    )
-                        .setAction(getString(com.xenon.todolist.R.string.undo)) {
-                            taskItemsModel.add(change.taskItem!!, change.idx)
-                        }
-
-                        .setTextColor(ContextCompat.getColor(this, R.color.onSurface))
-                        .setActionTextColor(ContextCompat.getColor(this, R.color.primary))
-                        .setBackgroundTint(ContextCompat.getColor(this, R.color.surface))
-                        .show()
-                }
-                TaskItemViewModel.TaskChangedType.MOVED -> {
-                    binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
-                }
-                TaskItemViewModel.TaskChangedType.UPDATE -> {
-                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
-                }
-                TaskItemViewModel.TaskChangedType.MOVED_AND_UPDATED -> {
-                    binding.todoListRecycleView.adapter?.notifyItemChanged(change.idx)
-                    binding.todoListRecycleView.adapter?.notifyItemMoved(change.idx, change.idx2)
-                    if (change.idx == 0) {
-                        binding.todoListRecycleView.scrollToPosition(0)
+            if (change.type == TaskItemViewModel.TaskChangedType.REMOVE) {
+                Snackbar.make(
+                    binding.NewTaskButton,
+                    getString(R.string.task_deleted),
+                    Snackbar.LENGTH_SHORT
+                )
+                    .setAction(getString(R.string.undo)) {
+                        taskItemsModel.add(change.taskItem!!, change.idx)
                     }
-                }
-                TaskItemViewModel.TaskChangedType.OVERWRITTEN -> {
-                    binding.todoListRecycleView.adapter?.notifyDataSetChanged()
-                }
+                    .setTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onSurface))
+                    .setActionTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary))
+                    .setBackgroundTint(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.surface))
+                    .show()
             }
-            onTaskItemsChanged()
+            saveTaskItems()
         }
-
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
-            ): Int {
-                return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.START)
+        taskFragment.setClickListener(object : TaskItemClickListener {
+            override fun editTaskItem(taskItem: TaskItem) {
+                binding.drawerLayout.openDrawer(binding.navView)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                subTaskItemsModel.setList(taskItem.children)
+//                if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
+//                    newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, taskItem)
+//                    newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+//                }
             }
 
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                val fromIdx = viewHolder.bindingAdapterPosition
-                val targetIdx = target.bindingAdapterPosition
-                return taskItemsModel.move(fromIdx, targetIdx)
+            override fun completeTaskItem(taskItem: TaskItem) {
+                taskItem.toggleCompleted()
+                taskItemsModel.moveAndUpdate(taskItem, true)
             }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                taskItemsModel.remove(viewHolder.bindingAdapterPosition)
-            }
-
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                val thresholdInDp = 100.0f
-                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
-                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
-
-                val backgroundDrawable = ContextCompat.getDrawable(
-                    this@MainActivity,
-                    R.drawable.delete_button
-                )
-
-                val marginInDp = resources.getDimension(R.dimen.floating_margin)
-                val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
-
-                backgroundDrawable?.setBounds(
-                    (viewHolder.itemView.right + limitedDX + marginInPixels).toInt(),
-                    viewHolder.itemView.top + marginInPixels * 2,
-                    viewHolder.itemView.right - marginInPixels * 2,
-                    viewHolder.itemView.bottom - marginInPixels * 2
-                )
-
-                backgroundDrawable?.colorFilter = PorterDuffColorFilter(
-                    ContextCompat.getColor(this@MainActivity, R.color.delete_red),
-                    PorterDuff.Mode.SRC_IN
-                )
-
-                val clipPath = Path()
-                clipPath.addRect(
-                    viewHolder.itemView.right.toFloat(),
-                    viewHolder.itemView.top.toFloat(),
-                    viewHolder.itemView.right + limitedDX + marginInPixels,
-                    viewHolder.itemView.bottom.toFloat(),
-                    Path.Direction.CW
-                )
-
-                c.clipPath(clipPath)
-
-                backgroundDrawable?.draw(c)
-
-                RecyclerViewSwipeDecorator.Builder(
-                    this@MainActivity,
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    limitedDX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
-                    .addSwipeLeftActionIcon(R.drawable.delete)
-                    .create()
-                    .decorate()
-
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    limitedDX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
-            }
-
-
-        }).attachToRecyclerView(binding.todoListRecycleView)
-
-        onTaskItemsChanged()
+        })
     }
 
-    override fun editTaskItem(taskItem: TaskItem) {
-        if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-            newTaskSheet = NewTaskSheet.getInstance(taskItemsModel, taskItem)
-            newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+    private fun setSubItemDrawerView() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        class MyDrawerListener : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerClosed(drawerView: View) {
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
         }
-    }
+        binding.drawerLayout.addDrawerListener(MyDrawerListener())
 
-    override fun completeTaskItem(taskItem: TaskItem) {
-        taskItem.toggleCompleted()
-        taskItemsModel.moveAndUpdate(taskItem, true)
-    }
-
-    private fun onTaskItemsChanged() {
-        saveTaskItems()
-        if (taskItemsModel.getList().isEmpty()) {
-            binding.noTasks.visibility = View.VISIBLE
-        } else {
-            binding.noTasks.visibility = View.GONE
-        }
+        val subTaskFragment = binding.subTaskItemFragment.getFragment<TaskRecyclerViewFragment>()
+        subTaskItemsModel = subTaskFragment.getViewModel()
     }
 }
