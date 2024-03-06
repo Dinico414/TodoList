@@ -18,7 +18,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.TaskItem
-import com.xenon.todolist.TaskItemViewModel
+import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
@@ -179,7 +179,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             taskItem!!.desc = desc
             Log.d("", "updated to $dueTime")
             if (dueTime >= 0) taskItem!!.dueTime = dueTime
-            taskItemViewModel?.moveAndUpdate(taskItem!!)
+            taskItemViewModel?.update(taskItem!!)
         }
         binding.name.setText("")
         binding.desc.setText("")

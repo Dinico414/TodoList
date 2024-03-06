@@ -3,18 +3,19 @@ package com.xenon.todolist
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.viewmodel.LiveListItem
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class TaskItem(
-    var id: Int,
+    override var id: Int,
     var name: String,
     var desc: String,
     var dueTime: Long,
     var createdDate: Long,
     var completedDate: Long,
     val children: ArrayList<TaskItem>
-) {
+) : LiveListItem {
 
     fun isCompleted() = completedDate >= 0
     private fun setCompleted(b: Boolean) {

@@ -5,12 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.RadioGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.activities.BaseActivity
@@ -18,6 +15,8 @@ import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
 import com.xenon.todolist.fragments.NewTaskSheetFragment
 import com.xenon.todolist.fragments.TaskRecyclerViewFragment
+import com.xenon.todolist.viewmodel.LiveListViewModel
+import com.xenon.todolist.viewmodel.TaskItemViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -25,7 +24,6 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPref: SharedPreferences
     private lateinit var taskItemsModel: TaskItemViewModel
-    private lateinit var subTaskItemsModel: TaskItemViewModel
 
     private var newTaskSheet: NewTaskSheetFragment? = null
 
@@ -96,7 +94,6 @@ class MainActivity : BaseActivity() {
                     apply()
                 }
                 taskItemsModel.setSortType(sortType)
-                subTaskItemsModel.setSortType(sortType)
             }
             .setNegativeButton(R.string.cancel, null)
             .setTitle(R.string.sort_by)
@@ -128,15 +125,15 @@ class MainActivity : BaseActivity() {
     private fun setupTaskFragment() {
         val taskFragment = binding.taskItemFragment.getFragment<TaskRecyclerViewFragment>()
         taskItemsModel = taskFragment.getViewModel()
-        taskItemsModel.taskStatus.observe(this) {change ->
-            if (change.type == TaskItemViewModel.TaskChangedType.REMOVE) {
+        taskItemsModel.listStatus.observe(this) { change ->
+            if (change.type == LiveListViewModel.ListChangedType.REMOVE) {
                 Snackbar.make(
                     binding.NewTaskButton,
                     getString(R.string.task_deleted),
                     Snackbar.LENGTH_SHORT
                 )
                     .setAction(getString(R.string.undo)) {
-                        taskItemsModel.add(change.taskItem!!, change.idx)
+                        taskItemsModel.add(change.item!!, change.idx)
                     }
                     .setTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onSurface))
                     .setActionTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary))
@@ -147,32 +144,24 @@ class MainActivity : BaseActivity() {
         }
         taskFragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
-                binding.drawerLayout.openDrawer(binding.navView)
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                subTaskItemsModel.setList(taskItem.children)
-//                if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-//                    newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, taskItem)
-//                    newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
-//                }
+                if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
+                    newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, taskItem)
+                    newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+                }
             }
 
             override fun completeTaskItem(taskItem: TaskItem) {
                 taskItem.toggleCompleted()
-                taskItemsModel.moveAndUpdate(taskItem, true)
+                taskItemsModel.update(taskItem, true)
             }
         })
     }
 
     private fun setSubItemDrawerView() {
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        class MyDrawerListener : DrawerLayout.SimpleDrawerListener() {
-            override fun onDrawerClosed(drawerView: View) {
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }
-        }
-        binding.drawerLayout.addDrawerListener(MyDrawerListener())
-
-        val subTaskFragment = binding.subTaskItemFragment.getFragment<TaskRecyclerViewFragment>()
-        subTaskItemsModel = subTaskFragment.getViewModel()
+//        class MyDrawerListener : DrawerLayout.SimpleDrawerListener() {
+//            override fun onDrawerClosed(drawerView: View) {
+//            }
+//        }
+//        binding.drawerLayout.addDrawerListener(MyDrawerListener())
     }
 }

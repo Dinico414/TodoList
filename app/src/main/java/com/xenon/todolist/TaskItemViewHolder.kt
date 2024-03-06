@@ -7,6 +7,11 @@ import com.xenon.todolist.databinding.TaskItemCellBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+interface TaskItemClickListener {
+    fun editTaskItem(taskItem: TaskItem)
+    fun completeTaskItem(taskItem: TaskItem)
+}
+
 class TaskItemViewHolder(
     private val context: Context,
     private val binding: TaskItemCellBinding,

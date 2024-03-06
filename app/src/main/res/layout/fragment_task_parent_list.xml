@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/todoListRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?attr/colorSurface"
+        android:fadeScrollbars="true"
+        android:scrollbarSize="6dp"
+        android:scrollbarThumbVertical="@drawable/scrollhandle"
+        android:scrollbarTrackVertical="@color/surface"
+        android:scrollbars="vertical" />
+</RelativeLayout>

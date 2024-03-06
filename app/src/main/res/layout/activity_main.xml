@@ -84,8 +84,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="start">
 
-<!--            TODO: Add description box and add task button -->
-
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/subTaskItemFragment"
                 android:layout_width="match_parent"
