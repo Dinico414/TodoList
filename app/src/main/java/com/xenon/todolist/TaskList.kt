@@ -10,5 +10,4 @@ data class TaskList(
     var items: ArrayList<TaskItem>,
     var createdTime: Long
 ) : LiveListItem {
-
 }

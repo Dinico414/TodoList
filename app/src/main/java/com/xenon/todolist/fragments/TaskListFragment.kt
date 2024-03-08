@@ -1,6 +1,7 @@
 package com.xenon.todolist.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Path
@@ -10,6 +11,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +29,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskList
 import com.xenon.todolist.TaskListAdapter
-import com.xenon.todolist.TaskListClickListener
 import com.xenon.todolist.databinding.FragmentTaskListBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskListViewModel
@@ -37,13 +38,14 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
     private lateinit var binding: FragmentTaskListBinding
     private lateinit var taskListModel: TaskListViewModel
-    private var clickListener: TaskListClickListener = object : TaskListClickListener {
-        override fun editTaskList(taskList: TaskList) {
+    private var clickListener: TaskListAdapter.TaskListClickListener = object : TaskListAdapter.TaskListClickListener {
+        override fun editTaskList(taskList: TaskList, position: Int) {
         }
 
-        override fun selectTaskList(taskList: TaskList) {
+        override fun selectTaskList(taskList: TaskList, position: Int) {
         }
     }
+    private var selectedTaskListIdx: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +57,20 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         super.onViewCreated(view, savedInstanceState)
 
         setRecyclerView()
+        updateRecyclerViewScroll()
+
+        val context = requireContext()
+        val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
+        selectTaskList(sharedPref.getInt("selectedTaskList", -1))
 
         binding.addListButton.setOnClickListener {
             showAddListDialog()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateRecyclerViewScroll()
     }
 
     override fun onCreateView(
@@ -70,12 +82,29 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         return binding.root
     }
 
-    fun setClickListener(listener: TaskListClickListener) {
+    fun setClickListener(listener: TaskListAdapter.TaskListClickListener) {
         clickListener = listener
+    }
+
+    fun selectTaskList(idx: Int) {
+        val adapter = binding.todoListRecyclerView.adapter as TaskListAdapter
+        adapter.selectedItemPosition = idx
+        if (selectedTaskListIdx >= 0) {
+//            taskListModel.update(selectedTaskListIdx)
+            adapter.notifyItemChanged(selectedTaskListIdx)
+        }
+        selectedTaskListIdx = idx
+//        taskListModel.update(idx)
+        adapter.notifyItemChanged(selectedTaskListIdx)
     }
 
     fun getViewModel(): TaskListViewModel {
         return taskListModel
+    }
+
+    private fun updateRecyclerViewScroll() {
+        val orientation = resources.configuration.orientation
+        binding.todoListRecyclerView.isNestedScrollingEnabled = orientation != Configuration.ORIENTATION_LANDSCAPE
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
@@ -123,6 +152,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
                     adapter.notifyItemMoved(change.idx, change.idx2)
                 }
                 LiveListViewModel.ListChangedType.UPDATE -> {
+                    Log.d("iip", "UPDATE $change")
                     adapter.notifyItemChanged(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {

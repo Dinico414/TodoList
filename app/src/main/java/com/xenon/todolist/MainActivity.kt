@@ -27,7 +27,6 @@ class MainActivity : BaseActivity() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var taskItemsModel: TaskItemViewModel
     private lateinit var taskListModel: TaskListViewModel
-    private var selectedTaskList: TaskList? = null
 
     private var newTaskSheet: NewTaskSheetFragment? = null
 
@@ -54,8 +53,8 @@ class MainActivity : BaseActivity() {
             }
         }
 
-//        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-//            binding.appbar.setExpanded(false, false)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            binding.appbar.setExpanded(false, false)
 
         setupToolbar()
         loadTaskList()
@@ -63,13 +62,14 @@ class MainActivity : BaseActivity() {
         var selectedIdx = sharedPref.getInt("selectedTaskList", 0)
         if (selectedIdx >= taskListModel.getList().size)
             selectedIdx = 0
-        selectTaskList(taskListModel.getList()[selectedIdx])
+        val taskList = taskListModel.getList()[selectedIdx]
+        taskItemsModel.setList(taskList.items)
     }
 
     override fun onResume() {
         super.onResume()
-//        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-//            binding.appbar.setExpanded(false, false)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            binding.appbar.setExpanded(false, false)
     }
 
     private fun setupToolbar() {
@@ -143,7 +143,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun saveTaskList() {
-        selectedTaskList?.items = taskItemsModel.getList()
         val json = Json.encodeToString(taskListModel.getList())
         with(sharedPref.edit()) {
             putString("taskList", json)
@@ -197,25 +196,27 @@ class MainActivity : BaseActivity() {
         taskListModel = fragment.getViewModel()
         taskListModel.listStatus.observe(this) {change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
-                selectTaskList(change.item!!)
+                selectTaskList(change.idx)
 //                binding.drawerLayout.closeDrawers()
             }
             saveTaskList()
         }
-        fragment.setClickListener(object : TaskListClickListener {
-            override fun editTaskList(taskList: TaskList) {
+        fragment.setClickListener(object : TaskListAdapter.TaskListClickListener {
+            override fun editTaskList(taskList: TaskList, position: Int) {
             }
 
-            override fun selectTaskList(taskList: TaskList) {
-                selectedTaskList = taskList
-                taskItemsModel.setList(taskList.items)
+            override fun selectTaskList(taskList: TaskList, position: Int) {
+                selectTaskList(position)
                 binding.drawerLayout?.closeDrawers()
             }
         })
     }
 
-    private fun selectTaskList(taskList: TaskList) {
-        selectedTaskList = taskList
+    private fun selectTaskList(position: Int) {
+        val taskList = taskListModel.getList()[position]
         taskItemsModel.setList(taskList.items)
+        val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
+        fragment.selectTaskList(position)
+        sharedPref.edit().putInt("selectedTaskList", position).apply()
     }
 }
