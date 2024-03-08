@@ -193,6 +193,14 @@ class MainActivity : BaseActivity() {
 //        binding.drawerLayout.addDrawerListener(MyDrawerListener())
         val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
         taskListModel = fragment.getViewModel()
+        taskListModel.listStatus.observe(this) {change ->
+            if (change.type == LiveListViewModel.ListChangedType.ADD) {
+                selectedTaskList = change.item
+                taskItemsModel.setList(selectedTaskList!!.items)
+//                binding.drawerLayout.closeDrawers()
+            }
+            saveTaskList()
+        }
         fragment.setClickListener(object : TaskListClickListener {
             override fun editTaskList(taskList: TaskList) {
             }
@@ -200,6 +208,7 @@ class MainActivity : BaseActivity() {
             override fun selectTaskList(taskList: TaskList) {
                 selectedTaskList = taskList
                 taskItemsModel.setList(taskList.items)
+                binding.drawerLayout.closeDrawers()
             }
 
         })

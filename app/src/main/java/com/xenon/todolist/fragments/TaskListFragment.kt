@@ -12,6 +12,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -50,6 +52,20 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
         setRecyclerView()
         updateRecyclerViewScroll()
+
+        val view = layoutInflater.inflate(R.layout.alert_add_task_list, null)
+        binding.addListButton.setOnClickListener {
+            AlertDialog.Builder(this.requireContext())
+                .setTitle(R.string.create_task_list_dialog)
+                .setPositiveButton(R.string.save) { dialog, _ ->
+                    val taskListName = view.findViewById<EditText>(R.id.listNameEditText).text.toString()
+                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
+                    dialog.dismiss()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .setView(view)
+                .show()
+        }
     }
 
     override fun onCreateView(
