@@ -70,7 +70,7 @@
                 android:id="@+id/taskItemFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.xenon.todolist.fragments.TaskRecyclerViewFragment"
+                android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:background="@drawable/tile_background"
                 android:backgroundTint="@color/surface"
                 android:clipToOutline="true"
@@ -85,10 +85,10 @@
             android:layout_gravity="start">
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/subTaskItemFragment"
+                android:id="@+id/taskListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.xenon.todolist.fragments.TaskRecyclerViewFragment" />
+                android:name="com.xenon.todolist.fragments.TaskListFragment" />
 
         </com.google.android.material.navigation.NavigationView>
 

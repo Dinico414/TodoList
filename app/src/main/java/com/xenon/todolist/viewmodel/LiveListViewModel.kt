@@ -11,7 +11,7 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
     }
 
     private var maxTaskId = -1
-    protected val items = ArrayList<T>()
+    protected var items = ArrayList<T>()
 
     /**
      * returned list should not be modified
@@ -20,9 +20,7 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         return items
     }
     open fun setList(list: ArrayList<T>) {
-//        items = list
-        items.clear()
-        items.addAll(list)
+        items = list
         if (list.size > 0) {
             maxTaskId = list.maxBy { v -> v.id }.id
             sortItems()

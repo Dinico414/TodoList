@@ -1,7 +1,6 @@
 package com.xenon.todolist.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Path
@@ -20,36 +19,30 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
-import com.xenon.todolist.TaskItem
-import com.xenon.todolist.TaskItemAdapter
-import com.xenon.todolist.viewmodel.TaskItemViewModel
-import com.xenon.todolist.databinding.FragmentTaskRecyclerviewBinding
+import com.xenon.todolist.TaskList
+import com.xenon.todolist.TaskListAdapter
+import com.xenon.todolist.TaskListClickListener
+import com.xenon.todolist.databinding.FragmentTaskListBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
+import com.xenon.todolist.viewmodel.TaskListViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
+class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
-    private lateinit var binding: FragmentTaskRecyclerviewBinding
-    private lateinit var taskItemsModel: TaskItemViewModel
-    private var clickListener: TaskItemClickListener = object : TaskItemClickListener {
-        override fun editTaskItem(taskItem: TaskItem) {
+    private lateinit var binding: FragmentTaskListBinding
+    private lateinit var taskListModel: TaskListViewModel
+    private var clickListener: TaskListClickListener = object : TaskListClickListener {
+        override fun editTaskList(taskList: TaskList) {
         }
 
-        override fun completeTaskItem(taskItem: TaskItem) {
+        override fun selectTaskList(taskList: TaskList) {
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val context = requireContext()
-        val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
-        taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
-        val currentSortType = sharedPref.getString("sortType", null)
-        if (currentSortType != null) {
-            val t = TaskItemViewModel.SortType.valueOf(currentSortType)
-            taskItemsModel.setSortType(t)
-        }
+        taskListModel = ViewModelProvider(this)[TaskListViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +57,7 @@ class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTaskRecyclerviewBinding.inflate(inflater, container, false)
+        binding = FragmentTaskListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -73,12 +66,12 @@ class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
         updateRecyclerViewScroll()
     }
 
-    fun setClickListener(listener: TaskItemClickListener) {
+    fun setClickListener(listener: TaskListClickListener) {
         clickListener = listener
     }
 
-    fun getViewModel(): TaskItemViewModel {
-        return taskItemsModel
+    fun getViewModel(): TaskListViewModel {
+        return taskListModel
     }
 
     private fun updateRecyclerViewScroll() {
@@ -89,65 +82,62 @@ class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
     private fun setRecyclerView() {
         val context = requireContext()
-        binding.todoListRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = TaskItemAdapter(context, taskItemsModel.getList(), clickListener)
-            class TodoListItemDecoration : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    super.getItemOffsets(outRect, view, parent, state)
+        val adapter = TaskListAdapter(context, taskListModel.getList(), clickListener)
+        binding.todoListRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.todoListRecyclerView.adapter = adapter
+        binding.todoListRecyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val marginInPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    10.toFloat(),
+                    view.context.resources.displayMetrics
+                ).toInt()
 
-                    val marginInPx = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        10.toFloat(),
-                        view.context.resources.displayMetrics
-                    ).toInt()
-
-                    val position = parent.getChildAdapterPosition(view)
-                    if (position == RecyclerView.NO_POSITION) {
-                        val oldPosition = parent.getChildViewHolder(view)?.oldPosition
-                        if (oldPosition == 0) {
-                            outRect.top = marginInPx
-                        }
-                    }
-                    else if (position == 0) {
+                val position = parent.getChildAdapterPosition(view)
+                if (position == RecyclerView.NO_POSITION) {
+                    val oldPosition = parent.getChildViewHolder(view)?.oldPosition
+                    if (oldPosition == 0) {
                         outRect.top = marginInPx
                     }
                 }
+                else if (position == 0) {
+                    outRect.top = marginInPx
+                }
             }
-            addItemDecoration(TodoListItemDecoration())
-        }
+        })
 
-        taskItemsModel.listStatus.observe(viewLifecycleOwner) { change ->
+        taskListModel.listStatus.observe(viewLifecycleOwner) { change ->
             when (change.type) {
                 LiveListViewModel.ListChangedType.ADD -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemInserted(change.idx)
+                    adapter.notifyItemInserted(change.idx)
                 }
                 LiveListViewModel.ListChangedType.REMOVE -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemRemoved(change.idx)
+                    adapter.notifyItemRemoved(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    adapter.notifyItemMoved(change.idx, change.idx2)
                 }
                 LiveListViewModel.ListChangedType.UPDATE -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemChanged(change.idx)
+                    adapter.notifyItemChanged(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemChanged(change.idx)
-                    binding.todoListRecyclerView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    adapter.notifyItemChanged(change.idx)
+                    adapter.notifyItemMoved(change.idx, change.idx2)
                     if (change.idx == 0) {
                         binding.todoListRecyclerView.scrollToPosition(0)
                     }
                 }
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    binding.todoListRecyclerView.adapter?.notifyDataSetChanged()
+                    adapter.taskItems = taskListModel.getList()
+                    adapter.notifyDataSetChanged()
                 }
             }
-            updateNoTasksTextview()
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -165,11 +155,11 @@ class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
             ): Boolean {
                 val fromIdx = viewHolder.bindingAdapterPosition
                 val targetIdx = target.bindingAdapterPosition
-                return taskItemsModel.move(fromIdx, targetIdx)
+                return taskListModel.move(fromIdx, targetIdx)
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                taskItemsModel.remove(viewHolder.bindingAdapterPosition)
+                taskListModel.remove(viewHolder.bindingAdapterPosition)
             }
 
             override fun onChildDraw(
@@ -245,15 +235,5 @@ class TaskRecyclerViewFragment : Fragment(R.layout.fragment_task_recyclerview) {
 
 
         }).attachToRecyclerView(binding.todoListRecyclerView)
-
-        updateNoTasksTextview()
-    }
-
-    private fun updateNoTasksTextview() {
-        if (taskItemsModel.getList().isEmpty()) {
-            binding.noTasks.visibility = View.VISIBLE
-        } else {
-            binding.noTasks.visibility = View.GONE
-        }
     }
 }

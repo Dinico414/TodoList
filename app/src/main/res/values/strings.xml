@@ -27,5 +27,6 @@
     <string name="settings">Settings</string>
     <string name="general">General</string>
     <string name="language">Language</string>
+    <string name="default_task_list">My Tasks</string>
     <string name="Theme" translatable="false">Theme</string>
 </resources>

@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
+import com.xenon.todolist.databinding.TaskListCellBinding
 
 class TaskListAdapter(
     private val context: Context,
-    private val taskItems: List<TaskList>,
+    var taskItems: List<TaskList>,
     private val clickListener: TaskListClickListener,
 ) : RecyclerView.Adapter<TaskListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val from = LayoutInflater.from(parent.context)
-        val binding = TaskItemCellBinding.inflate(from, parent, false)
+        val binding = TaskListCellBinding.inflate(from, parent, false)
         return TaskListViewHolder(parent.context, binding, clickListener)
     }
 

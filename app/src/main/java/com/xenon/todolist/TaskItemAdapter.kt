@@ -9,7 +9,7 @@ import com.xenon.todolist.databinding.TaskItemCellBinding
 
 class TaskItemAdapter(
     private val context: Context,
-    private val taskItems: List<TaskItem>,
+    var taskItems: List<TaskItem>,
     private val clickListener: TaskItemClickListener,
 ) : RecyclerView.Adapter<TaskItemViewHolder>() {
 

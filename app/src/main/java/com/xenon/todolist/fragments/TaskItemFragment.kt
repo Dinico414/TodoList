@@ -1,6 +1,7 @@
 package com.xenon.todolist.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Path
@@ -21,29 +22,36 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
 import com.xenon.todolist.TaskItemAdapter
-import com.xenon.todolist.TaskList
+import com.xenon.todolist.TaskItemClickListener
 import com.xenon.todolist.TaskListAdapter
-import com.xenon.todolist.TaskListClickListener
-import com.xenon.todolist.databinding.FragmentTaskRecyclerviewBinding
+import com.xenon.todolist.databinding.FragmentTaskItemsBinding
+import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-class TaskParentListFragment : Fragment(R.layout.fragment_task_parent_list) {
+class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 
-    private lateinit var binding: FragmentTaskRecyclerviewBinding
-    private lateinit var taskItemsModel: LiveListViewModel<TaskList>
-    private var clickListener: TaskListClickListener = object : TaskListClickListener {
-        override fun editTaskList(taskList: TaskList) {
+    private lateinit var binding: FragmentTaskItemsBinding
+    private lateinit var taskItemsModel: TaskItemViewModel
+    private var clickListener: TaskItemClickListener = object : TaskItemClickListener {
+        override fun editTaskItem(taskItem: TaskItem) {
         }
 
-        override fun selectTaskList(taskList: TaskList) {
+        override fun completeTaskItem(taskItem: TaskItem) {
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = requireContext()
+        val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
-        taskItemsModel = ViewModelProvider(this)[LiveListViewModel::class.java] as LiveListViewModel<TaskList>
+        taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
+        val currentSortType = sharedPref.getString("sortType", null)
+        if (currentSortType != null) {
+            val t = TaskItemViewModel.SortType.valueOf(currentSortType)
+            taskItemsModel.setSortType(t)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +66,7 @@ class TaskParentListFragment : Fragment(R.layout.fragment_task_parent_list) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTaskRecyclerviewBinding.inflate(inflater, container, false)
+        binding = FragmentTaskItemsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -67,11 +75,11 @@ class TaskParentListFragment : Fragment(R.layout.fragment_task_parent_list) {
         updateRecyclerViewScroll()
     }
 
-    fun setClickListener(listener: TaskListClickListener) {
+    fun setClickListener(listener: TaskItemClickListener) {
         clickListener = listener
     }
 
-    fun getViewModel(): LiveListViewModel<TaskList> {
+    fun getViewModel(): TaskItemViewModel {
         return taskItemsModel
     }
 
@@ -83,62 +91,60 @@ class TaskParentListFragment : Fragment(R.layout.fragment_task_parent_list) {
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
     private fun setRecyclerView() {
         val context = requireContext()
-        binding.todoListRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = TaskListAdapter(context, taskItemsModel.getList(), clickListener)
-            class TodoListItemDecoration : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    super.getItemOffsets(outRect, view, parent, state)
+        val adapter = TaskItemAdapter(context, taskItemsModel.getList(), clickListener)
+        binding.todoListRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.todoListRecyclerView.adapter = adapter
+        binding.todoListRecyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val marginInPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    10.toFloat(),
+                    view.context.resources.displayMetrics
+                ).toInt()
 
-                    val marginInPx = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        10.toFloat(),
-                        view.context.resources.displayMetrics
-                    ).toInt()
-
-                    val position = parent.getChildAdapterPosition(view)
-                    if (position == RecyclerView.NO_POSITION) {
-                        val oldPosition = parent.getChildViewHolder(view)?.oldPosition
-                        if (oldPosition == 0) {
-                            outRect.top = marginInPx
-                        }
-                    }
-                    else if (position == 0) {
+                val position = parent.getChildAdapterPosition(view)
+                if (position == RecyclerView.NO_POSITION) {
+                    val oldPosition = parent.getChildViewHolder(view)?.oldPosition
+                    if (oldPosition == 0) {
                         outRect.top = marginInPx
                     }
                 }
+                else if (position == 0) {
+                    outRect.top = marginInPx
+                }
             }
-            addItemDecoration(TodoListItemDecoration())
-        }
+        })
 
         taskItemsModel.listStatus.observe(viewLifecycleOwner) { change ->
             when (change.type) {
                 LiveListViewModel.ListChangedType.ADD -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemInserted(change.idx)
+                    adapter.notifyItemInserted(change.idx)
                 }
                 LiveListViewModel.ListChangedType.REMOVE -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemRemoved(change.idx)
+                    adapter.notifyItemRemoved(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    adapter.notifyItemMoved(change.idx, change.idx2)
                 }
                 LiveListViewModel.ListChangedType.UPDATE -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemChanged(change.idx)
+                    adapter.notifyItemChanged(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
-                    binding.todoListRecyclerView.adapter?.notifyItemChanged(change.idx)
-                    binding.todoListRecyclerView.adapter?.notifyItemMoved(change.idx, change.idx2)
+                    adapter.notifyItemChanged(change.idx)
+                    adapter.notifyItemMoved(change.idx, change.idx2)
                     if (change.idx == 0) {
                         binding.todoListRecyclerView.scrollToPosition(0)
                     }
                 }
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    binding.todoListRecyclerView.adapter?.notifyDataSetChanged()
+                    adapter.taskItems = taskItemsModel.getList()
+                    adapter.notifyDataSetChanged()
                 }
             }
             updateNoTasksTextview()

@@ -8,7 +8,7 @@ data class TaskList(
     override var id: Int,
     var name: String,
     var items: ArrayList<TaskItem>,
-    var createdTime: Int
+    var createdTime: Long
 ) : LiveListItem {
 
 }

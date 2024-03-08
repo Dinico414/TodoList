@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.RadioGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -14,9 +15,11 @@ import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
 import com.xenon.todolist.fragments.NewTaskSheetFragment
-import com.xenon.todolist.fragments.TaskRecyclerViewFragment
+import com.xenon.todolist.fragments.TaskItemFragment
+import com.xenon.todolist.fragments.TaskListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
+import com.xenon.todolist.viewmodel.TaskListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -24,6 +27,8 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPref: SharedPreferences
     private lateinit var taskItemsModel: TaskItemViewModel
+    private lateinit var taskListModel: TaskListViewModel
+    private var selectedTaskList: TaskList? = null
 
     private var newTaskSheet: NewTaskSheetFragment? = null
 
@@ -34,7 +39,8 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
-        setupTaskFragment()
+        setupTaskItemFragment()
+        setupTaskListFragment()
 
         adjustBottomMargin(binding.CoordinatorLayoutMain, binding.NewTaskButton)
 
@@ -48,9 +54,14 @@ class MainActivity : BaseActivity() {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
             binding.appbar.setExpanded(false, false)
 
-        setSubItemDrawerView()
         setupToolbar()
-        loadTaskItems()
+        loadTaskList()
+
+        var selectedIdx = sharedPref.getInt("selectedTaskList", 0)
+        if (selectedIdx >= taskListModel.getList().size)
+            selectedIdx = 0
+        selectedTaskList = taskListModel.getList()[selectedIdx]
+        taskItemsModel.setList(selectedTaskList!!.items)
     }
 
     override fun onResume() {
@@ -105,26 +116,39 @@ class MainActivity : BaseActivity() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
     }
 
-    private fun loadTaskItems() {
-        val json = sharedPref.getString("taskItems", "[]")
-        taskItemsModel.setList(try {
-            json?.let { Json.decodeFromString(it) }!!
+    private fun loadTaskList() {
+        val json = sharedPref.getString("taskList", "[]")
+        try {
+            val list = Json.decodeFromString<ArrayList<TaskList>>(json!!)
+            if (list.size == 0) {
+                loadDefaultTaskList()
+                return
+            }
+            taskListModel.setList(list)
         } catch (e: Exception) {
-            ArrayList()
-        })
+            loadDefaultTaskList()
+        }
     }
 
-    private fun saveTaskItems() {
-        val json = Json.encodeToString(taskItemsModel.getList())
+    private fun loadDefaultTaskList() {
+        val defaultList = ArrayList<TaskList>()
+        defaultList.add(TaskList(0, getString(R.string.default_task_list), ArrayList(), System.currentTimeMillis()))
+        taskListModel.setList(defaultList)
+        saveTaskList()
+    }
+
+    private fun saveTaskList() {
+        selectedTaskList?.items = taskItemsModel.getList()
+        val json = Json.encodeToString(taskListModel.getList())
         with(sharedPref.edit()) {
-            putString("taskItems", json)
+            putString("taskList", json)
             apply()
         }
     }
 
-    private fun setupTaskFragment() {
-        val taskFragment = binding.taskItemFragment.getFragment<TaskRecyclerViewFragment>()
-        taskItemsModel = taskFragment.getViewModel()
+    private fun setupTaskItemFragment() {
+        val fragment = binding.taskItemFragment.getFragment<TaskItemFragment>()
+        taskItemsModel = fragment.getViewModel()
         taskItemsModel.listStatus.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.REMOVE) {
                 Snackbar.make(
@@ -140,9 +164,10 @@ class MainActivity : BaseActivity() {
                     .setBackgroundTint(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.surface))
                     .show()
             }
-            saveTaskItems()
+
+            saveTaskList()
         }
-        taskFragment.setClickListener(object : TaskItemClickListener {
+        fragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
                 if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
                     newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, taskItem)
@@ -157,11 +182,23 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun setSubItemDrawerView() {
+    private fun setupTaskListFragment() {
 //        class MyDrawerListener : DrawerLayout.SimpleDrawerListener() {
 //            override fun onDrawerClosed(drawerView: View) {
 //            }
 //        }
 //        binding.drawerLayout.addDrawerListener(MyDrawerListener())
+        val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
+        taskListModel = fragment.getViewModel()
+        fragment.setClickListener(object : TaskListClickListener {
+            override fun editTaskList(taskList: TaskList) {
+            }
+
+            override fun selectTaskList(taskList: TaskList) {
+                selectedTaskList = taskList
+                taskItemsModel.setList(taskList.items)
+            }
+
+        })
     }
 }
