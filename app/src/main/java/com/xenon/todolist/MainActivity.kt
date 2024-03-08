@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,7 +45,7 @@ class MainActivity : BaseActivity() {
         setupTaskItemFragment()
         setupTaskListFragment()
 
-        adjustBottomMargin(binding.CoordinatorLayoutMain, binding.NewTaskButton)
+        adjustBottomMargin(binding.mainLinearLayout ?: binding.CoordinatorLayoutMain, binding.NewTaskButton)
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
@@ -53,8 +54,8 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            binding.appbar.setExpanded(false, false)
+//        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+//            binding.appbar.setExpanded(false, false)
 
         setupToolbar()
         loadTaskList()
@@ -67,8 +68,8 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            binding.appbar.setExpanded(false, false)
+//        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+//            binding.appbar.setExpanded(false, false)
     }
 
     private fun setupToolbar() {
@@ -82,7 +83,7 @@ class MainActivity : BaseActivity() {
             return@setOnMenuItemClickListener true
         }
         binding.toolbar.setNavigationOnClickListener {
-            binding.drawerLayout.openDrawer(binding.navView)
+            binding.drawerLayout?.openDrawer(binding.navView!!)
         }
     }
 
@@ -208,7 +209,7 @@ class MainActivity : BaseActivity() {
             override fun selectTaskList(taskList: TaskList) {
                 selectedTaskList = taskList
                 taskItemsModel.setList(taskList.items)
-                binding.drawerLayout.closeDrawers()
+                binding.drawerLayout?.closeDrawers()
             }
         })
     }

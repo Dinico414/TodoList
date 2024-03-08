@@ -14,6 +14,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -54,7 +55,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         super.onViewCreated(view, savedInstanceState)
 
         setRecyclerView()
-        updateRecyclerViewScroll()
 
         binding.addListButton.setOnClickListener {
             showAddListDialog()
@@ -70,22 +70,12 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateRecyclerViewScroll()
-    }
-
     fun setClickListener(listener: TaskListClickListener) {
         clickListener = listener
     }
 
     fun getViewModel(): TaskListViewModel {
         return taskListModel
-    }
-
-    private fun updateRecyclerViewScroll() {
-        val orientation = resources.configuration.orientation
-        binding.todoListRecyclerView.isNestedScrollingEnabled = orientation != Configuration.ORIENTATION_LANDSCAPE
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
@@ -262,6 +252,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         val dialog = builder.create()
         dialog.setOnShowListener {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            titleEditText.requestFocus()
         }
         titleEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -275,6 +266,5 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
             }
         })
         dialog.show()
-        titleEditText.requestFocus()
     }
 }

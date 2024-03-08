@@ -14,11 +14,13 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import kotlin.math.max
 
 open class BaseActivity : AppCompatActivity() {
-    fun adjustBottomMargin(layoutMain: View) {
+    fun adjustBottomMargin(layoutMain: View?) {
         adjustBottomMargin(layoutMain, null)
     }
 
-    fun adjustBottomMargin(layoutMain: View, floatingButton: ExtendedFloatingActionButton?) {
+    fun adjustBottomMargin(layoutMain: View?, floatingButton: ExtendedFloatingActionButton?) {
+        if (layoutMain == null)
+            return
         val layoutParams = layoutMain.layoutParams as MarginLayoutParams
         val desiredMargin = layoutParams.leftMargin
 

@@ -84,8 +84,8 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
     }
 
     private fun updateRecyclerViewScroll() {
-        val orientation = resources.configuration.orientation
-        binding.todoListRecyclerView.isNestedScrollingEnabled = orientation != Configuration.ORIENTATION_LANDSCAPE
+//        val orientation = resources.configuration.orientation
+//        binding.todoListRecyclerView.isNestedScrollingEnabled = orientation != Configuration.ORIENTATION_LANDSCAPE
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")

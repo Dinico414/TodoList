@@ -2,6 +2,7 @@ package com.xenon.todolist
 
 import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
 import com.xenon.todolist.databinding.TaskListCellBinding

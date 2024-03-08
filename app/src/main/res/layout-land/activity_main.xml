@@ -6,17 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <LinearLayout
+        android:id="@+id/main_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/border_margin"
+        android:orientation="horizontal">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-
-            android:id="@+id/CoordinatorLayoutMain"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/border_margin"
+            android:layout_weight="0.3"
             android:background="@drawable/tile_cutout"
             android:clipToOutline="true">
 
@@ -68,8 +68,22 @@
                 app:navigationIconTint="@color/onSurfaceVariant"
                 app:layout_collapseMode="pin"
                 android:layout_gravity="top"
-                app:layout_anchor="@id/taskItemFragment"
+                app:layout_anchor="@id/taskListFragment"
                 app:layout_anchorGravity="top" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/taskListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="com.xenon.todolist.fragments.TaskListFragment"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7">
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/taskItemFragment"
@@ -78,14 +92,13 @@
                 android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:background="@drawable/tile_background"
                 android:backgroundTint="@color/surface"
-                android:clipToOutline="true"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+                android:clipToOutline="true" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/NewTaskButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="29dp"
+                android:layout_marginEnd="14dp"
                 android:backgroundTint="@color/primary"
                 android:padding="5dp"
                 app:icon="@drawable/add"
@@ -95,24 +108,7 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start">
-
-            <!--            TODO: Add description box and add task button -->
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/taskListFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:name="com.xenon.todolist.fragments.TaskListFragment" />
-
-        </com.google.android.material.navigation.NavigationView>
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </LinearLayout>
     <!--        adding dynamic bottom margin with navbar height-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
