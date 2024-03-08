@@ -31,5 +31,5 @@
     <string name="default_task_list">Meine Todos</string>
     <string name="clear_data">Lösche alle Daten</string>
     <string name="clear_data_dialog">Willst du wirklich alle App Daten löschen?</string>
-    <string name="create_task_list_dialog">TODO Liste erstellen</string>
+    <string name="create_task_list_dialog">Liste erstellen</string>
 </resources>

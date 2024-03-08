@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.widget.RadioGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -32,11 +30,15 @@ class MainActivity : BaseActivity() {
 
     private var newTaskSheet: NewTaskSheetFragment? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        if (pInfo.packageName.endsWith(".debug")) {
+            title = "$title (DEBUG)"
+        }
 
         sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         setupTaskItemFragment()
@@ -60,8 +62,7 @@ class MainActivity : BaseActivity() {
         var selectedIdx = sharedPref.getInt("selectedTaskList", 0)
         if (selectedIdx >= taskListModel.getList().size)
             selectedIdx = 0
-        selectedTaskList = taskListModel.getList()[selectedIdx]
-        taskItemsModel.setList(selectedTaskList!!.items)
+        selectTaskList(taskListModel.getList()[selectedIdx])
     }
 
     override fun onResume() {
@@ -86,7 +87,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openSortDialog() {
-            val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
+        val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
         val radioView = view.findViewById<RadioGroup>(R.id.sorting_dialog_radio_sorting)
         radioView.check(when(taskItemsModel.getSortType()) {
             TaskItemViewModel.SortType.BY_COMPLETENESS ->R.id.sorting_dialog_radio_by_completeness
@@ -96,7 +97,7 @@ class MainActivity : BaseActivity() {
         })
 
         MaterialAlertDialogBuilder(this, R.style.MyAlertDialogTheme)
-            .setPositiveButton(R.string.ok) { dialog, which ->
+            .setPositiveButton(R.string.ok) { _, _ ->
                 val sortType = when (radioView.checkedRadioButtonId) {
                     R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
                     R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
@@ -195,8 +196,7 @@ class MainActivity : BaseActivity() {
         taskListModel = fragment.getViewModel()
         taskListModel.listStatus.observe(this) {change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
-                selectedTaskList = change.item
-                taskItemsModel.setList(selectedTaskList!!.items)
+                selectTaskList(change.item!!)
 //                binding.drawerLayout.closeDrawers()
             }
             saveTaskList()
@@ -210,7 +210,11 @@ class MainActivity : BaseActivity() {
                 taskItemsModel.setList(taskList.items)
                 binding.drawerLayout.closeDrawers()
             }
-
         })
+    }
+
+    private fun selectTaskList(taskList: TaskList) {
+        selectedTaskList = taskList
+        taskItemsModel.setList(taskList.items)
     }
 }

@@ -8,6 +8,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskList
 import com.xenon.todolist.TaskListAdapter
@@ -53,18 +56,8 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         setRecyclerView()
         updateRecyclerViewScroll()
 
-        val view = layoutInflater.inflate(R.layout.alert_add_task_list, null)
         binding.addListButton.setOnClickListener {
-            AlertDialog.Builder(this.requireContext())
-                .setTitle(R.string.create_task_list_dialog)
-                .setPositiveButton(R.string.save) { dialog, _ ->
-                    val taskListName = view.findViewById<EditText>(R.id.listNameEditText).text.toString()
-                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
-                    dialog.dismiss()
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .setView(view)
-                .show()
+            showAddListDialog()
         }
     }
 
@@ -248,8 +241,40 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
                     isCurrentlyActive
                 )
             }
-
-
         }).attachToRecyclerView(binding.todoListRecyclerView)
+    }
+
+    private fun showAddListDialog() {
+        val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
+        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        val builder = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.create_task_list_dialog)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val taskListName = titleEditText.text.toString()
+                if (taskListName == "")
+//                    Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
+                else
+                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .setView(addTaskView)
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+        }
+        titleEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = p0?.isNotBlank() ?: false
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        dialog.show()
+        titleEditText.requestFocus()
     }
 }

@@ -22,8 +22,6 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import java.util.Calendar
 
-
-@Suppress("DEPRECATION")
 class NewTaskSheetFragment : BottomSheetDialogFragment() {
     companion object {
         private var taskItemViewModel: TaskItemViewModel? = null
@@ -71,8 +69,6 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         }
         binding.saveButton.isEnabled = binding.name.text?.isNotEmpty() ?: false
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
-
 
         val screenWidth = resources.displayMetrics.widthPixels
         val density = resources.displayMetrics.density
