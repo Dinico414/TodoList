@@ -25,8 +25,7 @@
                 android:layout_height="280dp"
                 android:layout_marginBottom="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:fitsSystemWindows="true"
-                android:theme="@style/Theme.AppCompat.NoActionBar">
+                android:fitsSystemWindows="true">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar"
@@ -52,7 +51,7 @@
                         android:layout_marginTop="4dp"
                         app:layout_collapseMode="pin"
                         app:navigationIcon="@drawable/ic_navigation_vector"
-                        app:navigationIconTint="@color/transparent"/>
+                        app:navigationIconTint="@color/onSurfaceVariant" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -63,8 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_main"
-                app:navigationIcon="@drawable/ic_navigation_vector"
-                app:navigationIconTint="@color/onSurfaceVariant"
                 app:layout_collapseMode="pin"
                 android:layout_gravity="top"
                 app:layout_anchor="@id/taskItemFragment"
