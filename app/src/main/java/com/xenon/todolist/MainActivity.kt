@@ -71,7 +71,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupToolbar() {
-        (binding.toolbar as Toolbar).setOnMenuItemClickListener { menuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.search -> {}
                 R.id.sort -> openSortDialog()
@@ -79,6 +79,9 @@ class MainActivity : BaseActivity() {
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true
+        }
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(binding.navView)
         }
     }
 

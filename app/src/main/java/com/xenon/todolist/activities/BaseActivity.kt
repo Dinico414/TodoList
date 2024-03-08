@@ -29,7 +29,7 @@ open class BaseActivity : AppCompatActivity() {
         layoutMain.layoutParams = layoutParams
 
         if (floatingButton != null) {
-            setNewTaskButtonMargin(floatingButton, 2 * targetMargin - 1)
+            setNewTaskButtonMargin(floatingButton, targetMargin - 1)
         }
     }
 

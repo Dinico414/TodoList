@@ -50,7 +50,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:layout_marginTop="4dp"
-                        app:layout_collapseMode="pin" />
+                        app:layout_collapseMode="pin"
+                        app:navigationIcon="@drawable/ic_navigation_vector"
+                        app:navigationIconTint="@color/transparent"/>
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -61,9 +63,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_main"
+                app:navigationIcon="@drawable/ic_navigation_vector"
+                app:navigationIconTint="@color/onSurfaceVariant"
                 app:layout_collapseMode="pin"
                 android:layout_gravity="top"
-                app:layout_anchor="@id/RelativeLayoutMain"
+                app:layout_anchor="@id/taskItemFragment"
                 app:layout_anchorGravity="top" />
 
             <androidx.fragment.app.FragmentContainerView
@@ -75,6 +79,19 @@
                 android:backgroundTint="@color/surface"
                 android:clipToOutline="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/NewTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                android:backgroundTint="@color/primary"
+                android:padding="5dp"
+                app:icon="@drawable/add"
+                app:iconTint="?attr/colorOnPrimary"
+                app:layout_anchor="@id/taskItemFragment"
+                app:layout_anchorGravity="end|bottom"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -93,18 +110,4 @@
         </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/NewTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="29dp"
-        android:backgroundTint="@color/primary"
-        android:padding="5dp"
-        app:icon="@drawable/add"
-        app:iconTint="?attr/colorOnPrimary"
-        app:layout_anchor="@+id/CoordinatorLayoutMain"
-        app:layout_anchorGravity="end|bottom"
-        tools:ignore="SpeakableTextPresentCheck" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
