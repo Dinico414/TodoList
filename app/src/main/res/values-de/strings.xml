@@ -17,6 +17,8 @@
     <string name="search">Suche</string>
     <string name="sort_by">Sortiere nach</string>
     <string name="ok">Ok</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
     <string name="cancel">Abbruch</string>
     <string name="sort_by_completeness">Fertigstellung</string>
     <string name="sort_by_none">Freie Sortierung</string>
@@ -27,4 +29,6 @@
     <string name="general">Allgemein</string>
     <string name="language">Sprache</string>
     <string name="default_task_list">Meine Todos</string>
+    <string name="clear_data">Lösche alle Daten</string>
+    <string name="clear_data_dialog">Willst du wirklich alle App Daten löschen?</string>
 </resources>

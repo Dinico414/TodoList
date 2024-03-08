@@ -1,13 +1,17 @@
 package com.xenon.todolist.activities
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.xenon.todolist.R
 import com.xenon.todolist.SharedPreferenceManager
 import com.xenon.todolist.databinding.ActivitySettingsBinding
 import java.util.Locale
@@ -45,6 +49,18 @@ class SettingsActivity : BaseActivity() {
             themeDialog.show()
         }
 
+        binding.clearButtonHolder.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setPositiveButton(R.string.yes) { _, _ ->
+                val sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
+                sharedPref.edit().clear().commit()
+                this.restartApplication()
+            }
+            builder.setNegativeButton(R.string.cancel, null)
+            builder.setMessage(R.string.clear_data_dialog)
+            builder.show()
+        }
+
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -62,4 +78,12 @@ class SettingsActivity : BaseActivity() {
             startActivity(intent)
         }
     }
+}
+
+fun Context.restartApplication() {
+    val intent = packageManager.getLaunchIntentForPackage(packageName)
+    val componentName = intent?.component
+    val mainIntent = Intent.makeRestartActivityTask(componentName)
+    startActivity(mainIntent)
+    Runtime.getRuntime().exit(0)
 }

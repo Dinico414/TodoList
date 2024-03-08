@@ -18,6 +18,8 @@
     <string name="search">Search</string>
     <string name="sort_by">Sort by</string>
     <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="cancel">Cancel</string>
     <string name="sort_by_none">Free sorting</string>
     <string name="sort_by_completeness">Completeness</string>
@@ -28,5 +30,7 @@
     <string name="general">General</string>
     <string name="language">Language</string>
     <string name="default_task_list">My Tasks</string>
+    <string name="clear_data">Clear all app data</string>
+    <string name="clear_data_dialog">Are you sure you want to clear all app data?</string>
     <string name="Theme" translatable="false">Theme</string>
 </resources>

@@ -114,6 +114,20 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/clear_button_holder"
+                    style="@style/SettingsTile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/SettingsSelectionTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clear_data" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
