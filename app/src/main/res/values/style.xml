@@ -22,6 +22,10 @@
         <item name="android:textColor">@color/onSurface</item>
     </style>
 
+<!--    <style name="ActionMenuTransparentColor" parent="@android:style/TextAppearance.Widget.IconMenu.Item">-->
+<!--        <item name="android:textColor">@color/transparent</item>-->
+<!--    </style>-->
+
 
     <style name="SettingsTitle">
         <item name="android:paddingStart">@dimen/border_margin</item>

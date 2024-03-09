@@ -82,7 +82,7 @@ class MainActivity : BaseActivity() {
             }
             return@setOnMenuItemClickListener true
         }
-        binding.dummyToolbar.setNavigationOnClickListener {
+        binding.dummyToolbar?.setNavigationOnClickListener {
             binding.drawerLayout?.openDrawer(binding.navView!!)
         }
     }
