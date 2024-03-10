@@ -17,11 +17,14 @@
         android:scrollbarTrackVertical="@color/surface"
         android:scrollbars="vertical" />
 
-    <ImageButton
+    <Button
         android:id="@+id/addListButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:src="@drawable/add"
-        android:padding="10dp"/>
+        android:text="@string/add_list"
+        android:textColor="@color/textOnPrimaryInvert"
+        android:textColorHighlight="@color/textOnPrimaryInvert"
+        android:backgroundTint="@color/primary"
+        android:layout_margin="10dp"/>
 </LinearLayout>

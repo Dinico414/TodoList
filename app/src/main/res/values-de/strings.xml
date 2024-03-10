@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Todo-Liste</string>
     <string name="action_settings">Einstellungen</string>
     <string name="new_task">Neue Aufgabe</string>
@@ -28,8 +28,9 @@
     <string name="settings">Einstellungen</string>
     <string name="general">Allgemein</string>
     <string name="language">Sprache</string>
-    <string name="default_task_list">Meine Todos</string>
+    <string name="default_task_list" >Meine Aufgaben</string>
     <string name="clear_data">Lösche alle Daten</string>
     <string name="clear_data_dialog">Willst du wirklich alle App Daten löschen?</string>
     <string name="create_task_list_dialog">Liste erstellen</string>
+    <string name="add_list">Neue Liste erstellen</string>
 </resources>

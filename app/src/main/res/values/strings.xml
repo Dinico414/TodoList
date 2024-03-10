@@ -34,4 +34,5 @@
     <string name="clear_data">Clear all app data</string>
     <string name="clear_data_dialog">Are you sure you want to clear all app data?</string>
     <string name="create_task_list_dialog">Create list</string>
+    <string name="add_list">Create new list</string>
 </resources>
