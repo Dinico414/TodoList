@@ -15,7 +15,17 @@
         android:background="@drawable/tile"
         android:backgroundTint="@color/primary"
         android:clipToOutline="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:animateLayoutChanges="true">
+
+        <CheckBox
+            android:id="@+id/selectedCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/name"

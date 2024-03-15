@@ -5,8 +5,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.EditText
 import android.widget.RadioGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -19,6 +26,8 @@ import com.xenon.todolist.fragments.TaskListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TaskListViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -210,13 +219,70 @@ class MainActivity : BaseActivity() {
                 binding.drawerLayout?.closeDrawers()
             }
         })
+
+//        for (i in 0..20) {
+//            val item = binding.navView?.menu?.add(0, i, 0, "item $i")
+//            item?.actionView = View.inflate(this, R.layout.nav_drawer_button, null)
+//            item?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_arrow_left_vector)
+//        }
+//        binding.navView?.menu?.setGroupCheckable(0, true, false)
+//        binding.navView?.menu?.getItem(0)?.isChecked = true
+//        binding.navView?.menu?.getItem(3)?.isChecked = true
+//
+//        binding.navView?.setNavigationItemSelectedListener { menuItem ->
+//            val position = taskListModel.getList().indexOfFirst { it.id == menuItem.itemId }
+//            selectTaskList(position)
+//            // Slight delay to prevent stutter when closing
+////            Handler(Looper.getMainLooper()).postDelayed({
+////                binding.drawerLayout?.closeDrawers()
+////            }, 0)
+//            true
+//        }
+
+
+//        binding.addListButton?.setOnClickListener {
+//            showAddListDialog()
+//        }
     }
+
+//    private fun showAddListDialog() {
+//        val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
+//        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+//        val builder = MaterialAlertDialogBuilder(this)
+//            .setTitle(R.string.create_task_list_dialog)
+//            .setPositiveButton(R.string.save) { _, _ ->
+//                val taskListName = titleEditText.text.toString()
+////                Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
+//                if (taskListName.isNotBlank())
+//                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
+//            }
+//            .setNegativeButton(R.string.cancel, null)
+//            .setView(addTaskView)
+//
+//        val dialog = builder.create()
+//        dialog.setOnShowListener {
+//            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+//            titleEditText.requestFocus()
+//        }
+//        titleEditText.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//            }
+//
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = p0?.isNotBlank() ?: false
+//            }
+//
+//            override fun afterTextChanged(p0: Editable?) {
+//            }
+//        })
+//        dialog.show()
+//    }
 
     private fun selectTaskList(position: Int) {
         val taskList = taskListModel.getList()[position]
         taskItemsModel.setList(taskList.items)
-        val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
-        fragment.selectTaskList(position)
+        val taskListFragment = binding.taskListFragment.getFragment<TaskListFragment>()
+        taskListFragment.selectTaskList(position)
         sharedPref.edit().putInt("selectedTaskList", position).apply()
     }
 }

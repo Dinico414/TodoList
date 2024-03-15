@@ -3,6 +3,13 @@ package com.xenon.todolist.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+interface LiveListItem {
+    /**
+     * id gets auto-assigned by LiveListViewModel
+     */
+    var id: Int
+}
+
 open class LiveListViewModel<T: LiveListItem> : ViewModel() {
     val listStatus = MutableLiveData<ListStatusChange<T>>()
     class ListStatusChange<T>(val type: ListChangedType, val item: T? = null, val idx: Int = -1, val idx2: Int = -1)
