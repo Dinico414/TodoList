@@ -22,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:visibility="gone"
         android:text="@string/add_list"
         android:textColor="@color/textOnPrimaryInvert"
         android:textColorHighlight="@color/textOnPrimaryInvert"
         android:backgroundTint="@color/primary"
-        android:layout_margin="10dp"/>
+        android:layout_marginHorizontal="10dp"/>
 </LinearLayout>

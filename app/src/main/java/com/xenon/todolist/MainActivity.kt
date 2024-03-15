@@ -91,7 +91,7 @@ class MainActivity : BaseActivity() {
             }
             return@setOnMenuItemClickListener true
         }
-        binding.dummyToolbar?.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             binding.drawerLayout?.openDrawer(binding.navView!!)
         }
     }
@@ -240,43 +240,43 @@ class MainActivity : BaseActivity() {
 //        }
 
 
-//        binding.addListButton?.setOnClickListener {
-//            showAddListDialog()
-//        }
+        binding.addListButton?.setOnClickListener {
+            showAddListDialog()
+        }
     }
 
-//    private fun showAddListDialog() {
-//        val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
-//        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
-//        val builder = MaterialAlertDialogBuilder(this)
-//            .setTitle(R.string.create_task_list_dialog)
-//            .setPositiveButton(R.string.save) { _, _ ->
-//                val taskListName = titleEditText.text.toString()
-////                Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
-//                if (taskListName.isNotBlank())
-//                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
-//            }
-//            .setNegativeButton(R.string.cancel, null)
-//            .setView(addTaskView)
-//
-//        val dialog = builder.create()
-//        dialog.setOnShowListener {
-//            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-//            titleEditText.requestFocus()
-//        }
-//        titleEditText.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//            }
-//
-//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = p0?.isNotBlank() ?: false
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {
-//            }
-//        })
-//        dialog.show()
-//    }
+    private fun showAddListDialog() {
+        val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
+        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        val builder = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.create_task_list_dialog)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val taskListName = titleEditText.text.toString()
+//                Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
+                if (taskListName.isNotBlank())
+                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .setView(addTaskView)
+
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            titleEditText.requestFocus()
+        }
+        titleEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = p0?.isNotBlank() ?: false
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        dialog.show()
+    }
 
     private fun selectTaskList(position: Int) {
         val taskList = taskListModel.getList()[position]

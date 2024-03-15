@@ -5,8 +5,9 @@
     </style>
 
     <style name="Theme.TodoList" parent="Base.Theme.TodoList" >
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/system_background_dark</item>
+        <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/system_background_dark</item>
+        <item name="android:enforceStatusBarContrast">true</item>
     </style>
 
 </resources>

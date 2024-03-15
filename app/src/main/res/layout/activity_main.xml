@@ -51,7 +51,7 @@
                         android:layout_marginTop="4dp"
                         app:layout_collapseMode="pin"
                         app:navigationIcon="@drawable/ic_navigation_vector"
-                        app:navigationIconTint="@color/onSurfaceVariant" />
+                        app:navigationIconTint="@color/transparent" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -62,6 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_main"
+                app:navigationIcon="@drawable/ic_navigation_vector"
+                app:navigationIconTint="@color/onSurface"
                 app:layout_collapseMode="pin"
                 android:layout_gravity="top"
                 app:layout_anchor="@id/taskItemFragment"
@@ -98,36 +100,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="start">
 
-<!--            <Button-->
-<!--                android:id="@+id/addListButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="0"-->
-<!--                android:layout_gravity="bottom"-->
-<!--                android:text="@string/add_list"-->
-<!--                android:textColor="@color/textOnPrimaryInvert"-->
-<!--                android:textColorHighlight="@color/textOnPrimaryInvert"-->
-<!--                android:backgroundTint="@color/primary"-->
-<!--                android:layout_margin="10dp"/>-->
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/taskListFragment"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.xenon.todolist.fragments.TaskListFragment" />
-
-        </com.google.android.material.navigation.NavigationView>
-
-<!--        <com.google.android.material.navigation.NavigationView-->
-<!--            android:id="@+id/drawer_content_start"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="start">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="vertical">-->
+                android:orientation="vertical">
 
 <!--                <com.google.android.material.navigation.NavigationView-->
 <!--                    android:id="@+id/nav_view"-->
@@ -136,25 +112,25 @@
 <!--                    android:layout_weight="1"-->
 <!--                    android:layout_gravity="start" />-->
 
-<!--                <androidx.fragment.app.FragmentContainerView-->
-<!--                    android:id="@+id/taskListFragment"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:name="com.xenon.todolist.fragments.TaskListFragment" />-->
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/taskListFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:name="com.xenon.todolist.fragments.TaskListFragment" />
 
-<!--                <Button-->
-<!--                    android:id="@+id/addListButton"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="0"-->
-<!--                    android:text="@string/add_list"-->
-<!--                    android:textColor="@color/textOnPrimaryInvert"-->
-<!--                    android:textColorHighlight="@color/textOnPrimaryInvert"-->
-<!--                    android:backgroundTint="@color/primary"-->
-<!--                    android:layout_margin="10dp"/>-->
+                <Button
+                    android:id="@+id/addListButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/add_list"
+                    android:textColor="@color/textOnPrimaryInvert"
+                    android:textColorHighlight="@color/textOnPrimaryInvert"
+                    android:backgroundTint="@color/primary"
+                    android:layout_margin="10dp"/>
 
-<!--            </LinearLayout>-->
-<!--        </com.google.android.material.navigation.NavigationView>-->
+            </LinearLayout>
+        </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

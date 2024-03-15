@@ -100,9 +100,9 @@ class TaskListAdapter(
 
         fun setEnabled(state: Boolean) {
             if (state)
-                binding.taskCellContainer.background.setTint(context.getColor(com.xenon.commons.accesspoint.R.color.surfaceBright))
+                binding.taskCellContainer.background.setTint(context.getColor(com.xenon.commons.accesspoint.R.color.primary))
             else
-                binding.taskCellContainer.background.setTint(context.getColor(com.xenon.commons.accesspoint.R.color.surface))
+                binding.taskCellContainer.background.setTint(context.getColor(R.color.Background))
         }
 
         fun setSelected(value: Boolean) {
