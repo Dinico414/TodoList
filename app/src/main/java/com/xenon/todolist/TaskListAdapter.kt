@@ -131,9 +131,14 @@ class TaskListAdapter(
                     clickListener.selectTaskList(taskList, position)
             }
             binding.taskCellContainer.setOnLongClickListener {
-                setSelected(true)
-                onItemSelected(taskList, selected)
-                true
+                if (!inSelectionState) {
+                    setSelected(true)
+                    onItemSelected(taskList, selected)
+                    true
+                }
+                else {
+                    false
+                }
             }
 
             setEnabled(enabled)
