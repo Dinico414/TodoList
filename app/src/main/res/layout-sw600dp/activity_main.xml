@@ -87,7 +87,7 @@
                 android:backgroundTint="@color/primary"
                 android:padding="5dp"
                 app:icon="@drawable/add"
-                app:iconTint="?attr/colorOnPrimary"
+                app:iconTint="@color/textOnPrimaryInvert"
                 app:layout_anchor="@+id/taskItemFragment"
                 app:layout_anchorGravity="end|bottom"
                 tools:ignore="SpeakableTextPresentCheck" />

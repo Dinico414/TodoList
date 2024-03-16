@@ -98,38 +98,53 @@
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            android:background="@color/transparent"
+            android:elevation="0dp"
+            android:outlineAmbientShadowColor="@color/transparent"
+            android:outlineSpotShadowColor="@color/transparent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginVertical="@dimen/border_margin"
+                android:layout_marginStart="@dimen/border_margin"
+                android:background="@drawable/tile_popup"
+                android:backgroundTint="@color/surfaceContainer"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp">
 
-<!--                <com.google.android.material.navigation.NavigationView-->
-<!--                    android:id="@+id/nav_view"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_gravity="start" />-->
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/taskListFragment"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:name="com.xenon.todolist.fragments.TaskListFragment" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/addListButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/add_list"
-                    android:textColor="@color/textOnPrimaryInvert"
-                    android:textColorHighlight="@color/textOnPrimaryInvert"
-                    android:backgroundTint="@color/primary"
-                    android:layout_margin="10dp"/>
+                    <!--                <com.google.android.material.navigation.NavigationView-->
+                    <!--                    android:id="@+id/nav_view"-->
+                    <!--                    android:layout_width="wrap_content"-->
+                    <!--                    android:layout_height="0dp"-->
+                    <!--                    android:layout_weight="1"-->
+                    <!--                    android:layout_gravity="start" />-->
 
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/taskListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:name="com.xenon.todolist.fragments.TaskListFragment" />
+
+                    <Button
+                        android:id="@+id/addListButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/add_list"
+                        android:textColor="@color/textOnPrimaryInvert"
+                        android:textColorHighlight="@color/textOnPrimaryInvert"
+                        android:backgroundTint="@color/primary"
+                        android:layout_margin="10dp"/>
+
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>

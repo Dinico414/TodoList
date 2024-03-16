@@ -98,14 +98,18 @@ class TaskListAdapter(
         private var selected: Boolean = false
         private var inSelectionState: Boolean = false
 
-        fun setEnabled(state: Boolean) {
+        fun setEnabled(state: Boolean){
             val color = if (state) {
                 context.getColor(com.xenon.commons.accesspoint.R.color.primary)
             } else {
                 context.getColor(R.color.Background)
             }
 
-            val tintedColor = ColorUtils.setAlphaComponent(color, (255 * 0.5).toInt())
+            // Adjust alpha value based on the state
+            val alpha = if (state) 0.5f else 0.0f
+
+            // Apply alpha to the color using ColorUtils
+            val tintedColor = ColorUtils.setAlphaComponent(color, (255 * alpha).toInt())
 
             binding.taskCellContainer.background.setTint(tintedColor)
         }
