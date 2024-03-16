@@ -1,9 +1,11 @@
 package com.xenon.todolist
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -98,11 +100,11 @@ class TaskListAdapter(
         private var selected: Boolean = false
         private var inSelectionState: Boolean = false
 
-        fun setEnabled(state: Boolean){
+        fun setEnabled(state: Boolean) {
             val color = if (state) {
-                context.getColor(com.xenon.commons.accesspoint.R.color.primary)
+                ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.primary)
             } else {
-                context.getColor(R.color.Background)
+                ContextCompat.getColor(context, R.color.Background)
             }
 
             val alpha = if (state) 0.5f else 0.0f
@@ -111,10 +113,28 @@ class TaskListAdapter(
 
             binding.taskCellContainer.background.setTint(tintedColor)
         }
+
         fun setSelected(value: Boolean) {
             selected = value
             if (!inSelectionState) setInSelectionState(true)
             binding.selectedCheckbox.isEnabled = value
+            binding.selectedCheckbox.isChecked = value
+            // Set checkbox color filter based on its checked status
+            if (value) {
+                binding.selectedCheckbox.buttonTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        context,
+                        com.xenon.commons.accesspoint.R.color.primary
+                    )
+                )
+            } else {
+                val color = ContextCompat.getColor(
+                    context,
+                    com.xenon.commons.accesspoint.R.color.textOnPrimary
+                )
+                val halfAlphaColor = ColorUtils.setAlphaComponent(color, (255 * 0.5).toInt())
+                binding.selectedCheckbox.buttonTintList = ColorStateList.valueOf(halfAlphaColor)
+            }
         }
 
         fun setInSelectionState(value: Boolean) {
@@ -131,8 +151,7 @@ class TaskListAdapter(
                 if (inSelectionState) {
                     setSelected(!selected)
                     onItemSelected(taskList, selected)
-                }
-                else
+                } else
                     clickListener.selectTaskList(taskList, position)
             }
             binding.taskCellContainer.setOnLongClickListener {
@@ -140,8 +159,7 @@ class TaskListAdapter(
                     setSelected(true)
                     onItemSelected(taskList, selected)
                     true
-                }
-                else {
+                } else {
                     false
                 }
             }
@@ -149,4 +167,5 @@ class TaskListAdapter(
             setEnabled(enabled)
         }
     }
+
 }
