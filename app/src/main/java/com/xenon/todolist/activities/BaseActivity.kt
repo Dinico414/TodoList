@@ -2,18 +2,14 @@ package com.xenon.todolist.activities
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.doOnLayout
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import kotlin.math.max
 
 open class BaseActivity : AppCompatActivity() {
+
     fun adjustBottomMargin(layoutMain: View?) {
         adjustBottomMargin(layoutMain, null)
     }
@@ -22,16 +18,24 @@ open class BaseActivity : AppCompatActivity() {
         if (layoutMain == null)
             return
         val layoutParams = layoutMain.layoutParams as MarginLayoutParams
-        val desiredMargin = layoutParams.leftMargin
-
         val navigationBarHeight = getNavigationBarHeight()
-        val targetMargin = max(0, desiredMargin - navigationBarHeight)
+
+        val targetMargin = if (navigationBarHeight == 0) {
+            15.dpToPx()
+        } else {
+            0
+        }
 
         layoutParams.bottomMargin = targetMargin
         layoutMain.layoutParams = layoutParams
 
         if (floatingButton != null) {
-            setNewTaskButtonMargin(floatingButton, targetMargin - 1)
+            val fabMargin = if (navigationBarHeight == 0) {
+                14.dpToPx()
+            } else {
+                14.dpToPx()
+            }
+            setNewTaskButtonMargin(floatingButton, fabMargin)
         }
     }
 
@@ -41,7 +45,7 @@ open class BaseActivity : AppCompatActivity() {
 
         return if (resourceId > 0) {
             resources.getDimensionPixelSize(resourceId)
-        } else 0
+        } else 0 // Return 0 as default when navigation bar height is not found
     }
 
     private fun setNewTaskButtonMargin(button: ExtendedFloatingActionButton, margin: Int) {

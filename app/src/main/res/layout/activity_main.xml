@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/Background">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -107,24 +108,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_marginVertical="@dimen/border_margin"
                 android:layout_marginStart="@dimen/border_margin"
                 android:background="@drawable/tile_popup"
                 android:backgroundTint="@color/surfaceContainer"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <!--                <com.google.android.material.navigation.NavigationView-->
-                    <!--                    android:id="@+id/nav_view"-->
-                    <!--                    android:layout_width="wrap_content"-->
-                    <!--                    android:layout_height="0dp"-->
-                    <!--                    android:layout_weight="1"-->
-                    <!--                    android:layout_gravity="start" />-->
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/taskListFragment"
@@ -144,7 +134,6 @@
                         android:backgroundTint="@color/primary"
                         android:layout_margin="10dp"/>
 
-                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>

@@ -6,6 +6,7 @@
     <style name="Theme.TodoList" parent="Base.Theme.TodoList" >
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/system_background_light</item>
         <item name="android:statusBarColor" tools:ignore="NewApi">@android:color/transparent</item>
+        <item name="android:windowBackground" tools:ignore="NewApi">@android:color/system_background_light</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

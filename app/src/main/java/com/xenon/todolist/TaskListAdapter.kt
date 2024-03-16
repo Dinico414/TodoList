@@ -105,10 +105,8 @@ class TaskListAdapter(
                 context.getColor(R.color.Background)
             }
 
-            // Adjust alpha value based on the state
             val alpha = if (state) 0.5f else 0.0f
 
-            // Apply alpha to the color using ColorUtils
             val tintedColor = ColorUtils.setAlphaComponent(color, (255 * alpha).toInt())
 
             binding.taskCellContainer.background.setTint(tintedColor)
@@ -117,7 +115,6 @@ class TaskListAdapter(
             selected = value
             if (!inSelectionState) setInSelectionState(true)
             binding.selectedCheckbox.isEnabled = value
-//            binding.taskCellContainer.background
         }
 
         fun setInSelectionState(value: Boolean) {
