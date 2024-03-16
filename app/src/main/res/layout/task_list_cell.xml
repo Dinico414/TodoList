@@ -11,7 +11,7 @@
     android:outlineSpotShadowColor="@color/Background"
     app:barrierMargin="0dp"
     app:cardBackgroundColor="@color/Background"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="50dp"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp">
 
@@ -40,8 +40,9 @@
             android:layout_weight="1"
             android:background="@drawable/tile_cutout"
             android:paddingHorizontal="20dp"
-            android:paddingVertical="20dp"
-            android:text="@string/place_holder" />
+            android:paddingVertical="15dp"
+            android:text="@string/place_holder"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

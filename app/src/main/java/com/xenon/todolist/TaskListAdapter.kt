@@ -1,10 +1,10 @@
 package com.xenon.todolist
 
 import android.content.Context
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskListCellBinding
@@ -99,12 +99,16 @@ class TaskListAdapter(
         private var inSelectionState: Boolean = false
 
         fun setEnabled(state: Boolean) {
-            if (state)
-                binding.taskCellContainer.background.setTint(context.getColor(com.xenon.commons.accesspoint.R.color.primary))
-            else
-                binding.taskCellContainer.background.setTint(context.getColor(R.color.Background))
-        }
+            val color = if (state) {
+                context.getColor(com.xenon.commons.accesspoint.R.color.primary)
+            } else {
+                context.getColor(R.color.Background)
+            }
 
+            val tintedColor = ColorUtils.setAlphaComponent(color, (255 * 0.5).toInt())
+
+            binding.taskCellContainer.background.setTint(tintedColor)
+        }
         fun setSelected(value: Boolean) {
             selected = value
             if (!inSelectionState) setInSelectionState(true)
