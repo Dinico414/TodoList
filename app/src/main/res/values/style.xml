@@ -2,6 +2,8 @@
 <resources>
     <dimen name="settings_tile_margin">22dp</dimen>
 
+
+
     <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/primary</item>
         <item name="android:dialogCornerRadius">20dp</item>
@@ -14,22 +16,28 @@
         <item name="materialAlertDialogBodyTextStyle">@color/onSurface</item>
         <item name="android:borderlessButtonStyle">@style/MyBorderlessButton</item>
         <item name="android:buttonBarStyle">@style/MyBorderlessButton</item>
+
     </style>
+         <style name="MyBorderlessButton" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+            <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+            <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        </style>
+
+        <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+            <item name="android:textColor">@color/primary</item>
+        </style>
+
+        <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+            <item name="android:textColor">@color/primary</item>
+        </style>
 
 
-    <style name="MyBorderlessButton" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-        <item name="android:textColor">@color/primary</item>
-        <item name="android:color">@color/primary</item>
-    </style>
 
     <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="buttonTint">@color/button_tint</item>
         <item name="android:textColor">@color/onSurface</item>
     </style>
 
-<!--    <style name="ActionMenuTransparentColor" parent="@android:style/TextAppearance.Widget.IconMenu.Item">-->
-<!--        <item name="android:textColor">@color/transparent</item>-->
-<!--    </style>-->
 
 
     <style name="SettingsTitle">
