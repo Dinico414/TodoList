@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.xenon.todolist"
-        minSdk = 32
+        minSdk = 31
         targetSdk = 34
         versionCode = 6
         versionName = "0.4.0-beta"
