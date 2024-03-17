@@ -5,12 +5,17 @@
     <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/primary</item>
         <item name="android:dialogCornerRadius">20dp</item>
+        <item name="android:backgroundTint">@color/surfaceContainer</item>
         <item name="android:colorBackground">@color/surface</item>
         <item name="android:windowBackground">@color/surface</item>
         <item name="android:textColor">@color/onSurface</item>
+        <item name="textColorAlertDialogListItem">@color/onSurface</item>
+        <item name="itemTextColor">@color/onSurface</item>
+        <item name="materialAlertDialogBodyTextStyle">@color/onSurface</item>
         <item name="android:borderlessButtonStyle">@style/MyBorderlessButton</item>
         <item name="android:buttonBarStyle">@style/MyBorderlessButton</item>
     </style>
+
 
     <style name="MyBorderlessButton" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
         <item name="android:textColor">@color/primary</item>

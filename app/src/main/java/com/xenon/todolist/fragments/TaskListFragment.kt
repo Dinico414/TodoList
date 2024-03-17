@@ -2,11 +2,6 @@ package com.xenon.todolist.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
-import android.graphics.Canvas
-import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
@@ -16,13 +11,10 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,7 +24,6 @@ import com.xenon.todolist.TaskListAdapter
 import com.xenon.todolist.databinding.FragmentTaskListBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskListViewModel
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
@@ -267,12 +258,12 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     private fun showAddListDialog() {
         val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
         val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
-        val builder = MaterialAlertDialogBuilder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
             .setTitle(R.string.create_task_list_dialog)
             .setPositiveButton(R.string.save) { _, _ ->
                 val taskListName = titleEditText.text.toString()
                 if (taskListName == "")
-//                    Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
+                // Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
                 else
                     taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
             }
