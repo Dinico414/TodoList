@@ -18,10 +18,11 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.TaskItem
-import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
+import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.util.Calendar
 
+@Suppress("DEPRECATION")
 class NewTaskSheetFragment : BottomSheetDialogFragment() {
     companion object {
         private var taskItemViewModel: TaskItemViewModel? = null
@@ -35,7 +36,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.FloatingBottomSheetDialogTheme)
+        setStyle(STYLE_NORMAL, R.style.XenonFloatingBottomSheetDialogTheme)
     }
 
 
@@ -122,7 +123,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             .setMinute(cal.get(Calendar.MINUTE))
             .setTitleText(getString(com.xenon.todolist.R.string.task_due))
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-            .setTheme(R.style.MyTimePickerStyle)
+            .setTheme(R.style.XenonTimePickerStyle)
             .build()
 
 

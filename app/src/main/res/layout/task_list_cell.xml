@@ -8,9 +8,9 @@
     android:backgroundTint="@color/primary"
     android:elevation="0dp"
     android:fadingEdge="none"
-    android:outlineSpotShadowColor="@color/Background"
+    android:outlineSpotShadowColor="@color/background"
     app:barrierMargin="0dp"
-    app:cardBackgroundColor="@color/Background"
+    app:cardBackgroundColor="@color/background"
     app:cardCornerRadius="50dp"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp">

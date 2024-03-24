@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/no_tasks"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/onSurface"
         android:textStyle="italic"
         android:visibility="gone" />
 
@@ -24,7 +24,7 @@
         android:gravity="center"
         android:text="@string/done"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/onSurface"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -32,7 +32,7 @@
         android:id="@+id/todoListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="?attr/colorSurface"
+        android:backgroundTint="@color/surface"
         android:fadeScrollbars="true"
         android:scrollbarSize="6dp"
         android:scrollbarThumbVertical="@drawable/scrollhandle"

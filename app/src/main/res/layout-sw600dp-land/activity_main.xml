@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Background"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -115,7 +115,7 @@
                 android:backgroundTint="@color/primary"
                 android:padding="5dp"
                 app:icon="@drawable/add"
-                app:iconTint="?attr/colorOnPrimary"
+                app:iconTint="@color/onPrimary"
                 app:layout_anchor="@+id/taskItemFragment"
                 app:layout_anchorGravity="end|bottom"
                 tools:ignore="SpeakableTextPresentCheck" />

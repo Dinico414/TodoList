@@ -100,7 +100,7 @@ class MainActivity : BaseActivity() {
             else -> R.id.sorting_dialog_radio_by_none
         })
 
-        MaterialAlertDialogBuilder(this, R.style.MyAlertDialogTheme)
+        MaterialAlertDialogBuilder(this, R.style.XenonAlertDialogTheme)
             .setPositiveButton(R.string.ok) { _, _ ->
                 val sortType = when (radioView.checkedRadioButtonId) {
                     R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
@@ -158,22 +158,28 @@ class MainActivity : BaseActivity() {
         taskItemsModel = fragment.getViewModel()
         taskItemsModel.listStatus.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.REMOVE) {
-                Snackbar.make(
+                val snackbar = Snackbar.make(
                     binding.NewTaskButton,
                     getString(R.string.task_deleted),
                     Snackbar.LENGTH_SHORT
                 )
-                    .setAction(getString(R.string.undo)) {
-                        taskItemsModel.add(change.item!!, change.idx)
-                    }
-                    .setTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onSurface))
-                    .setActionTextColor(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary))
-                    .setBackgroundTint(ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.surface))
+                snackbar.setAction(getString(R.string.undo)) {
+                    taskItemsModel.add(change.item!!, change.idx)
+                }
+                val snackbarView = snackbar.view
+                snackbarView.background = ContextCompat.getDrawable(this, com.xenon.commons.accesspoint.R.drawable.tile_popup)
+                val textColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inverseOnSurface)
+                val actionTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inversePrimary)
+                val backgroundTint = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inverseSurface)
+                snackbar.setTextColor(textColor)
+                    .setActionTextColor(actionTextColor)
+                    .setBackgroundTint(backgroundTint)
                     .show()
             }
 
             saveTaskList()
         }
+
         fragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
                 if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
@@ -234,7 +240,7 @@ class MainActivity : BaseActivity() {
 //        }
 
 
-        binding.addListButton?.setOnClickListener {
+        binding.addListButton.setOnClickListener {
             showAddListDialog()
         }
     }

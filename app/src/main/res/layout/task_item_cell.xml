@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/tile_low_alpha"
-        android:backgroundTint="@color/surfaceInvert"
+        android:backgroundTint="@color/inverseSurface"
         android:clipToOutline="true"
         android:orientation="horizontal">
 

@@ -258,7 +258,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     private fun showAddListDialog() {
         val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
         val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
-        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
+        val builder = MaterialAlertDialogBuilder(requireContext(), R.style.XenonAlertDialogTheme)
             .setTitle(R.string.create_task_list_dialog)
             .setPositiveButton(R.string.save) { _, _ ->
                 val taskListName = titleEditText.text.toString()

@@ -14,7 +14,7 @@
         android:layout_marginHorizontal="25dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/tile_popup"
-        android:backgroundTint="@color/surfaceContainer"
+        android:backgroundTint="@color/background"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp">
 
@@ -41,7 +41,7 @@
                     android:layout_marginBottom="5dp"
                     android:alpha="0.5"
                     android:background="@drawable/handle"
-                    android:backgroundTint="@android:color/system_neutral1_500"
+                    android:backgroundTint="@color/tertiary"
                     android:importantForAccessibility="no"
                     tools:ignore="ImageContrastCheck" />
 
@@ -66,11 +66,13 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/tile_inputbox"
-                    android:backgroundTint="@color/surface"
+                    android:backgroundTint="@color/transparent"
                     android:clipToOutline="true"
                     app:counterEnabled="false"
                     app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:cursorColor="@color/primary"
+                    app:endIconTint="@color/primary"
+                    app:startIconTint="@color/primary"
                     app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -92,7 +94,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/tile_inputbox"
-                    android:backgroundTint="@color/secondaryContainer"
+                    android:backgroundTint="@color/transparent"
                     android:clipToOutline="true"
                     app:cursorColor="@color/primary"
                     app:endIconTint="@color/primary"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/Background">
+    android:background="@color/background">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -88,7 +88,7 @@
                 android:backgroundTint="@color/primary"
                 android:padding="5dp"
                 app:icon="@drawable/add"
-                app:iconTint="?attr/colorOnPrimary"
+                app:iconTint="@color/onPrimary"
                 app:layout_anchor="@id/taskItemFragment"
                 app:layout_anchorGravity="end|bottom"
                 tools:ignore="SpeakableTextPresentCheck" />
@@ -112,7 +112,7 @@
                 android:layout_marginVertical="@dimen/border_margin"
                 android:layout_marginStart="@dimen/border_margin"
                 android:background="@drawable/tile_popup"
-                android:backgroundTint="@color/surfaceContainer"
+                android:backgroundTint="@color/background"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
 

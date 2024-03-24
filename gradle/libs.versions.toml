@@ -1,5 +1,5 @@
 [versions]
-accesspoint = "1.0.3-5.3"
+accesspoint = "1.0.4-2"
 agp = "8.3.0-rc01"
 glide-transformations = "4.3.0"
 kotlin = "1.9.10"
