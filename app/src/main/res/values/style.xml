@@ -3,7 +3,6 @@
     <dimen name="settings_tile_margin">22dp</dimen>
 
 
-
     <style name="XenonAlertDialogTheme" parent="Theme.Material3.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/primary</item>
         <item name="android:dialogCornerRadius">20dp</item>
@@ -14,30 +13,25 @@
         <item name="textColorAlertDialogListItem">@color/onSurface</item>
         <item name="itemTextColor">@color/onSurface</item>
         <item name="materialAlertDialogBodyTextStyle">@color/onSurface</item>
-        <item name="android:borderlessButtonStyle">@style/XenonBorderlessButton</item>
-        <item name="android:buttonBarStyle">@style/XenonBorderlessButton</item>
-
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/XenonBorderlessButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/XenonBorderlessButton</item>
     </style>
-         <style name="XenonBorderlessButton" parent="MaterialAlertDialog.Material3.Body.Text">
-            <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-            <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        </style>
 
-        <style name="NegativeButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
-            <item name="android:textColor">@color/primary</item>
-        </style>
+    <style name="MaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">@color/primary</item>
+    </style>
 
-        <style name="PositiveButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
-            <item name="android:textColor">@color/primary</item>
-        </style>
-
+    <style name="XenonBorderlessButton" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 
     <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
         <item name="buttonTint">@color/button_tint</item>
         <item name="android:textColor">@color/onSurface</item>
     </style>
-
 
 
     <style name="SettingsTitle">
