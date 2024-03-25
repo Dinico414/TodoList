@@ -1,7 +1,6 @@
 package com.xenon.todolist.activities
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -33,7 +32,7 @@ class SettingsActivity : BaseActivity() {
         var checkedTheme = sharedPreferenceManager.theme
         themeSelectionValue.text = themeTitleList[sharedPreferenceManager.theme]
 
-        val themeDialog = MaterialAlertDialogBuilder(this)
+        val themeDialog = MaterialAlertDialogBuilder(this, R.style.XenonAlertDialogTheme)
             .setTitle("Select Theme")
             .setPositiveButton("OK") { _, _ ->
                 sharedPreferenceManager.theme = checkedTheme
