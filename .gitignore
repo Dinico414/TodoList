@@ -14,5 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/release/TodoList_v.0.1.1-beta.apk
 app/release/output-metadata.json
+app/release/TodoList_v.0.1.0-beta.apk
 *.json
