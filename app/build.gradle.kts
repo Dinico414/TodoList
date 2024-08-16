@@ -4,8 +4,6 @@ plugins {
     kotlin("plugin.serialization") version "1.9.10"
 }
 
-val versionName = "0.4.1-beta"
-
 android {
     namespace = "com.xenon.todolist"
     compileSdk = 35
@@ -15,7 +13,7 @@ android {
         minSdk = 31
         targetSdk = 35
         versionCode = 7
-        versionName = versionName
+        versionName = "0.4.3-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
