@@ -4,6 +4,8 @@ plugins {
     kotlin("plugin.serialization") version "1.9.10"
 }
 
+val versionName = "0.4.1-beta"
+
 android {
     namespace = "com.xenon.todolist"
     compileSdk = 35
@@ -13,7 +15,7 @@ android {
         minSdk = 31
         targetSdk = 35
         versionCode = 7
-        versionName = "0.4.1-beta"
+        versionName = versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -63,4 +65,13 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation (libs.play.services.auth)
 
+}
+
+tasks.register("commitAndPushToGH", Exec::class.java) {
+    group = "xenon"
+    description = "Commits and pushes to github"
+    commandLine("git", "add", ".")
+    commandLine("git", "commit", "release commit")
+    commandLine("git", "tag", versionName)
+    commandLine("git", "push")
 }

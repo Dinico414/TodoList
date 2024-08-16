@@ -43,6 +43,7 @@ class MainActivity : BaseActivity() {
             title = "$title (DEBUG)"
         }
 
+
         sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         setupTaskItemFragment()
         setupTaskListFragment()
