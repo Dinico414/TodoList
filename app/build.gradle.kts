@@ -71,7 +71,7 @@ tasks.register("commitAndPushToGH", Exec::class.java) {
     group = "xenon"
     description = "Commits and pushes to github"
     commandLine("git", "add", ".")
-    commandLine("git", "commit", "release commit")
+    commandLine("git", "commit", "-m", "\"release commit\"")
     commandLine("git", "tag", versionName)
-    commandLine("git", "push")
+    commandLine("git", "push", "origin")
 }
