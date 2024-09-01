@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/surfaceContainerLowest"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -103,8 +103,8 @@
                 android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/tile_background"
-                android:backgroundTint="@color/surface"
+                android:background="@drawable/tile_background_100"
+                android:backgroundTint="@color/surfaceContainer"
                 android:clipToOutline="true" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

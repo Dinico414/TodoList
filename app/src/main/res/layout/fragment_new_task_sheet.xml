@@ -14,7 +14,7 @@
         android:layout_marginHorizontal="25dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/tile_popup"
-        android:backgroundTint="@color/background"
+        android:backgroundTint="@color/surfaceContainer"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp">
 
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:scrollbarSize="6dp"
             android:scrollbarThumbVertical="@drawable/scrollhandle"
-            android:scrollbarTrackVertical="@color/surface"
+            android:scrollbarTrackVertical="@color/surfaceContainer"
             >
 
             <LinearLayout

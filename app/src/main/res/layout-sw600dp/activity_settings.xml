@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/surfaceContainerLowest">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_main"
@@ -55,8 +55,8 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/tile_background"
-            android:backgroundTint="@color/surface"
+            android:background="@drawable/tile_background_100"
+            android:backgroundTint="@color/surfaceContainer"
             android:clipToOutline="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 

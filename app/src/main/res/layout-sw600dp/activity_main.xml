@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/background">
+    android:background="@color/surfaceContainerLowest">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -75,8 +75,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:name="com.xenon.todolist.fragments.TaskItemFragment"
-                android:background="@drawable/tile_background"
-                android:backgroundTint="@color/surface"
+                android:background="@drawable/tile_background_100"
+                android:backgroundTint="@color/surfaceContainer"
                 android:clipToOutline="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 

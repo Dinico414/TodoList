@@ -5,7 +5,7 @@
     android:id="@+id/taskCellContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/primaryContainer"
+    android:backgroundTint="@color/secondaryContainer"
     app:cardCornerRadius="20dp"
     android:outlineSpotShadowColor="@color/transparent">
 
