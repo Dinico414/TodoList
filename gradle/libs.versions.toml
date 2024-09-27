@@ -1,29 +1,26 @@
 [versions]
-accesspoint = "1.0.6.2"
-agp = "8.5.2"
-glide-transformations = "4.3.0"
-kotlin = "1.9.10"
+accesspoint = "1.0.6.2-6.5"
+agp = "8.6.1"
+kotlin = "1.9.24"
 core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
 appcompat = "1.7.0"
-kotlinx-serialization-json = "1.5.1"
+kotlinx-serialization-json = "1.6.3"
 material = "1.12.0"
 constraintlayout = "2.1.4"
-navigation-fragment-ktx = "2.7.7"
-navigation-ui-ktx = "2.7.7"
+navigation-fragment-ktx = "2.8.1"
+navigation-ui-ktx = "2.8.1"
 play-services-auth = "21.2.0"
 recyclerview = "1.3.2"
 recyclerview-swipedecorator = "1.4"
-transition = "1.5.1"
 
 [libraries]
 accesspoint = { module = "com.xenon.commons:accesspoint", version.ref = "accesspoint" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
-androidx-transition = { module = "androidx.transition:transition", version.ref = "transition" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-glide-transformations = { module = "jp.wasabeef:glide-transformations", version.ref = "glide-transformations" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
