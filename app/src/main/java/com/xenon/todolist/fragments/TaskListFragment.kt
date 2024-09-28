@@ -53,10 +53,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         val context = requireContext()
         val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
         selectTaskList(sharedPref.getInt("selectedTaskList", -1))
-
-        binding.addListButton.setOnClickListener {
-            showAddListDialog()
-        }
     }
 
     override fun onResume() {

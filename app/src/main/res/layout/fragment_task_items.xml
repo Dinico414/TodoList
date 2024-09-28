@@ -16,18 +16,6 @@
         android:textStyle="italic"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/done"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:alpha="0.5"
-        android:gravity="center"
-        android:text="@string/done"
-        android:textAlignment="center"
-        android:textColor="@color/onSurface"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todoListRecyclerView"
         android:layout_width="match_parent"
@@ -37,6 +25,6 @@
         android:scrollbarSize="6dp"
         android:scrollbarThumbVertical="@drawable/scrollhandle"
         android:scrollbarTrackVertical="@color/surfaceContainer"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"/>
 
 </RelativeLayout>

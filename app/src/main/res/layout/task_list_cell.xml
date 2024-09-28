@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/primary"
+    android:background="@drawable/tile_cutout"
     android:elevation="0dp"
     android:fadingEdge="none"
     android:outlineSpotShadowColor="@color/background"
@@ -19,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:background="@drawable/tile_cutout"
         android:orientation="horizontal">
 
         <CheckBox
@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/name"
             style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
