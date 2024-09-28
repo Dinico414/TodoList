@@ -2,11 +2,8 @@ package com.xenon.todolist.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
@@ -23,10 +20,9 @@ import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
 import com.xenon.todolist.TaskItemAdapter
 import com.xenon.todolist.TaskItemClickListener
-import com.xenon.todolist.TaskListAdapter
 import com.xenon.todolist.databinding.FragmentTaskItemsBinding
-import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.LiveListViewModel
+import com.xenon.todolist.viewmodel.TaskItemViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
@@ -84,8 +80,6 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
     }
 
     private fun updateRecyclerViewScroll() {
-//        val orientation = resources.configuration.orientation
-//        binding.todoListRecyclerView.isNestedScrollingEnabled = orientation != Configuration.ORIENTATION_LANDSCAPE
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
@@ -200,10 +194,6 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                     viewHolder.itemView.bottom - marginInPixels * 2
                 )
 
-                backgroundDrawable?.colorFilter = PorterDuffColorFilter(
-                    ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.delete_red),
-                    PorterDuff.Mode.SRC_IN
-                )
 
                 val clipPath = Path()
                 clipPath.addRect(
