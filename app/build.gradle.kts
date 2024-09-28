@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.24"
 }
 
 android {
@@ -12,8 +12,8 @@ android {
         applicationId = "com.xenon.todolist"
         minSdk = 31
         targetSdk = 34
-        versionCode = 7
-        versionName = "0.4.3-beta"
+        versionCode = 8
+        versionName = "0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
     buildFeatures {
         viewBinding = true
@@ -61,6 +61,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.recyclerview.swipedecorator)
     implementation(libs.androidx.recyclerview)
-    implementation (libs.play.services.auth)
+    implementation(libs.play.services.auth)
 
 }

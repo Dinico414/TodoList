@@ -35,7 +35,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // test2
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,7 +48,10 @@ class MainActivity : BaseActivity() {
         setupTaskItemFragment()
         setupTaskListFragment()
 
-        adjustBottomMargin(binding.mainLinearLayout ?: binding.CoordinatorLayoutMain, binding.NewTaskButton)
+        adjustBottomMargin(
+            binding.mainLinearLayout ?: binding.CoordinatorLayoutMain,
+            binding.NewTaskButton
+        )
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
@@ -95,14 +97,16 @@ class MainActivity : BaseActivity() {
     private fun openSortDialog() {
         val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
         val radioView = view.findViewById<RadioGroup>(R.id.sorting_dialog_radio_sorting)
-        radioView.check(when(taskItemsModel.getSortType()) {
-            TaskItemViewModel.SortType.BY_COMPLETENESS ->R.id.sorting_dialog_radio_by_completeness
-            TaskItemViewModel.SortType.BY_CREATION_DATE ->R.id.sorting_dialog_radio_by_creation_date
-            TaskItemViewModel.SortType.BY_DUE_DATE ->R.id.sorting_dialog_radio_by_due_date
-            else -> R.id.sorting_dialog_radio_by_none
-        })
+        radioView.check(
+            when (taskItemsModel.getSortType()) {
+                TaskItemViewModel.SortType.BY_COMPLETENESS -> R.id.sorting_dialog_radio_by_completeness
+                TaskItemViewModel.SortType.BY_CREATION_DATE -> R.id.sorting_dialog_radio_by_creation_date
+                TaskItemViewModel.SortType.BY_DUE_DATE -> R.id.sorting_dialog_radio_by_due_date
+                else -> R.id.sorting_dialog_radio_by_none
+            }
+        )
 
-        MaterialAlertDialogBuilder(this, R.style.XenonAlertDialogTheme)
+        MaterialAlertDialogBuilder(this)
             .setPositiveButton(R.string.ok) { _, _ ->
                 val sortType = when (radioView.checkedRadioButtonId) {
                     R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
@@ -110,7 +114,7 @@ class MainActivity : BaseActivity() {
                     R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
                     else -> TaskItemViewModel.SortType.NONE
                 }
-                with (sharedPref.edit()) {
+                with(sharedPref.edit()) {
                     putString("sortType", sortType.name)
                     apply()
                 }
@@ -142,7 +146,14 @@ class MainActivity : BaseActivity() {
 
     private fun loadDefaultTaskList() {
         val defaultList = ArrayList<TaskList>()
-        defaultList.add(TaskList(0, getString(R.string.default_task_list), ArrayList(), System.currentTimeMillis()))
+        defaultList.add(
+            TaskList(
+                0,
+                getString(R.string.default_task_list),
+                ArrayList(),
+                System.currentTimeMillis()
+            )
+        )
         taskListModel.setList(defaultList)
         saveTaskList()
     }
@@ -169,10 +180,22 @@ class MainActivity : BaseActivity() {
                     taskItemsModel.add(change.item!!, change.idx)
                 }
                 val snackbarView = snackbar.view
-                snackbarView.background = ContextCompat.getDrawable(this, com.xenon.commons.accesspoint.R.drawable.tile_popup)
-                val textColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inverseOnSurface)
-                val actionTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inversePrimary)
-                val backgroundTint = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.inverseSurface)
+                snackbarView.background = ContextCompat.getDrawable(
+                    this,
+                    com.xenon.commons.accesspoint.R.drawable.tile_popup
+                )
+                val textColor = ContextCompat.getColor(
+                    this,
+                    com.xenon.commons.accesspoint.R.color.inverseOnSurface
+                )
+                val actionTextColor = ContextCompat.getColor(
+                    this,
+                    com.xenon.commons.accesspoint.R.color.inversePrimary
+                )
+                val backgroundTint = ContextCompat.getColor(
+                    this,
+                    com.xenon.commons.accesspoint.R.color.inverseSurface
+                )
                 snackbar.setTextColor(textColor)
                     .setActionTextColor(actionTextColor)
                     .setBackgroundTint(backgroundTint)
@@ -198,17 +221,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupTaskListFragment() {
-//        class MyDrawerListener : DrawerLayout.SimpleDrawerListener() {
-//            override fun onDrawerClosed(drawerView: View) {
-//            }
-//        }
-//        binding.drawerLayout.addDrawerListener(MyDrawerListener())
         val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
         taskListModel = fragment.getViewModel()
-        taskListModel.listStatus.observe(this) {change ->
+        taskListModel.listStatus.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
                 selectTaskList(change.idx)
-//                binding.drawerLayout.closeDrawers()
             }
             saveTaskList()
         }
@@ -221,27 +238,6 @@ class MainActivity : BaseActivity() {
                 binding.drawerLayout?.closeDrawers()
             }
         })
-
-//        for (i in 0..20) {
-//            val item = binding.navView?.menu?.add(0, i, 0, "item $i")
-//            item?.actionView = View.inflate(this, R.layout.nav_drawer_button, null)
-//            item?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_arrow_left_vector)
-//        }
-//        binding.navView?.menu?.setGroupCheckable(0, true, false)
-//        binding.navView?.menu?.getItem(0)?.isChecked = true
-//        binding.navView?.menu?.getItem(3)?.isChecked = true
-//
-//        binding.navView?.setNavigationItemSelectedListener { menuItem ->
-//            val position = taskListModel.getList().indexOfFirst { it.id == menuItem.itemId }
-//            selectTaskList(position)
-//            // Slight delay to prevent stutter when closing
-////            Handler(Looper.getMainLooper()).postDelayed({
-////                binding.drawerLayout?.closeDrawers()
-////            }, 0)
-//            true
-//        }
-
-
         binding.addListButton.setOnClickListener {
             showAddListDialog()
         }
@@ -254,9 +250,15 @@ class MainActivity : BaseActivity() {
             .setTitle(R.string.create_task_list_dialog)
             .setPositiveButton(R.string.save) { _, _ ->
                 val taskListName = titleEditText.text.toString()
-//                Toast.makeText(requireContext(), "Empty field", Toast.LENGTH_LONG).show()
                 if (taskListName.isNotBlank())
-                    taskListModel.add(TaskList(-1, taskListName, ArrayList(), System.currentTimeMillis()))
+                    taskListModel.add(
+                        TaskList(
+                            -1,
+                            taskListName,
+                            ArrayList(),
+                            System.currentTimeMillis()
+                        )
+                    )
             }
             .setNegativeButton(R.string.cancel, null)
             .setView(addTaskView)

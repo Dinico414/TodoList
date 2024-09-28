@@ -26,13 +26,13 @@ class SettingsActivity : BaseActivity() {
         adjustBottomMargin(binding.layoutMain)
         setupViews()
 
-        val themeSelectionValue = findViewById<TextView>(com.xenon.todolist.R.id.theme_selection_value)
+        val themeSelectionValue = findViewById<TextView>(R.id.theme_selection_value)
 
         val sharedPreferenceManager = SharedPreferenceManager(this)
         var checkedTheme = sharedPreferenceManager.theme
         themeSelectionValue.text = themeTitleList[sharedPreferenceManager.theme]
 
-        val themeDialog = MaterialAlertDialogBuilder(this, R.style.XenonAlertDialogTheme)
+        val themeDialog = MaterialAlertDialogBuilder(this)
             .setTitle("Select Theme")
             .setPositiveButton("OK") { _, _ ->
                 sharedPreferenceManager.theme = checkedTheme

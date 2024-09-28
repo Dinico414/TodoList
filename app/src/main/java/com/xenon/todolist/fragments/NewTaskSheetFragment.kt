@@ -113,17 +113,12 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             cal.timeInMillis = taskItem?.dueTime ?: System.currentTimeMillis()
         }
 
-//        val picker = MaterialDatePicker.Builder() {
-//
-//        }
-
         val picker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
             .setHour(cal.get(Calendar.HOUR_OF_DAY))
             .setMinute(cal.get(Calendar.MINUTE))
             .setTitleText(getString(com.xenon.todolist.R.string.task_due))
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-            .setTheme(R.style.XenonTimePickerStyle)
             .build()
 
 

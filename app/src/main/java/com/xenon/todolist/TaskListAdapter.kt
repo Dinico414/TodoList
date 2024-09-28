@@ -25,7 +25,8 @@ class TaskListAdapter(
     }
 
     fun setInSelectionState(value: Boolean) {
-        val state = if (value) SelectedStateChanged.SELECTION_ACTIVE else SelectedStateChanged.SELECTION_INACTIVE
+        val state =
+            if (value) SelectedStateChanged.SELECTION_ACTIVE else SelectedStateChanged.SELECTION_INACTIVE
         notifyItemRangeChanged(0, itemCount, state)
     }
 
@@ -37,8 +38,7 @@ class TaskListAdapter(
                 selectedItems.add(taskItem)
                 if (selectedItems.size == 1)
                     setInSelectionState(true)
-            }
-            else {
+            } else {
                 selectedItems.remove(taskItem)
                 if (selectedItems.size == 0)
                     setInSelectionState(false)
