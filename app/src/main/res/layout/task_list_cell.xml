@@ -13,14 +13,16 @@
     app:cardBackgroundColor="@color/background"
     app:cardCornerRadius="50dp"
     app:cardElevation="0dp"
-    app:cardMaxElevation="0dp">
+    app:cardMaxElevation="0dp"
+   >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="false"
+        android:animateLayoutChanges="true"
         android:background="@drawable/tile_cutout"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:rippleColor="@color/surface">
 
         <CheckBox
             android:id="@+id/selectedCheckbox"
