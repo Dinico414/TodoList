@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
-                    app:collapsedTitleGravity="left"
+                    app:collapsedTitleGravity="center"
                     app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
                     app:collapsedTitleTextColor="@color/textOnPrimary"
                     app:expandedTitleGravity="center|center_vertical"
@@ -51,10 +51,7 @@
                         android:id="@+id/dummy_toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
-
-                        app:layout_collapseMode="pin"
-                        app:navigationIcon="@drawable/ic_navigation_vector"
-                        app:navigationIconTint="@color/transparent" />
+                        />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
