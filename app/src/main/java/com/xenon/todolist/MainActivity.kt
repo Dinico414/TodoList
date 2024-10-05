@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -34,6 +35,8 @@ class MainActivity : BaseActivity() {
     private var newTaskSheet: NewTaskSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sharedPreferenceManager = SharedPreferenceManager(this)
+        AppCompatDelegate.setDefaultNightMode(sharedPreferenceManager.themeFlag[sharedPreferenceManager.theme])
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
