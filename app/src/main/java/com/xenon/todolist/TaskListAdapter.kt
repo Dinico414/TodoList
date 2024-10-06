@@ -104,7 +104,7 @@ class TaskListAdapter(
             val color = if (state) {
                 ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.primary)
             } else {
-                ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.background)
+                ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.transparent)
             }
 
             val alpha = if (state) 0.5f else 0.0f

@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/secondaryContainer"
+    android:elevation="10dp"
     app:cardCornerRadius="20dp"
-    android:outlineSpotShadowColor="@color/transparent">
+    android:stateListAnimator="@animator/task_item_statelist">
 
     <LinearLayout
         android:layout_width="match_parent"

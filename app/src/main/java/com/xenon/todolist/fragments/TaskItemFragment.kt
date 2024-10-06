@@ -1,5 +1,6 @@
 package com.xenon.todolist.fragments
 
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -31,9 +32,11 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
     private lateinit var taskItemsModel: TaskItemViewModel
     private var clickListener: TaskItemClickListener = object : TaskItemClickListener {
         override fun editTaskItem(taskItem: TaskItem) {
+            // Handle edit task item click
         }
 
         override fun completeTaskItem(taskItem: TaskItem) {
+            // Handle complete task item click
         }
     }
 
@@ -80,6 +83,7 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
     }
 
     private fun updateRecyclerViewScroll() {
+        // Update RecyclerView scroll position if needed
     }
 
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
@@ -108,8 +112,7 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                     if (oldPosition == 0) {
                         outRect.top = marginInPx
                     }
-                }
-                else if (position == 0) {
+                } else if (position == 0) {
                     outRect.top = marginInPx
                 }
             }
@@ -120,15 +123,19 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 LiveListViewModel.ListChangedType.ADD -> {
                     adapter.notifyItemInserted(change.idx)
                 }
+
                 LiveListViewModel.ListChangedType.REMOVE -> {
                     adapter.notifyItemRemoved(change.idx)
                 }
+
                 LiveListViewModel.ListChangedType.MOVED -> {
                     adapter.notifyItemMoved(change.idx, change.idx2)
                 }
+
                 LiveListViewModel.ListChangedType.UPDATE -> {
                     adapter.notifyItemChanged(change.idx)
                 }
+
                 LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
                     adapter.notifyItemChanged(change.idx)
                     adapter.notifyItemMoved(change.idx, change.idx2)
@@ -136,6 +143,7 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                         binding.todoListRecyclerView.scrollToPosition(0)
                     }
                 }
+
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
                     adapter.taskItems = taskItemsModel.getList()
                     adapter.notifyDataSetChanged()
@@ -149,7 +157,10 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
             ): Int {
-                return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.START)
+                return makeMovementFlags(
+                    ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+                    ItemTouchHelper.START
+                )
             }
 
             override fun onMove(
@@ -159,6 +170,16 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
             ): Boolean {
                 val fromIdx = viewHolder.bindingAdapterPosition
                 val targetIdx = target.bindingAdapterPosition
+
+                // Trigger animation when item is moved
+                val taskItemView = viewHolder.itemView
+                taskItemView.setStateListAnimator(
+                    AnimatorInflater.loadStateListAnimator(
+                        recyclerView.context,
+                        R.animator.task_item_statelist
+                    )
+                )
+
                 return taskItemsModel.move(fromIdx, targetIdx)
             }
 
@@ -184,7 +205,8 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                     com.xenon.commons.accesspoint.R.drawable.delete_button
                 )
 
-                val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
+                val marginInDp =
+                    resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
                 val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
 
                 backgroundDrawable?.setBounds(
@@ -193,7 +215,6 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                     viewHolder.itemView.right - marginInPixels * 2,
                     viewHolder.itemView.bottom - marginInPixels * 2
                 )
-
 
                 val clipPath = Path()
                 clipPath.addRect(
@@ -233,7 +254,11 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 )
             }
 
-
+            override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+                val thresholdInDp = 100.0f
+                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
+                return thresholdInPixels.toFloat() / viewHolder.itemView.width
+            }
         }).attachToRecyclerView(binding.todoListRecyclerView)
 
         updateNoTasksTextview()
