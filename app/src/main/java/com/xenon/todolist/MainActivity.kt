@@ -52,7 +52,7 @@ class MainActivity : BaseActivity() {
         setupTaskListFragment()
 
         adjustBottomMargin(
-            binding.mainLinearLayout ?: binding.CoordinatorLayoutMain,
+            binding.mainLinearLayout ?: binding.coordinatorLayoutMain,
             binding.NewTaskButton
         )
 

@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/CoordinatorLayoutMain"
+            android:id="@+id/coordinatorLayoutMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/border_margin"
