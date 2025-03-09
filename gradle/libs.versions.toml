@@ -1,6 +1,5 @@
 [versions]
-accesspoint = "1.0.8-1"
-agp = "8.7.3"
+agp = "8.8.2"
 kotlin = "1.9.24"
 core-ktx = "1.13.1"
 junit = "4.13.2"
@@ -16,12 +15,13 @@ play-services-auth = "21.2.0"
 recyclerview = "1.3.2"
 recyclerview-swipedecorator = "1.4"
 core-animation = "1.0.0"
+xenon-commons-version = "1.0.1"
 
 [libraries]
-accesspoint = { module = "com.xenon.commons:accesspoint", version.ref = "accesspoint" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 
+dinico414-xenon-commons = { module = "com.github.Dinico414:Xenon-Commons", version.ref = "xenon-commons-version" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

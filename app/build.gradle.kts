@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace = "com.xenon.todolist"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.xenon.todolist"
         minSdk = 31
         targetSdk = 34
-        versionCode = 8
-        versionName = "0.5"
+        versionCode = 1
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,9 +48,9 @@ android {
 }
 
 dependencies {
+    implementation (libs.dinico414.xenon.commons)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.core.ktx)
-    implementation(libs.accesspoint)
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
