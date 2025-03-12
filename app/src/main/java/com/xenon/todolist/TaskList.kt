@@ -9,5 +9,4 @@ data class TaskList(
     var name: String,
     var items: ArrayList<TaskItem>,
     var createdTime: Long
-) : LiveListItem {
-}
+) : LiveListItem

@@ -18,13 +18,13 @@ class TaskListAdapter(
 ) : RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder>() {
 
     var selectedItemPosition = -1
-    val selectedItems: ArrayList<TaskList> = ArrayList()
+    private val selectedItems: ArrayList<TaskList> = ArrayList()
 
     private enum class SelectedStateChanged {
         SELECTION_ACTIVE, SELECTION_INACTIVE
     }
 
-    fun setInSelectionState(value: Boolean) {
+    private fun setInSelectionState(value: Boolean) {
         val state =
             if (value) SelectedStateChanged.SELECTION_ACTIVE else SelectedStateChanged.SELECTION_INACTIVE
         notifyItemRangeChanged(0, itemCount, state)
@@ -71,11 +71,6 @@ class TaskListAdapter(
     ) {
         if (payloads.lastOrNull() == null)
             super.onBindViewHolder(holder, position, payloads)
-//        when (payloads.lastOrNull()) {
-//            SelectedStateChanged.SELECTION_ACTIVE -> holder.setSelected(selectedItems.contains(taskItems[position]))
-//            SelectedStateChanged.SELECTION_INACTIVE -> holder.setInSelectionState(false)
-//            else -> super.onBindViewHolder(holder, position, payloads)
-//        }
         if (selectedItems.size > 0)
             holder.setSelected(selectedItems.contains(taskItems[position]))
         else
@@ -119,7 +114,6 @@ class TaskListAdapter(
             if (!inSelectionState) setInSelectionState(true)
             binding.selectedCheckbox.isEnabled = value
             binding.selectedCheckbox.isChecked = value
-            // Set checkbox color filter based on its checked status
             if (value) {
                 binding.selectedCheckbox.buttonTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(

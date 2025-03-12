@@ -50,12 +50,6 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         listStatus.postValue(ListStatusChange(ListChangedType.ADD, item, to))
     }
 
-    fun remove(item: T) {
-        val idx = items.indexOfFirst { v -> item.id == v.id }
-        if (idx < 0) return
-        remove(idx)
-    }
-
     fun remove(idx: Int) {
         val item = items.removeAt(idx)
         listStatus.postValue(ListStatusChange(ListChangedType.REMOVE, item, idx))
@@ -69,7 +63,7 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         update(from)
     }
 
-    fun update(idx: Int) {
+    private fun update(idx: Int) {
         if (idx < 0) return
         val item = items[idx]
         val newIdx = calculateItemPosition(item, idx)

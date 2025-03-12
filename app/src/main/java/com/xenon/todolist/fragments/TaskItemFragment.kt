@@ -26,6 +26,7 @@ import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
+@Suppress("DEPRECATION")
 class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 
     private lateinit var binding: FragmentTaskItemsBinding

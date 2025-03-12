@@ -52,7 +52,7 @@ class SettingsActivity : BaseActivity() {
             val builder = AlertDialog.Builder(this)
             builder.setPositiveButton(R.string.yes) { _, _ ->
                 val sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
-                sharedPref.edit().clear().commit()
+                sharedPref.edit().clear().apply()
                 this.restartApplication()
             }
             builder.setNegativeButton(R.string.cancel, null)
