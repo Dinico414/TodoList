@@ -36,8 +36,7 @@ class MainActivity : BaseActivity() {
     private var newTaskSheet: NewTaskSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val sharedPreferenceManager = SharedPreferenceManager(this)
-        AppCompatDelegate.setDefaultNightMode(sharedPreferenceManager.themeFlag[sharedPreferenceManager.theme])
+        applyTheme()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,7 +65,6 @@ class MainActivity : BaseActivity() {
 
         setupToolbar()
         loadTaskList()
-        applyTheme()
 
         var selectedIdx = sharedPreferences.getInt("selectedTaskList", 0)
         if (selectedIdx >= taskListModel.getList().size)

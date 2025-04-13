@@ -52,7 +52,6 @@ class SettingsActivity : BaseActivity() {
         var checkedTheme = manager.theme
         themeSelectionValue.text = themeTitleList[manager.theme]
 
-
         val themeDialog = MaterialAlertDialogBuilder(this)
             .setTitle("Select Theme")
             .setPositiveButton("OK") { _, _ ->
@@ -105,14 +104,6 @@ class SettingsActivity : BaseActivity() {
             startActivity(intent)
         }
     }
-
-
-
-
-
-
-
-
 
     private fun applyTheme(recreateActivity: Boolean = false) {
         AppCompatDelegate.setDefaultNightMode(manager.themeFlag[manager.theme])
