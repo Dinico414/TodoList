@@ -28,9 +28,10 @@ import kotlinx.serialization.json.Json
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var taskItemsModel: TaskItemViewModel
     private lateinit var taskListModel: TaskListViewModel
+    private var currentTheme: Int = 0
 
     private var newTaskSheet: NewTaskSheetFragment? = null
 
@@ -47,7 +48,7 @@ class MainActivity : BaseActivity() {
         }
 
 
-        sharedPref = getSharedPreferences(packageName, Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         setupTaskItemFragment()
         setupTaskListFragment()
 
@@ -63,13 +64,11 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            binding.appbar.setExpanded(false, false)
-
         setupToolbar()
         loadTaskList()
+        applyTheme()
 
-        var selectedIdx = sharedPref.getInt("selectedTaskList", 0)
+        var selectedIdx = sharedPreferences.getInt("selectedTaskList", 0)
         if (selectedIdx >= taskListModel.getList().size)
             selectedIdx = 0
         val taskList = taskListModel.getList()[selectedIdx]
@@ -78,8 +77,7 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            binding.appbar.setExpanded(false, false)
+        applyTheme(true)
     }
 
     private fun setupToolbar() {
@@ -117,7 +115,7 @@ class MainActivity : BaseActivity() {
                     R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
                     else -> TaskItemViewModel.SortType.NONE
                 }
-                with(sharedPref.edit()) {
+                with(sharedPreferences.edit()) {
                     putString("sortType", sortType.name)
                     apply()
                 }
@@ -134,7 +132,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun loadTaskList() {
-        val json = sharedPref.getString("taskList", "[]")
+        val json = sharedPreferences.getString("taskList", "[]")
         try {
             val list = Json.decodeFromString<ArrayList<TaskList>>(json!!)
             if (list.size == 0) {
@@ -163,7 +161,7 @@ class MainActivity : BaseActivity() {
 
     private fun saveTaskList() {
         val json = Json.encodeToString(taskListModel.getList())
-        with(sharedPref.edit()) {
+        with(sharedPreferences.edit()) {
             putString("taskList", json)
             apply()
         }
@@ -285,11 +283,26 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
+    private fun applyTheme(recreateActivity: Boolean = false) {
+        val preferenceManager = SharedPreferenceManager(this)
+
+        AppCompatDelegate.setDefaultNightMode(preferenceManager.themeFlag[preferenceManager.theme])
+
+        if (currentTheme == 0) currentTheme = preferenceManager.theme
+        val newTheme = if (preferenceManager.amoledDark) R.style.Theme_Xenon_Amoled else preferenceManager.theme
+
+        if (currentTheme != newTheme) {
+            currentTheme = newTheme
+            setTheme(newTheme)
+            if (recreateActivity) recreate()
+        }
+    }
+
     private fun selectTaskList(position: Int) {
         val taskList = taskListModel.getList()[position]
         taskItemsModel.setList(taskList.items)
         val taskListFragment = binding.taskListFragment.getFragment<TaskListFragment>()
         taskListFragment.selectTaskList(position)
-        sharedPref.edit().putInt("selectedTaskList", position).apply()
+        sharedPreferences.edit().putInt("selectedTaskList", position).apply()
     }
 }

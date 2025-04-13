@@ -36,4 +36,7 @@
     <string name="create_task_list_dialog">Create list</string>
     <string name="add_list">Create new list</string>
     <string name="amoled">Blacked-out</string>
+    <string name="about">About</string>
+    <string name="about_text">Version: %1$s</string>
+    <string name="version_with_prefix">v.%1$s</string>
 </resources>
