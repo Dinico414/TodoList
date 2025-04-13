@@ -25,6 +25,8 @@ import com.xenon.todolist.databinding.FragmentTaskItemsBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import kotlin.math.abs
+import kotlin.math.tanh
 
 @Suppress("DEPRECATION")
 class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
@@ -154,6 +156,8 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            private var lastDraw: Boolean = false
+
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
@@ -197,21 +201,30 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                val thresholdInDp = 100.0f
-                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
-                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
+//                val thresholdInDp = 100.0f
+//                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
+//                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
+
+                if (lastDraw) {
+                    lastDraw = false
+                    return
+                }
+
+                val swipeThreshold = getSwipeThreshold(viewHolder)
+                val swipeThresholdPx = viewHolder.itemView.width * swipeThreshold
+                var limitedDX = -swipeThresholdPx * abs(tanh(0.8f * dX / swipeThresholdPx)).toFloat()
+//                if (dX < -swipeThresholdPx) limitedDX = -limitedDX
 
                 val backgroundDrawable = ContextCompat.getDrawable(
                     context,
                     com.xenon.commons.accesspoint.R.drawable.delete_button
                 )
 
-                val marginInDp =
-                    resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
+                val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
                 val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
 
                 backgroundDrawable?.setBounds(
-                    (viewHolder.itemView.right + limitedDX + marginInPixels).toInt(),
+                    viewHolder.itemView.right + limitedDX.toInt() + marginInPixels,
                     viewHolder.itemView.top + marginInPixels * 2,
                     viewHolder.itemView.right - marginInPixels * 2,
                     viewHolder.itemView.bottom - marginInPixels * 2
@@ -255,10 +268,16 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 )
             }
 
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                lastDraw = true
+            }
+
             override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
-                val thresholdInDp = 100.0f
-                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
-                return thresholdInPixels.toFloat() / viewHolder.itemView.width
+                return 0.3f
             }
         }).attachToRecyclerView(binding.todoListRecyclerView)
 
