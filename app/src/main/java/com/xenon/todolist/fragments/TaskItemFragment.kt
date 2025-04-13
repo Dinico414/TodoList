@@ -207,8 +207,11 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 
                 if (lastDraw) {
                     lastDraw = false
+                    viewHolder.itemView.elevation = 0f
                     return
                 }
+
+                viewHolder.itemView.elevation = 100f
 
                 val swipeThreshold = getSwipeThreshold(viewHolder)
                 val swipeThresholdPx = viewHolder.itemView.width * swipeThreshold
