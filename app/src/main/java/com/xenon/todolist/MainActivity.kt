@@ -218,7 +218,7 @@ class MainActivity : BaseActivity() {
 
             override fun completeTaskItem(taskItem: TaskItem) {
                 taskItem.toggleCompleted()
-                taskItemsModel.update(taskItem, true)
+                taskItemsModel.update(taskItem)
             }
         })
     }

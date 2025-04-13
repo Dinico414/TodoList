@@ -41,9 +41,9 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             SortType.BY_COMPLETENESS -> {
                 var pivotIdx = items.indexOfFirst { v -> v.isCompleted() && v != item }
                 if (pivotIdx > 0) pivotIdx -= 1
-                else if (pivotIdx < 0) pivotIdx = items.size - 1
+                if (pivotIdx < 0) pivotIdx = items.size - 1
 
-                newIdx = if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx else currentIdx
+                newIdx = if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx else if (pivotIdx < currentIdx - 1) pivotIdx + 1 else currentIdx
             }
             SortType.BY_CREATION_DATE -> {
                 var pivotIdx = items.indexOfFirst { v ->
@@ -68,28 +68,6 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             }
         }
         return newIdx
-    }
-
-    override fun update(item: TaskItem, payload: Any?) {
-        update(item, false)
-    }
-
-    fun update(taskItem: TaskItem, completedStateChanged: Boolean) {
-        // Updates taskItem and sets to correct position as per sorting
-        val from = items.indexOfFirst { item -> taskItem.id == item.id }
-        if (from < 0) return
-        val to = if (completedStateChanged && sortType == SortType.BY_COMPLETENESS && !taskItem.isCompleted()) {
-            // Move newly uncompleted items to top
-            0
-        } else {
-            calculateItemPosition(taskItem, from)
-        }
-        if (from == to) {
-            liveListEvent.postValue(ListEvent(ListChangedType.UPDATE, items[from], from))
-            return
-        }
-        items.add(to, items.removeAt(from))
-        liveListEvent.postValue(ListEvent(ListChangedType.MOVED_AND_UPDATED, taskItem, from, to))
     }
 
     override fun move(from: Int, to: Int): Boolean {
