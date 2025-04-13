@@ -70,7 +70,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
         return newIdx
     }
 
-    override fun update(item: TaskItem) {
+    override fun update(item: TaskItem, payload: Any?) {
         update(item, false)
     }
 
@@ -85,11 +85,11 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             calculateItemPosition(taskItem, from)
         }
         if (from == to) {
-            listStatus.postValue(ListStatusChange(ListChangedType.UPDATE, items[from], from))
+            liveListEvent.postValue(ListEvent(ListChangedType.UPDATE, items[from], from))
             return
         }
         items.add(to, items.removeAt(from))
-        listStatus.postValue(ListStatusChange(ListChangedType.MOVED_AND_UPDATED, taskItem, from, to))
+        liveListEvent.postValue(ListEvent(ListChangedType.MOVED_AND_UPDATED, taskItem, from, to))
     }
 
     override fun move(from: Int, to: Int): Boolean {

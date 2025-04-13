@@ -172,7 +172,7 @@ class MainActivity : BaseActivity() {
     private fun setupTaskItemFragment() {
         val fragment = binding.taskItemFragment.getFragment<TaskItemFragment>()
         taskItemsModel = fragment.getViewModel()
-        taskItemsModel.listStatus.observe(this) { change ->
+        taskItemsModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.REMOVE) {
                 val snackbar = Snackbar.make(
                     binding.NewTaskButton,
@@ -226,7 +226,7 @@ class MainActivity : BaseActivity() {
     private fun setupTaskListFragment() {
         val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
         taskListModel = fragment.getViewModel()
-        taskListModel.listStatus.observe(this) { change ->
+        taskListModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
                 selectTaskList(change.idx)
             }

@@ -118,7 +118,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
             }
         })
 
-        taskListModel.listStatus.observe(viewLifecycleOwner) { change ->
+        taskListModel.liveListEvent.observe(viewLifecycleOwner) { change ->
             when (change.type) {
                 LiveListViewModel.ListChangedType.ADD -> {
                     adapter.notifyItemInserted(change.idx)
