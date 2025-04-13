@@ -8,7 +8,7 @@
     <string name="name">Name*</string>
     <string name="select_time">select Time</string>
     <string name="todo_list">ToDo-List</string>
-    <string name="app_name">Todo-List</string>
+    <string name="app_name">To-Do List</string>
     <string name="no_tasks">no Tasks</string>
     <string name="delete">delete</string>
     <string name="edit_task">Edit Task</string>
@@ -31,9 +31,9 @@
     <string name="language">Language</string>
     <string name="Theme" translatable="false">Theme</string>
     <string name="default_task_list">My Tasks</string>
-    <string name="clear_data">Clear all app data</string>
+    <string name="clear_data">Clear data</string>
     <string name="clear_data_dialog">Are you sure you want to clear all app data?</string>
     <string name="create_task_list_dialog">Create list</string>
     <string name="add_list">Create new list</string>
-    <string name="amoled">Amoled-Darkmode</string>
+    <string name="amoled">Blacked-out</string>
 </resources>

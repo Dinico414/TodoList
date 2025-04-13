@@ -7,7 +7,7 @@
     <string name="description">Beschreibung</string>
     <string name="name">Name*</string>
     <string name="select_time">Zeit wählen</string>
-    <string name="todo_list">ToDo-Liste</string>
+    <string name="todo_list">To-Do Liste</string>
     <string name="no_tasks">keine Aufgaben</string>
     <string name="task_due">Aufgaben fälligkeit</string>
     <string name="delete">löschen</string>
@@ -29,9 +29,9 @@
     <string name="general">Allgemein</string>
     <string name="language">Sprache</string>
     <string name="default_task_list" >Meine Aufgaben</string>
-    <string name="clear_data">Lösche alle Daten</string>
+    <string name="clear_data">Daten zurücksetzen</string>
     <string name="clear_data_dialog">Willst du wirklich alle App Daten löschen?</string>
     <string name="create_task_list_dialog">Liste erstellen</string>
     <string name="add_list">Neue Liste erstellen</string>
-    <string name="amoled">Amoled-Darkmode</string>
+    <string name="amoled">Ausgeschwärzt</string>
 </resources>
