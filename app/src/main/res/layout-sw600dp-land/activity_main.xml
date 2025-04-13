@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
-                    app:collapsedTitleGravity="center"
+                    app:collapsedTitleGravity="center|center_vertical"
                     app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
                     app:collapsedTitleTextColor="@color/textOnPrimary"
                     app:expandedTitleGravity="center|center_vertical"

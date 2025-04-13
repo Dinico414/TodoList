@@ -24,7 +24,6 @@ data class TaskItem(
 
     fun toggleCompleted() {
         setCompleted(!isCompleted())
-        dirty = true
     }
 
     fun imageResource(): Int =
