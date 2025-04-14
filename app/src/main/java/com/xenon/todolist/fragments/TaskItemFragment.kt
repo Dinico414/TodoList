@@ -1,6 +1,5 @@
 package com.xenon.todolist.fragments
 
-import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -176,16 +175,16 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 val fromIdx = viewHolder.bindingAdapterPosition
                 val targetIdx = target.bindingAdapterPosition
 
-                // Trigger animation when item is moved
-                val taskItemView = viewHolder.itemView
-                taskItemView.setStateListAnimator(
-                    AnimatorInflater.loadStateListAnimator(
-                        recyclerView.context,
-                        R.animator.task_item_statelist
-                    )
-                )
-
                 return taskItemsModel.move(fromIdx, targetIdx)
+            }
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
+                    // Scale up the item when dragging starts
+                    viewHolder.itemView.animate().scaleX(1.02f).scaleY(1.02f).setDuration(200).start()
+                }
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -276,6 +275,7 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 viewHolder: RecyclerView.ViewHolder
             ) {
                 super.clearView(recyclerView, viewHolder)
+                viewHolder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
                 lastDraw = true
             }
 
