@@ -1,7 +1,7 @@
 [versions]
 agp = "8.8.2"
 kotlin = "2.0.21"
-core-ktx = "1.15.0"
+core-ktx = "1.16.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
@@ -15,7 +15,7 @@ play-services-auth = "21.3.0"
 recyclerview = "1.4.0"
 recyclerview-swipedecorator = "1.4"
 core-animation = "1.0.0"
-xenon-commons-version = "1.2.0"
+xenon-commons-version = "1.3.1"
 
 [libraries]
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
