@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
 
         sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         setupTaskItemFragment()
-        setupTaskListFragment()
+        setupTodoListFragment()
 
         adjustBottomMargin(
             binding.mainLinearLayout ?: binding.coordinatorLayoutMain,
@@ -218,7 +218,7 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun setupTaskListFragment() {
+    private fun setupTodoListFragment() {
         val fragment = binding.todoListFragment.getFragment<TodoListFragment>()
         todoListModel = fragment.getViewModel()
         todoListModel.liveListEvent.observe(this) { change ->
