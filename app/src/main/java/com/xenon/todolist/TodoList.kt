@@ -4,7 +4,7 @@ import com.xenon.todolist.viewmodel.LiveListItem
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TaskList(
+data class TodoList(
     override var id: Int,
     var name: String,
     var items: ArrayList<TaskItem>,

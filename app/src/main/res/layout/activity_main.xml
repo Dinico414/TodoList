@@ -116,7 +116,7 @@
                 app:cardElevation="10dp">
 
                     <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/taskListFragment"
+                        android:id="@+id/todo_list_fragment"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
@@ -129,10 +129,22 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="@string/add_list"
+                        android:visibility="visible"
                         android:textColor="@color/textOnPrimaryInvert"
                         android:textColorHighlight="@color/textOnPrimaryInvert"
                         android:backgroundTint="@color/primary"
                         android:layout_margin="10dp"/>
+                <Button
+                    android:id="@+id/deleteListButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/delete_list"
+                    android:visibility="gone"
+                    android:textColor="@color/delete"
+                    android:textColorHighlight="@color/delete"
+                    android:backgroundTint="@color/delete_red"
+                    android:layout_margin="10dp"/>
 
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>

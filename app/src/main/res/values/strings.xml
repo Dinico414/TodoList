@@ -30,7 +30,7 @@
     <string name="general">General</string>
     <string name="language">Language</string>
     <string name="Theme" translatable="false">Theme</string>
-    <string name="default_task_list">My Tasks</string>
+    <string name="default_todo_list">My Tasks</string>
     <string name="clear_data">Clear data</string>
     <string name="clear_data_dialog">Are you sure you want to clear all app data?</string>
     <string name="create_task_list_dialog">Create list</string>
@@ -39,4 +39,5 @@
     <string name="about">About</string>
     <string name="about_text">Version: %1$s</string>
     <string name="version_with_prefix">v.%1$s</string>
+    <string name="delete_list">Delete selected list(s)</string>
 </resources>

@@ -14,29 +14,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
-import com.xenon.todolist.TaskList
-import com.xenon.todolist.TaskListAdapter
-import com.xenon.todolist.databinding.FragmentTaskListBinding
+import com.xenon.todolist.TodoList
+import com.xenon.todolist.TodoListAdapter
+import com.xenon.todolist.databinding.FragmentTodoListsBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
-import com.xenon.todolist.viewmodel.TaskListViewModel
+import com.xenon.todolist.viewmodel.TodoListViewModel
 
-class TaskListFragment : Fragment(R.layout.fragment_task_list) {
+class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
 
-    private lateinit var binding: FragmentTaskListBinding
-    private lateinit var taskListModel: TaskListViewModel
-    private var clickListener: TaskListAdapter.TaskListClickListener = object : TaskListAdapter.TaskListClickListener {
-        override fun editTaskList(taskList: TaskList, position: Int) {
+    private lateinit var binding: FragmentTodoListsBinding
+    private lateinit var todoListModel: TodoListViewModel
+    private var clickListener: TodoListAdapter.TodoListClickListener = object : TodoListAdapter.TodoListClickListener {
+        override fun editTodoList(taskList: TodoList, position: Int) {
         }
 
-        override fun selectTaskList(taskList: TaskList, position: Int) {
+        override fun selectTodoList(taskList: TodoList, position: Int) {
         }
     }
-    private var selectedTaskListIdx: Int = -1
+    private var selectedTodoListIdx: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        taskListModel = ViewModelProvider(this)[TaskListViewModel::class.java]
+        todoListModel = ViewModelProvider(this)[TodoListViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
         val context = requireContext()
         val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
-        selectTaskList(sharedPref.getInt("selectedTaskList", 0))
+        selectTodoList(sharedPref.getInt("selectedTodoList", 0))
     }
 
     override fun onResume() {
@@ -60,26 +60,26 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        binding = FragmentTodoListsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    fun setClickListener(listener: TaskListAdapter.TaskListClickListener) {
+    fun setClickListener(listener: TodoListAdapter.TodoListClickListener) {
         clickListener = listener
     }
 
-    fun selectTaskList(idx: Int) {
-        val adapter = binding.todoListRecyclerView.adapter as TaskListAdapter
+    fun selectTodoList(idx: Int) {
+        val adapter = binding.todoListRecyclerView.adapter as TodoListAdapter
         adapter.selectedItemPosition = idx
-        if (selectedTaskListIdx >= 0) {
-            adapter.notifyItemChanged(selectedTaskListIdx, true)
+        if (selectedTodoListIdx >= 0) {
+            adapter.notifyItemChanged(selectedTodoListIdx, true)
         }
-        selectedTaskListIdx = idx
-        adapter.notifyItemChanged(selectedTaskListIdx, true)
+        selectedTodoListIdx = idx
+        adapter.notifyItemChanged(selectedTodoListIdx, true)
     }
 
-    fun getViewModel(): TaskListViewModel {
-        return taskListModel
+    fun getViewModel(): TodoListViewModel {
+        return todoListModel
     }
 
     private fun updateRecyclerViewScroll() {
@@ -88,7 +88,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
     @SuppressLint("NotifyDataSetChanged", "ResourceAsColor", "RestrictedApi")
     private fun setRecyclerView() {
         val context = requireContext()
-        val adapter = TaskListAdapter(context, taskListModel.getList(), clickListener)
+        val adapter = TodoListAdapter(context, todoListModel.getList(), clickListener)
         binding.todoListRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.todoListRecyclerView.adapter = adapter
         binding.todoListRecyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
@@ -118,7 +118,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
             }
         })
 
-        taskListModel.liveListEvent.observe(viewLifecycleOwner) { change ->
+        todoListModel.liveListEvent.observe(viewLifecycleOwner) { change ->
             when (change.type) {
                 LiveListViewModel.ListChangedType.ADD -> {
                     adapter.notifyItemInserted(change.idx)
@@ -141,7 +141,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
                     }
                 }
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    adapter.taskItems = taskListModel.getList()
+                    adapter.taskItems = todoListModel.getList()
                     adapter.notifyDataSetChanged()
                 }
             }

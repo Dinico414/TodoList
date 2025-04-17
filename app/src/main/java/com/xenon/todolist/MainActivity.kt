@@ -3,7 +3,6 @@ package com.xenon.todolist
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,10 +18,10 @@ import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
 import com.xenon.todolist.fragments.NewTaskSheetFragment
 import com.xenon.todolist.fragments.TaskItemFragment
-import com.xenon.todolist.fragments.TaskListFragment
+import com.xenon.todolist.fragments.TodoListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
-import com.xenon.todolist.viewmodel.TaskListViewModel
+import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -30,7 +29,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var taskItemsModel: TaskItemViewModel
-    private lateinit var taskListModel: TaskListViewModel
+    private lateinit var todoListModel: TodoListViewModel
     private var currentTheme: Int = 0
 
     private var newTaskSheet: NewTaskSheetFragment? = null
@@ -64,13 +63,13 @@ class MainActivity : BaseActivity() {
         }
 
         setupToolbar()
-        loadTaskList()
+        loadTodoList()
 
-        var selectedIdx = sharedPreferences.getInt("selectedTaskList", 0)
-        if (selectedIdx >= taskListModel.getList().size)
+        var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
+        if (selectedIdx >= todoListModel.getList().size)
             selectedIdx = 0
-        val taskList = taskListModel.getList()[selectedIdx]
-        taskItemsModel.setList(taskList.items)
+        val todoList = todoListModel.getList()[selectedIdx]
+        taskItemsModel.setList(todoList.items)
     }
 
     override fun onResume() {
@@ -129,38 +128,38 @@ class MainActivity : BaseActivity() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
     }
 
-    private fun loadTaskList() {
-        val json = sharedPreferences.getString("taskList", "[]")
+    private fun loadTodoList() {
+        val json = sharedPreferences.getString("todoList", "[]")
         try {
-            val list = Json.decodeFromString<ArrayList<TaskList>>(json!!)
+            val list = Json.decodeFromString<ArrayList<TodoList>>(json!!)
             if (list.size == 0) {
-                loadDefaultTaskList()
+                loadDefaultTodoList()
                 return
             }
-            taskListModel.setList(list)
+            todoListModel.setList(list)
         } catch (e: Exception) {
-            loadDefaultTaskList()
+            loadDefaultTodoList()
         }
     }
 
-    private fun loadDefaultTaskList() {
-        val defaultList = ArrayList<TaskList>()
+    private fun loadDefaultTodoList() {
+        val defaultList = ArrayList<TodoList>()
         defaultList.add(
-            TaskList(
+            TodoList(
                 0,
-                getString(R.string.default_task_list),
+                getString(R.string.default_todo_list),
                 ArrayList(),
                 System.currentTimeMillis()
             )
         )
-        taskListModel.setList(defaultList)
+        todoListModel.setList(defaultList)
         saveTaskList()
     }
 
     private fun saveTaskList() {
-        val json = Json.encodeToString(taskListModel.getList())
+        val json = Json.encodeToString(todoListModel.getList())
         with(sharedPreferences.edit()) {
-            putString("taskList", json)
+            putString("todoList", json)
             apply()
         }
     }
@@ -220,20 +219,20 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupTaskListFragment() {
-        val fragment = binding.taskListFragment.getFragment<TaskListFragment>()
-        taskListModel = fragment.getViewModel()
-        taskListModel.liveListEvent.observe(this) { change ->
+        val fragment = binding.todoListFragment.getFragment<TodoListFragment>()
+        todoListModel = fragment.getViewModel()
+        todoListModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
-                selectTaskList(change.idx)
+                selectTodoList(change.idx)
             }
             saveTaskList()
         }
-        fragment.setClickListener(object : TaskListAdapter.TaskListClickListener {
-            override fun editTaskList(taskList: TaskList, position: Int) {
+        fragment.setClickListener(object : TodoListAdapter.TodoListClickListener {
+            override fun editTodoList(taskList: TodoList, position: Int) {
             }
 
-            override fun selectTaskList(taskList: TaskList, position: Int) {
-                selectTaskList(position)
+            override fun selectTodoList(taskList: TodoList, position: Int) {
+                selectTodoList(position)
                 binding.drawerLayout?.closeDrawers()
             }
         })
@@ -243,15 +242,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showAddListDialog() {
-        val addTaskView = layoutInflater.inflate(R.layout.alert_add_task_list, null)
+        val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
         val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val builder = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.create_task_list_dialog)
             .setPositiveButton(R.string.save) { _, _ ->
                 val taskListName = titleEditText.text.toString()
                 if (taskListName.isNotBlank())
-                    taskListModel.add(
-                        TaskList(
+                    todoListModel.add(
+                        TodoList(
                             -1,
                             taskListName,
                             ArrayList(),
@@ -296,11 +295,11 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun selectTaskList(position: Int) {
-        val taskList = taskListModel.getList()[position]
-        taskItemsModel.setList(taskList.items)
-        val taskListFragment = binding.taskListFragment.getFragment<TaskListFragment>()
-        taskListFragment.selectTaskList(position)
-        sharedPreferences.edit().putInt("selectedTaskList", position).apply()
+    private fun selectTodoList(position: Int) {
+        val todoList = todoListModel.getList()[position]
+        taskItemsModel.setList(todoList.items)
+        val todoListFragment = binding.todoListFragment.getFragment<TodoListFragment>()
+        todoListFragment.selectTodoList(position)
+        sharedPreferences.edit().putInt("selectedTodoList", position).apply()
     }
 }

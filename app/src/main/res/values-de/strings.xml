@@ -28,7 +28,7 @@
     <string name="settings">Einstellungen</string>
     <string name="general">Allgemein</string>
     <string name="language">Sprache</string>
-    <string name="default_task_list" >Meine Aufgaben</string>
+    <string name="default_todo_list" >Meine Aufgaben</string>
     <string name="clear_data">Daten zurücksetzen</string>
     <string name="clear_data_dialog">Willst du wirklich alle App Daten löschen?</string>
     <string name="create_task_list_dialog">Liste erstellen</string>

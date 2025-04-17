@@ -18,8 +18,8 @@
             android:id="@+id/coordinatorLayoutMain"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@drawable/tile_cutout"
             android:layout_weight="0.3"
+            android:background="@drawable/tile_cutout"
             android:clipToOutline="true">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -50,20 +50,19 @@
                     <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/dummy_toolbar"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        />
+                        android:layout_height="?attr/actionBarSize" />
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/taskListFragment"
+                android:id="@+id/todo_list_fragment"
                 android:name="com.xenon.todolist.fragments.TaskListFragment"
-                android:background="@drawable/tile_background_100"
-                android:backgroundTint="@color/surfaceContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/tile_background_100"
+                android:backgroundTint="@color/surfaceContainer"
                 android:clipToOutline="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
@@ -71,14 +70,31 @@
                 android:id="@+id/addListButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="0"
                 android:backgroundTint="@color/primary"
                 android:text="@string/add_list"
                 android:textColor="@color/textOnPrimaryInvert"
                 android:textColorHighlight="@color/textOnPrimaryInvert"
+                android:visibility="visible"
+                app:layout_anchor="@id/todo_list_fragment"
+                app:layout_anchorGravity="bottom" />
+
+            <Button
+                android:id="@+id/deleteListButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginBottom="6dp"
-                app:layout_anchor="@id/taskListFragment"
-                app:layout_anchorGravity="bottom"/>
+                android:layout_weight="0"
+                android:backgroundTint="@color/delete_red"
+                android:text="@string/delete_list"
+                android:textColor="@color/delete"
+                android:textColorHighlight="@color/delete"
+                android:visibility="gone"
+                app:layout_anchor="@id/todo_list_fragment"
+                app:layout_anchorGravity="bottom" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -100,9 +116,9 @@
                 android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
                 android:background="@drawable/tile_background_100"
                 android:backgroundTint="@color/surfaceContainer"
-                android:layout_marginTop="?attr/actionBarSize"
                 android:clipToOutline="true" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
