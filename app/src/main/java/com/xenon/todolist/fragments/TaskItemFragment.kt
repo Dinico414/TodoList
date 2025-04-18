@@ -25,6 +25,8 @@ import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.tanh
 
 @Suppress("DEPRECATION")
@@ -224,9 +226,10 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 
                 val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
                 val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
+                var drawableMinX = 4 * marginInPixels + (30 * resources.displayMetrics.density).toInt()
 
                 backgroundDrawable?.setBounds(
-                    viewHolder.itemView.right + limitedDX.toInt() + marginInPixels,
+                    viewHolder.itemView.right + min(limitedDX.toInt(), -drawableMinX) + marginInPixels,
                     viewHolder.itemView.top + marginInPixels * 2,
                     viewHolder.itemView.right - marginInPixels * 2,
                     viewHolder.itemView.bottom - marginInPixels * 2
