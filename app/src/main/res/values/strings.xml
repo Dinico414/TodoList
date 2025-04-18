@@ -40,4 +40,5 @@
     <string name="about_text">Version: %1$s</string>
     <string name="version_with_prefix">v.%1$s</string>
     <string name="delete_list">Delete selected list(s)</string>
+    <string name="edit_list">Rename list</string>
 </resources>

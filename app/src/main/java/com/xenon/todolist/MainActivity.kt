@@ -158,7 +158,6 @@ class MainActivity : BaseActivity() {
             )
         )
         todoListModel.setList(defaultList)
-        saveTaskList()
     }
 
     private fun saveTaskList() {
@@ -238,6 +237,10 @@ class MainActivity : BaseActivity() {
             sharedPreferences.edit() { putInt("selectedTodoList", change) }
         }
         fragment.setClickListener(object : TodoListAdapter.TodoListClickListener {
+            override fun onItemEdited(taskList: TodoList, position: Int) {
+                showEditListDialog(taskList) {  }
+            }
+
             override fun onItemSelected(taskList: TodoList, position: Int) {
                 todoListModel.selectedIdx.value = position
                 binding.drawerLayout?.closeDrawers()
@@ -318,6 +321,23 @@ class MainActivity : BaseActivity() {
                 onComplete()
             }
             .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showEditListDialog(item: TodoList, onComplete: () -> Unit) {
+        val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
+        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        titleEditText.setText(item.name)
+        titleEditText.setSelection(item.name.length)
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.edit_list)
+            .setPositiveButton(R.string.yes) { _, _ ->
+                item.name = titleEditText.text.toString()
+                todoListModel.update(item, true)
+                onComplete()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .setView(addTaskView)
             .show()
     }
 

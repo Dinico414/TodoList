@@ -52,6 +52,10 @@ class TodoListAdapter(
         val from = LayoutInflater.from(parent.context)
         val binding = TodoListCellBinding.inflate(from, parent, false)
         return TodoListViewHolder(parent.context, binding, object : TodoListClickListener {
+            override fun onItemEdited(taskList: TodoList, position: Int) {
+                clickListener?.onItemEdited(taskList, position)
+            }
+
             override fun onItemSelected(taskList: TodoList, position: Int) {
                 clickListener?.onItemSelected(taskList, position)
                 notifyItemRangeChanged(0, itemCount, true)
@@ -116,6 +120,7 @@ class TodoListAdapter(
     override fun getItemCount(): Int = taskListList.size
 
     interface TodoListClickListener {
+        fun onItemEdited(taskList: TodoList, position: Int)
         fun onItemSelected(taskList: TodoList, position: Int)
         fun onItemChecked(taskList: TodoList, position: Int, checkedItems: List<TodoList>)
     }
@@ -148,6 +153,9 @@ class TodoListAdapter(
                 } else {
                     false
                 }
+            }
+            binding.editButton.setOnClickListener {
+                clickListener.onItemEdited(taskList, position)
             }
 
             setSelected(selected)
@@ -188,9 +196,9 @@ class TodoListAdapter(
 
         fun setCheckboxState(value: Boolean) {
             binding.selectedCheckbox.isVisible = value
+            binding.editButton.isVisible = value
             if (!value) {
                 taskList.checked = false
-                binding.selectedCheckbox.isEnabled = false
             }
             inCheckboxState = value
         }
