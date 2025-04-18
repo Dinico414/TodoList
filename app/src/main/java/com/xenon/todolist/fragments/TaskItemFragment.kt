@@ -206,61 +206,67 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 //                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
 //                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
 
-                if (lastDraw) {
-                    lastDraw = false
-                    viewHolder.itemView.elevation = 0f
-                    return
+                var limitedDX = dX
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    if (lastDraw) {
+                        lastDraw = false
+                        viewHolder.itemView.elevation = 0f
+                        return
+                    }
+                    viewHolder.itemView.elevation = 100f
                 }
+                else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
 
-                viewHolder.itemView.elevation = 100f
-
-                val swipeThreshold = getSwipeThreshold(viewHolder)
-                val swipeThresholdPx = viewHolder.itemView.width * swipeThreshold
-                var limitedDX = -swipeThresholdPx * abs(tanh(0.8f * dX / swipeThresholdPx)).toFloat()
+                    val swipeThreshold = getSwipeThreshold(viewHolder)
+                    val swipeThresholdPx = viewHolder.itemView.width * swipeThreshold
+                    limitedDX = -swipeThresholdPx * abs(tanh(0.8f * dX / swipeThresholdPx)).toFloat()
 //                if (dX < -swipeThresholdPx) limitedDX = -limitedDX
 
-                val backgroundDrawable = ContextCompat.getDrawable(
-                    context,
-                    com.xenon.commons.accesspoint.R.drawable.delete_button
-                )
+                    val backgroundDrawable = ContextCompat.getDrawable(
+                        context,
+                        com.xenon.commons.accesspoint.R.drawable.delete_button
+                    )
 
-                val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
-                val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
-                var drawableMinX = 4 * marginInPixels + (30 * resources.displayMetrics.density).toInt()
+                    val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
+                    val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
+//                var drawableMinX = 4 * marginInPixels + (30 * resources.displayMetrics.density)
 
-                backgroundDrawable?.setBounds(
-                    viewHolder.itemView.right + min(limitedDX.toInt(), -drawableMinX) + marginInPixels,
-                    viewHolder.itemView.top + marginInPixels * 2,
-                    viewHolder.itemView.right - marginInPixels * 2,
-                    viewHolder.itemView.bottom - marginInPixels * 2
-                )
+                    backgroundDrawable?.setBounds(
+                        viewHolder.itemView.right + limitedDX.toInt() + marginInPixels,
+                        viewHolder.itemView.top + marginInPixels * 2,
+                        viewHolder.itemView.right - marginInPixels * 2,
+                        viewHolder.itemView.bottom - marginInPixels * 2
+                    )
 
-                val clipPath = Path()
-                clipPath.addRect(
-                    viewHolder.itemView.right.toFloat(),
-                    viewHolder.itemView.top.toFloat(),
-                    viewHolder.itemView.right + limitedDX + marginInPixels,
-                    viewHolder.itemView.bottom.toFloat(),
-                    Path.Direction.CW
-                )
+                    val clipPath = Path()
+                    clipPath.addRect(
+                        viewHolder.itemView.right.toFloat(),
+                        viewHolder.itemView.top.toFloat(),
+                        viewHolder.itemView.right + limitedDX + marginInPixels,
+                        viewHolder.itemView.bottom.toFloat(),
+                        Path.Direction.CW
+                    )
 
-                c.clipPath(clipPath)
+                    c.clipPath(clipPath)
 
-                backgroundDrawable?.draw(c)
+                    backgroundDrawable?.draw(c)
 
-                RecyclerViewSwipeDecorator.Builder(
-                    context,
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    limitedDX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
-                    .addSwipeLeftActionIcon(com.xenon.commons.accesspoint.R.drawable.delete)
-                    .create()
-                    .decorate()
+                    RecyclerViewSwipeDecorator.Builder(
+                        context,
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        limitedDX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+                        .addSwipeLeftActionIcon(com.xenon.commons.accesspoint.R.drawable.delete)
+                        .create()
+                        .decorate()
+                }
+
 
                 super.onChildDraw(
                     c,
