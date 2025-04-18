@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.RadioGroup
@@ -247,7 +248,10 @@ class MainActivity : BaseActivity() {
                     binding.addListButton.visibility = View.GONE
                     binding.deleteListButton.visibility = View.VISIBLE
                     binding.deleteListButton.setOnClickListener {
-                        showDeleteListsDialog(checkedItems)
+                        showDeleteListsDialog(checkedItems) {
+                            binding.addListButton.visibility = View.VISIBLE
+                            binding.deleteListButton.visibility = View.GONE
+                        }
                     }
                 }
                 else {
@@ -299,13 +303,19 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
-    private fun showDeleteListsDialog(checkedItems: List<TodoList>) {
+    private fun showDeleteListsDialog(checkedItems: List<TodoList>, onComplete: () -> Unit) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.delete_list)
             .setPositiveButton(R.string.yes) { _, _ ->
-                checkedItems.forEach {
-                    todoListModel.remove(it)
+                if (checkedItems.size == todoListModel.getList().size) {
+                    loadDefaultTodoList()
                 }
+                else {
+                    checkedItems.forEach {
+                        todoListModel.remove(it)
+                    }
+                }
+                onComplete()
             }
             .setNegativeButton(R.string.cancel, null)
             .show()

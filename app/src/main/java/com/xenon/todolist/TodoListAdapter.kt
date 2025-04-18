@@ -2,6 +2,7 @@ package com.xenon.todolist
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -36,6 +37,7 @@ class TodoListAdapter(
     }
 
     fun updateCheckedItemsList() {
+        checkedItems.clear()
         for (list in taskListList)
             if (list.checked) checkedItems.add(list)
     }
@@ -43,7 +45,6 @@ class TodoListAdapter(
     fun onItemRemoved(taskList: TodoList) {
         if (checkedItems.remove(taskList) && checkedItems.isEmpty()) {
             notifyItemRangeChanged(0, itemCount, true)
-            clickListener?.onItemChecked(taskList, -1, checkedItems)
         }
     }
 
@@ -72,11 +73,15 @@ class TodoListAdapter(
     }
 
     override fun onBindViewHolder(holder: TodoListViewHolder, position: Int) {
-        holder.bindTaskItem(taskListList[position], position, position == selectedItemPosition)
+        val item = taskListList[position]
+        holder.bindTaskItem(item, position, position == selectedItemPosition)
 
         if (checkedItems.isNotEmpty()) {
             holder.setCheckboxState(true)
-            holder.setChecked(checkedItems.contains(taskListList[position]))
+            holder.setChecked(checkedItems.contains(item))
+        }
+        else {
+            holder.setCheckboxState(false)
         }
 
         holder.setSelected(selectedItemPosition == position)
