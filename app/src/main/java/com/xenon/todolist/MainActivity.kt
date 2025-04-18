@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
@@ -226,33 +227,37 @@ class MainActivity : BaseActivity() {
         todoListModel = fragment.getViewModel()
         todoListModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
-                selectTodoList(change.idx)
+                todoListModel.selectedIdx.value = change.idx
             }
             saveTaskList()
         }
         todoListModel.selectedIdx.observe(this) { change ->
-            val todoList = todoListModel.getList()[change]
-            taskItemsModel.setList(todoList.items)
+            val list = todoListModel.getList()[change].items
+            taskItemsModel.setList(list)
             sharedPreferences.edit() { putInt("selectedTodoList", change) }
         }
         fragment.setClickListener(object : TodoListAdapter.TodoListClickListener {
-            override fun editTodoList(taskList: TodoList, position: Int) {
-            }
-
-            override fun selectTodoList(taskList: TodoList, position: Int) {
-                selectTodoList(position)
+            override fun onItemSelected(taskList: TodoList, position: Int) {
+                todoListModel.selectedIdx.value = position
                 binding.drawerLayout?.closeDrawers()
             }
 
-            override fun onItemChecked(taskList: TodoList, position: Int) {
-
+            override fun onItemChecked(taskList: TodoList, position: Int, checkedItems: List<TodoList>) {
+                if (checkedItems.isNotEmpty()) {
+                    binding.addListButton.visibility = View.GONE
+                    binding.deleteListButton.visibility = View.VISIBLE
+                    binding.deleteListButton.setOnClickListener {
+                        showDeleteListsDialog(checkedItems)
+                    }
+                }
+                else {
+                    binding.addListButton.visibility = View.VISIBLE
+                    binding.deleteListButton.visibility = View.GONE
+                }
             }
         })
         binding.addListButton.setOnClickListener {
             showAddListDialog()
-        }
-        binding.deleteListButton.setOnClickListener {
-            showDeleteListsDialog()
         }
     }
 
@@ -294,11 +299,13 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
-    private fun showDeleteListsDialog() {
+    private fun showDeleteListsDialog(checkedItems: List<TodoList>) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.delete_list)
             .setPositiveButton(R.string.yes) { _, _ ->
-
+                checkedItems.forEach {
+                    todoListModel.remove(it)
+                }
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
@@ -317,9 +324,5 @@ class MainActivity : BaseActivity() {
             setTheme(newTheme)
             if (recreateActivity) recreate()
         }
-    }
-
-    private fun selectTodoList(position: Int) {
-        todoListModel.selectedIdx.value = position
     }
 }

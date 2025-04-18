@@ -2,7 +2,6 @@ package com.xenon.todolist
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ class TodoListAdapter(
     private val clickListener: TodoListClickListener?,
 ) : RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
-    var selectedItemPosition = -1
+    private var selectedItemPosition = -1
     private val checkedItems: ArrayList<TodoList> = ArrayList()
 
     init {
@@ -30,25 +29,34 @@ class TodoListAdapter(
         updateCheckedItemsList()
     }
 
+    fun selectItem(position: Int) {
+        notifyItemChanged(selectedItemPosition)
+        notifyItemChanged(position)
+        selectedItemPosition = position
+    }
+
     fun updateCheckedItemsList() {
         for (list in taskListList)
             if (list.checked) checkedItems.add(list)
+    }
+
+    fun onItemRemoved(taskList: TodoList) {
+        if (checkedItems.remove(taskList) && checkedItems.isEmpty()) {
+            notifyItemRangeChanged(0, itemCount, true)
+            clickListener?.onItemChecked(taskList, -1, checkedItems)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListViewHolder {
         val from = LayoutInflater.from(parent.context)
         val binding = TodoListCellBinding.inflate(from, parent, false)
         return TodoListViewHolder(parent.context, binding, object : TodoListClickListener {
-            override fun editTodoList(taskList: TodoList, position: Int) {
-                clickListener?.editTodoList(taskList, position)
-            }
-            override fun selectTodoList(taskList: TodoList, position: Int) {
-                clickListener?.selectTodoList(taskList, position)
+            override fun onItemSelected(taskList: TodoList, position: Int) {
+                clickListener?.onItemSelected(taskList, position)
                 notifyItemRangeChanged(0, itemCount, true)
             }
 
-            override fun onItemChecked(taskList: TodoList, position: Int) {
-                clickListener?.onItemChecked(taskList, position)
+            override fun onItemChecked(taskList: TodoList, position: Int, list: List<TodoList>) {
                 if (taskList.checked) {
                     checkedItems.add(taskList)
                     if (checkedItems.size == 1)
@@ -58,6 +66,7 @@ class TodoListAdapter(
                     if (checkedItems.isEmpty())
                         notifyItemRangeChanged(0, itemCount, true)
                 }
+                clickListener?.onItemChecked(taskList, position, checkedItems)
             }
         })
     }
@@ -102,9 +111,8 @@ class TodoListAdapter(
     override fun getItemCount(): Int = taskListList.size
 
     interface TodoListClickListener {
-        fun editTodoList(taskList: TodoList, position: Int)
-        fun selectTodoList(taskList: TodoList, position: Int)
-        fun onItemChecked(taskList: TodoList, position: Int)
+        fun onItemSelected(taskList: TodoList, position: Int)
+        fun onItemChecked(taskList: TodoList, position: Int, checkedItems: List<TodoList>)
     }
 
     class TodoListViewHolder(
@@ -123,14 +131,14 @@ class TodoListAdapter(
             binding.taskCellContainer.setOnClickListener {
                 if (inCheckboxState) {
                     setChecked(!taskList.checked)
-                    clickListener.onItemChecked(taskList, position)
+                    clickListener.onItemChecked(taskList, position, emptyList())
                 } else
-                    clickListener.selectTodoList(taskList, position)
+                    clickListener.onItemSelected(taskList, position)
             }
             binding.taskCellContainer.setOnLongClickListener {
                 if (!inCheckboxState) {
                     setChecked(true)
-                    clickListener.onItemChecked(taskList, position)
+                    clickListener.onItemChecked(taskList, position, emptyList())
                     true
                 } else {
                     false

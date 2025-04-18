@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
@@ -98,37 +99,45 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
             }
         })
 
-        todoListModel.liveListEvent.observe(viewLifecycleOwner) { change ->
-            when (change.type) {
-                LiveListViewModel.ListChangedType.ADD -> {
-                    adapter.notifyItemInserted(change.idx)
-                }
-                LiveListViewModel.ListChangedType.REMOVE -> {
-                    adapter.notifyItemRemoved(change.idx)
-                }
-                LiveListViewModel.ListChangedType.MOVED -> {
-                    adapter.notifyItemMoved(change.idx, change.idx2)
-                }
-                LiveListViewModel.ListChangedType.UPDATE -> {
-                    adapter.notifyItemChanged(change.idx)
-                }
-                LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
-                    adapter.notifyItemChanged(change.idx)
-                    adapter.notifyItemMoved(change.idx, change.idx2)
-                    if (change.idx == 0) {
-                        binding.todoListRecyclerView.scrollToPosition(0)
+        todoListModel.liveListEvent.observe(viewLifecycleOwner) { _ ->
+            while (true) {
+                val change = todoListModel.listEventQueue.poll() ?: break
+                when (change.type) {
+                    LiveListViewModel.ListChangedType.ADD -> {
+                        adapter.notifyItemInserted(change.idx)
                     }
-                }
-                LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    adapter.setTaskList(todoListModel.getList())
-                    adapter.notifyDataSetChanged()
+                    LiveListViewModel.ListChangedType.REMOVE -> {
+                        adapter.notifyItemRemoved(change.idx)
+                        adapter.onItemRemoved(change.item!!)
+                        todoListModel.selectedIdx.value?.let {
+                            if (it >= change.idx) {
+                                todoListModel.selectedIdx.value = 0
+                            }
+                        }
+                    }
+                    LiveListViewModel.ListChangedType.MOVED -> {
+                        adapter.notifyItemMoved(change.idx, change.idx2)
+                    }
+                    LiveListViewModel.ListChangedType.UPDATE -> {
+                        adapter.notifyItemChanged(change.idx)
+                    }
+                    LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
+                        adapter.notifyItemChanged(change.idx)
+                        adapter.notifyItemMoved(change.idx, change.idx2)
+                        if (change.idx == 0) {
+                            binding.todoListRecyclerView.scrollToPosition(0)
+                        }
+                    }
+                    LiveListViewModel.ListChangedType.OVERWRITTEN -> {
+                        adapter.setTaskList(todoListModel.getList())
+                        adapter.notifyDataSetChanged()
+                    }
                 }
             }
         }
 
         todoListModel.selectedIdx.observe(viewLifecycleOwner) { change ->
-            adapter.selectedItemPosition = change
-            adapter.notifyItemChanged(change, true)
+            adapter.selectItem(change)
         }
     }
 }

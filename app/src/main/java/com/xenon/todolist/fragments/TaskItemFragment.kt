@@ -122,35 +122,38 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
             }
         })
 
-        taskItemsModel.liveListEvent.observe(viewLifecycleOwner) { change ->
-            when (change.type) {
-                LiveListViewModel.ListChangedType.ADD -> {
-                    adapter.notifyItemInserted(change.idx)
-                }
-
-                LiveListViewModel.ListChangedType.REMOVE -> {
-                    adapter.notifyItemRemoved(change.idx)
-                }
-
-                LiveListViewModel.ListChangedType.MOVED -> {
-                    adapter.notifyItemMoved(change.idx, change.idx2)
-                }
-
-                LiveListViewModel.ListChangedType.UPDATE -> {
-                    adapter.notifyItemChanged(change.idx)
-                }
-
-                LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
-                    adapter.notifyItemChanged(change.idx)
-                    adapter.notifyItemMoved(change.idx, change.idx2)
-                    if (change.idx == 0) {
-                        binding.todoListRecyclerView.scrollToPosition(0)
+        taskItemsModel.liveListEvent.observe(viewLifecycleOwner) { _ ->
+            while (true) {
+                val change = taskItemsModel.listEventQueue.poll() ?: break
+                when (change.type) {
+                    LiveListViewModel.ListChangedType.ADD -> {
+                        adapter.notifyItemInserted(change.idx)
                     }
-                }
 
-                LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    adapter.taskItems = taskItemsModel.getList()
-                    adapter.notifyDataSetChanged()
+                    LiveListViewModel.ListChangedType.REMOVE -> {
+                        adapter.notifyItemRemoved(change.idx)
+                    }
+
+                    LiveListViewModel.ListChangedType.MOVED -> {
+                        adapter.notifyItemMoved(change.idx, change.idx2)
+                    }
+
+                    LiveListViewModel.ListChangedType.UPDATE -> {
+                        adapter.notifyItemChanged(change.idx)
+                    }
+
+                    LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
+                        adapter.notifyItemChanged(change.idx)
+                        adapter.notifyItemMoved(change.idx, change.idx2)
+                        if (change.idx == 0) {
+                            binding.todoListRecyclerView.scrollToPosition(0)
+                        }
+                    }
+
+                    LiveListViewModel.ListChangedType.OVERWRITTEN -> {
+                        adapter.taskItems = taskItemsModel.getList()
+                        adapter.notifyDataSetChanged()
+                    }
                 }
             }
             updateNoTasksTextview()
