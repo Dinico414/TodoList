@@ -26,7 +26,6 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
     private var clickListener: TodoListAdapter.TodoListClickListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         todoListModel = ViewModelProvider(this)[TodoListViewModel::class.java]
     }
 
@@ -121,7 +120,7 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
                     }
                 }
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    adapter.taskList = todoListModel.getList()
+                    adapter.setTaskList(todoListModel.getList())
                     adapter.notifyDataSetChanged()
                 }
             }

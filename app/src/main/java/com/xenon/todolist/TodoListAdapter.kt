@@ -2,6 +2,7 @@ package com.xenon.todolist
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import com.xenon.todolist.databinding.TodoListCellBinding
 
 class TodoListAdapter(
     private val context: Context,
-    var taskList: List<TodoList>,
+    private var taskListList: List<TodoList>,
     private val clickListener: TodoListClickListener?,
 ) : RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
@@ -21,7 +22,16 @@ class TodoListAdapter(
     private val checkedItems: ArrayList<TodoList> = ArrayList()
 
     init {
-        for (list in taskList)
+        updateCheckedItemsList()
+    }
+
+    fun setTaskList(taskList: List<TodoList>) {
+        this.taskListList = taskList
+        updateCheckedItemsList()
+    }
+
+    fun updateCheckedItemsList() {
+        for (list in taskListList)
             if (list.checked) checkedItems.add(list)
     }
 
@@ -53,11 +63,11 @@ class TodoListAdapter(
     }
 
     override fun onBindViewHolder(holder: TodoListViewHolder, position: Int) {
-        holder.bindTaskItem(taskList[position], position, position == selectedItemPosition)
+        holder.bindTaskItem(taskListList[position], position, position == selectedItemPosition)
 
         if (checkedItems.isNotEmpty()) {
             holder.setCheckboxState(true)
-            holder.setChecked(checkedItems.contains(taskList[position]))
+            holder.setChecked(checkedItems.contains(taskListList[position]))
         }
 
         holder.setSelected(selectedItemPosition == position)
@@ -83,13 +93,13 @@ class TodoListAdapter(
             return
         }
         else if (checkedItems.isNotEmpty())
-            holder.setChecked(checkedItems.contains(taskList[position]))
+            holder.setChecked(checkedItems.contains(taskListList[position]))
         else
             holder.setCheckboxState(false)
         holder.setSelected(selectedItemPosition == position)
     }
 
-    override fun getItemCount(): Int = taskList.size
+    override fun getItemCount(): Int = taskListList.size
 
     interface TodoListClickListener {
         fun editTodoList(taskList: TodoList, position: Int)

@@ -130,6 +130,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun loadTodoList() {
+        if (todoListModel.getList().isNotEmpty())
+            return
+
         val json = sharedPreferences.getString("todoList", "[]")
         try {
             val list = Json.decodeFromString<ArrayList<TodoList>>(json!!)
