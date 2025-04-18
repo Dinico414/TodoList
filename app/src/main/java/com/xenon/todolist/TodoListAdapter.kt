@@ -13,45 +13,54 @@ import com.xenon.todolist.databinding.TodoListCellBinding
 
 class TodoListAdapter(
     private val context: Context,
-    var taskItems: List<TodoList>,
-    private val clickListener: TodoListClickListener,
+    var taskList: List<TodoList>,
+    private val clickListener: TodoListClickListener?,
 ) : RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
 
     var selectedItemPosition = -1
-    private val selectedItems: ArrayList<TodoList> = ArrayList()
+    private val checkedItems: ArrayList<TodoList> = ArrayList()
 
-    private enum class SelectedStateChanged {
-        SELECTION_ACTIVE, SELECTION_INACTIVE
-    }
-
-    private fun setInSelectionState(value: Boolean) {
-        val state =
-            if (value) SelectedStateChanged.SELECTION_ACTIVE else SelectedStateChanged.SELECTION_INACTIVE
-        notifyItemRangeChanged(0, itemCount, state)
+    init {
+        for (list in taskList)
+            if (list.checked) checkedItems.add(list)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListViewHolder {
         val from = LayoutInflater.from(parent.context)
         val binding = TodoListCellBinding.inflate(from, parent, false)
-        return TodoListViewHolder(parent.context, binding, clickListener) { taskItem, selected ->
-            if (selected) {
-                selectedItems.add(taskItem)
-                if (selectedItems.size == 1)
-                    setInSelectionState(true)
-            } else {
-                selectedItems.remove(taskItem)
-                if (selectedItems.size == 0)
-                    setInSelectionState(false)
+        return TodoListViewHolder(parent.context, binding, object : TodoListClickListener {
+            override fun editTodoList(taskList: TodoList, position: Int) {
+                clickListener?.editTodoList(taskList, position)
             }
-        }
+            override fun selectTodoList(taskList: TodoList, position: Int) {
+                clickListener?.selectTodoList(taskList, position)
+                notifyItemRangeChanged(0, itemCount, true)
+            }
+
+            override fun onItemChecked(taskList: TodoList, position: Int) {
+                clickListener?.onItemChecked(taskList, position)
+                if (taskList.checked) {
+                    checkedItems.add(taskList)
+                    if (checkedItems.size == 1)
+                        notifyItemRangeChanged(0, itemCount, true)
+                } else {
+                    checkedItems.remove(taskList)
+                    if (checkedItems.isEmpty())
+                        notifyItemRangeChanged(0, itemCount, true)
+                }
+            }
+        })
     }
 
     override fun onBindViewHolder(holder: TodoListViewHolder, position: Int) {
-        holder.bindTaskItem(taskItems[position], position, position == selectedItemPosition)
+        holder.bindTaskItem(taskList[position], position, position == selectedItemPosition)
 
-        if (selectedItems.size > 0) {
-            holder.setSelected(selectedItems.contains(taskItems[position]))
+        if (checkedItems.isNotEmpty()) {
+            holder.setCheckboxState(true)
+            holder.setChecked(checkedItems.contains(taskList[position]))
         }
+
+        holder.setSelected(selectedItemPosition == position)
 
         val horizontalMarginInPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -69,49 +78,72 @@ class TodoListAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        if (payloads.lastOrNull() == null)
+        if (payloads.lastOrNull() == null) {
             super.onBindViewHolder(holder, position, payloads)
-        if (selectedItems.size > 0)
-            holder.setSelected(selectedItems.contains(taskItems[position]))
+            return
+        }
+        else if (checkedItems.isNotEmpty())
+            holder.setChecked(checkedItems.contains(taskList[position]))
         else
-            holder.setInSelectionState(false)
-        holder.setEnabled(selectedItemPosition == position)
+            holder.setCheckboxState(false)
+        holder.setSelected(selectedItemPosition == position)
     }
 
-    override fun getItemCount(): Int = taskItems.size
+    override fun getItemCount(): Int = taskList.size
 
     interface TodoListClickListener {
         fun editTodoList(taskList: TodoList, position: Int)
         fun selectTodoList(taskList: TodoList, position: Int)
+        fun onItemChecked(taskList: TodoList, position: Int)
     }
 
     class TodoListViewHolder(
         private val context: Context,
         private val binding: TodoListCellBinding,
         private val clickListener: TodoListClickListener,
-        private val onItemSelected: (taskList: TodoList, selected: Boolean) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var selected: Boolean = false
-        private var inSelectionState: Boolean = false
+        private lateinit var taskList: TodoList
+        private var inCheckboxState: Boolean = false
 
-        fun setEnabled(state: Boolean) {
+        fun bindTaskItem(taskList: TodoList, position: Int, selected: Boolean) {
+            this.taskList = taskList
+            binding.name.text = taskList.name
+
+            binding.taskCellContainer.setOnClickListener {
+                if (inCheckboxState) {
+                    setChecked(!taskList.checked)
+                    clickListener.onItemChecked(taskList, position)
+                } else
+                    clickListener.selectTodoList(taskList, position)
+            }
+            binding.taskCellContainer.setOnLongClickListener {
+                if (!inCheckboxState) {
+                    setChecked(true)
+                    clickListener.onItemChecked(taskList, position)
+                    true
+                } else {
+                    false
+                }
+            }
+
+            setSelected(selected)
+        }
+
+        fun setSelected(state: Boolean) {
             val color = if (state) {
                 ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.primary)
             } else {
                 ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.transparent)
             }
-
             val alpha = if (state) 0.5f else 0.0f
-
             val tintedColor = ColorUtils.setAlphaComponent(color, (255 * alpha).toInt())
-
             binding.taskCellContainer.background.setTint(tintedColor)
         }
 
-        fun setSelected(value: Boolean) {
-            selected = value
-            if (!inSelectionState) setInSelectionState(true)
+        fun setChecked(value: Boolean) {
+            taskList.checked = value
+            if (!inCheckboxState) setCheckboxState(true)
             binding.selectedCheckbox.isEnabled = value
             binding.selectedCheckbox.isChecked = value
             if (value) {
@@ -131,35 +163,13 @@ class TodoListAdapter(
             }
         }
 
-        fun setInSelectionState(value: Boolean) {
+        fun setCheckboxState(value: Boolean) {
             binding.selectedCheckbox.isVisible = value
-            if (!value)
+            if (!value) {
+                taskList.checked = false
                 binding.selectedCheckbox.isEnabled = false
-            inSelectionState = value
-        }
-
-        fun bindTaskItem(taskList: TodoList, position: Int, enabled: Boolean) {
-            binding.name.text = taskList.name
-
-            binding.taskCellContainer.setOnClickListener {
-                if (inSelectionState) {
-                    setSelected(!selected)
-                    onItemSelected(taskList, selected)
-                } else
-                    clickListener.selectTodoList(taskList, position)
             }
-            binding.taskCellContainer.setOnLongClickListener {
-                if (!inSelectionState) {
-                    setSelected(true)
-                    onItemSelected(taskList, selected)
-                    true
-                } else {
-                    false
-                }
-            }
-
-            setEnabled(enabled)
+            inCheckboxState = value
         }
     }
-
 }

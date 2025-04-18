@@ -24,6 +24,7 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import androidx.core.content.edit
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -146,7 +147,6 @@ class MainActivity : BaseActivity() {
         val defaultList = ArrayList<TodoList>()
         defaultList.add(
             TodoList(
-                0,
                 getString(R.string.default_todo_list),
                 ArrayList(),
                 System.currentTimeMillis()
@@ -227,6 +227,11 @@ class MainActivity : BaseActivity() {
             }
             saveTaskList()
         }
+        todoListModel.selectedIdx.observe(this) { change ->
+            val todoList = todoListModel.getList()[change]
+            taskItemsModel.setList(todoList.items)
+            sharedPreferences.edit() { putInt("selectedTodoList", change) }
+        }
         fragment.setClickListener(object : TodoListAdapter.TodoListClickListener {
             override fun editTodoList(taskList: TodoList, position: Int) {
             }
@@ -235,9 +240,16 @@ class MainActivity : BaseActivity() {
                 selectTodoList(position)
                 binding.drawerLayout?.closeDrawers()
             }
+
+            override fun onItemChecked(taskList: TodoList, position: Int) {
+
+            }
         })
         binding.addListButton.setOnClickListener {
             showAddListDialog()
+        }
+        binding.deleteListButton.setOnClickListener {
+            showDeleteListsDialog()
         }
     }
 
@@ -251,7 +263,6 @@ class MainActivity : BaseActivity() {
                 if (taskListName.isNotBlank())
                     todoListModel.add(
                         TodoList(
-                            -1,
                             taskListName,
                             ArrayList(),
                             System.currentTimeMillis()
@@ -280,6 +291,16 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
+    private fun showDeleteListsDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.delete_list)
+            .setPositiveButton(R.string.yes) { _, _ ->
+
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun applyTheme(recreateActivity: Boolean = false) {
         val preferenceManager = SharedPreferenceManager(this)
 
@@ -296,10 +317,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun selectTodoList(position: Int) {
-        val todoList = todoListModel.getList()[position]
-        taskItemsModel.setList(todoList.items)
-        val todoListFragment = binding.todoListFragment.getFragment<TodoListFragment>()
-        todoListFragment.selectTodoList(position)
-        sharedPreferences.edit().putInt("selectedTodoList", position).apply()
+        todoListModel.selectedIdx.value = position
     }
 }

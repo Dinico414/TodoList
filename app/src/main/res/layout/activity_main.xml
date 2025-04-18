@@ -115,25 +115,26 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/todo_list_fragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="20dp"
-                        android:name="com.xenon.todolist.fragments.TodoListFragment" />
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/todo_list_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="20dp"
+                    android:name="com.xenon.todolist.fragments.TodoListFragment" />
 
-                    <Button
-                        android:id="@+id/addListButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/add_list"
-                        android:visibility="visible"
-                        android:textColor="@color/textOnPrimaryInvert"
-                        android:textColorHighlight="@color/textOnPrimaryInvert"
-                        android:backgroundTint="@color/primary"
-                        android:layout_margin="10dp"/>
+                <Button
+                    android:id="@+id/addListButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/add_list"
+                    android:visibility="visible"
+                    android:textColor="@color/textOnPrimaryInvert"
+                    android:textColorHighlight="@color/textOnPrimaryInvert"
+                    android:backgroundTint="@color/primary"
+                    android:layout_margin="10dp"/>
+
                 <Button
                     android:id="@+id/deleteListButton"
                     android:layout_width="match_parent"

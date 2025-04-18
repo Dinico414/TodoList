@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TodoList(
-    override var id: Int,
     var name: String,
     var items: ArrayList<TaskItem>,
     var createdTime: Long
-) : LiveListItem
+) : LiveListItem {
+    override var id: Int = -1
+    var checked: Boolean = false
+}

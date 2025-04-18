@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -24,15 +23,7 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
 
     private lateinit var binding: FragmentTodoListsBinding
     private lateinit var todoListModel: TodoListViewModel
-    private var clickListener: TodoListAdapter.TodoListClickListener = object : TodoListAdapter.TodoListClickListener {
-        override fun editTodoList(taskList: TodoList, position: Int) {
-        }
-
-        override fun selectTodoList(taskList: TodoList, position: Int) {
-        }
-    }
-    private var selectedTodoListIdx: Int = -1
-
+    private var clickListener: TodoListAdapter.TodoListClickListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,7 +38,7 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
 
         val context = requireContext()
         val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
-        selectTodoList(sharedPref.getInt("selectedTodoList", 0))
+        todoListModel.selectedIdx.value = sharedPref.getInt("selectedTodoList", 0)
     }
 
     override fun onResume() {
@@ -66,16 +57,6 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
 
     fun setClickListener(listener: TodoListAdapter.TodoListClickListener) {
         clickListener = listener
-    }
-
-    fun selectTodoList(idx: Int) {
-        val adapter = binding.todoListRecyclerView.adapter as TodoListAdapter
-        adapter.selectedItemPosition = idx
-        if (selectedTodoListIdx >= 0) {
-            adapter.notifyItemChanged(selectedTodoListIdx, true)
-        }
-        selectedTodoListIdx = idx
-        adapter.notifyItemChanged(selectedTodoListIdx, true)
     }
 
     fun getViewModel(): TodoListViewModel {
@@ -130,7 +111,6 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
                     adapter.notifyItemMoved(change.idx, change.idx2)
                 }
                 LiveListViewModel.ListChangedType.UPDATE -> {
-                    Log.d("iip", "UPDATE $change")
                     adapter.notifyItemChanged(change.idx)
                 }
                 LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
@@ -141,11 +121,15 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
                     }
                 }
                 LiveListViewModel.ListChangedType.OVERWRITTEN -> {
-                    adapter.taskItems = todoListModel.getList()
+                    adapter.taskList = todoListModel.getList()
                     adapter.notifyDataSetChanged()
                 }
             }
         }
-    }
 
+        todoListModel.selectedIdx.observe(viewLifecycleOwner) { change ->
+            adapter.selectedItemPosition = change
+            adapter.notifyItemChanged(change, true)
+        }
+    }
 }
