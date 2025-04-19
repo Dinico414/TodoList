@@ -37,6 +37,6 @@
     <string name="about">About</string>
     <string name="about_text">Version: %1$s</string>
     <string name="version_with_prefix">v.%1$s</string>
-    <string name="delete_list">Lösche selectierte Liste(n)</string>
+    <string name="delete_list">Lösche ausgewählte Liste(n)</string>
     <string name="edit_list">Liste umbenennen</string>
 </resources>
