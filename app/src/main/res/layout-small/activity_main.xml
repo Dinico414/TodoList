@@ -105,7 +105,7 @@
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/addListButton"
+                    android:id="@+id/listActionButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -113,20 +113,7 @@
                     android:backgroundTint="@color/primary"
                     android:text="@string/add_list"
                     android:textColor="@color/textOnPrimaryInvert"
-                    android:textColorHighlight="@color/textOnPrimaryInvert"
-                    android:visibility="visible" />
-
-                <Button
-                    android:id="@+id/deleteListButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="0"
-                    android:backgroundTint="@color/delete_red"
-                    android:text="@string/delete_list"
-                    android:textColor="@color/delete"
-                    android:textColorHighlight="@color/delete"
-                    android:visibility="gone" />
+                    android:textColorHighlight="@color/textOnPrimaryInvert" />
 
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>

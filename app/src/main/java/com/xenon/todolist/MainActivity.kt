@@ -3,18 +3,21 @@ package com.xenon.todolist
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.xenon.commons.accesspoint.R.color
+import com.xenon.commons.accesspoint.R.drawable
 import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
@@ -26,7 +29,6 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import androidx.core.content.edit
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -184,19 +186,19 @@ class MainActivity : BaseActivity() {
                 val snackbarView = snackbar.view
                 snackbarView.background = ContextCompat.getDrawable(
                     this,
-                    com.xenon.commons.accesspoint.R.drawable.tile_popup
+                    drawable.tile_popup
                 )
                 val textColor = ContextCompat.getColor(
                     this,
-                    com.xenon.commons.accesspoint.R.color.inverseOnSurface
+                    color.inverseOnSurface
                 )
                 val actionTextColor = ContextCompat.getColor(
                     this,
-                    com.xenon.commons.accesspoint.R.color.inversePrimary
+                    color.inversePrimary
                 )
                 val backgroundTint = ContextCompat.getColor(
                     this,
-                    com.xenon.commons.accesspoint.R.color.inverseSurface
+                    color.inverseSurface
                 )
                 snackbar.setTextColor(textColor)
                     .setActionTextColor(actionTextColor)
@@ -223,7 +225,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupTodoListFragment() {
-        val fragment = binding.todoListFragment.getFragment<TodoListFragment>()
+        val fragment = binding.todoListFragment!!.getFragment<TodoListFragment>()
         todoListModel = fragment.getViewModel()
         todoListModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
@@ -248,24 +250,34 @@ class MainActivity : BaseActivity() {
 
             override fun onItemChecked(taskList: TodoList, position: Int, checkedItems: List<TodoList>) {
                 if (checkedItems.isNotEmpty()) {
-                    binding.addListButton.visibility = View.GONE
-                    binding.deleteListButton.visibility = View.VISIBLE
-                    binding.deleteListButton.setOnClickListener {
+                    setButtonToDeleteStyle(binding.listActionButton)
+                    binding.listActionButton.text = getString(R.string.delete_list)
+                    binding.listActionButton.setOnClickListener {
                         showDeleteListsDialog(checkedItems) {
-                            binding.addListButton.visibility = View.VISIBLE
-                            binding.deleteListButton.visibility = View.GONE
+                            setButtonToAddListStyle(binding.listActionButton)
+                            binding.listActionButton.text = getString(R.string.add_list)
+                            binding.listActionButton.setOnClickListener { showAddListDialog() }
                         }
                     }
-                }
-                else {
-                    binding.addListButton.visibility = View.VISIBLE
-                    binding.deleteListButton.visibility = View.GONE
+                } else {
+                    setButtonToAddListStyle(binding.listActionButton)
+                    binding.listActionButton.text = getString(R.string.add_list)
+                    binding.listActionButton.setOnClickListener { showAddListDialog() }
                 }
             }
         })
-        binding.addListButton.setOnClickListener {
+        binding.listActionButton.setOnClickListener {
             showAddListDialog()
         }
+    }
+    private fun setButtonToDeleteStyle(button: Button) {
+        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.delete_red))
+        button.setTextColor(ContextCompat.getColor(button.context, color.delete))
+    }
+
+    private fun setButtonToAddListStyle(button: Button) {
+        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.primary))
+        button.setTextColor(ContextCompat.getColor(button.context, color.textOnPrimaryInvert))
     }
 
     private fun showAddListDialog() {

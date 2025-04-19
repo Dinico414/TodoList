@@ -61,19 +61,19 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:menu="@menu/menu_main"
-                app:navigationIcon="@drawable/ic_navigation_vector"
-                app:navigationIconTint="@color/onSurface"
-                app:layout_collapseMode="pin"
                 android:layout_gravity="top"
                 app:layout_anchor="@id/taskItemFragment"
-                app:layout_anchorGravity="top" />
+                app:layout_anchorGravity="top"
+                app:layout_collapseMode="pin"
+                app:menu="@menu/menu_main"
+                app:navigationIcon="@drawable/ic_navigation_vector"
+                app:navigationIconTint="@color/onSurface" />
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/taskItemFragment"
+                android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.xenon.todolist.fragments.TaskItemFragment"
                 android:background="@drawable/tile_background_100"
                 android:backgroundTint="@color/surfaceContainer"
                 android:clipToOutline="true"
@@ -107,45 +107,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:layout_marginVertical="@dimen/border_margin"
                 android:layout_marginStart="@dimen/border_margin"
                 android:background="@drawable/tile_popup"
                 android:backgroundTint="@color/surfaceContainer"
+                android:orientation="vertical"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/todo_list_fragment"
+                    android:name="com.xenon.todolist.fragments.TodoListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
                     android:layout_marginTop="20dp"
-                    android:name="com.xenon.todolist.fragments.TodoListFragment" />
+                    android:layout_weight="1" />
 
-                <Button
-                    android:id="@+id/addListButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/add_list"
-                    android:visibility="visible"
-                    android:textColor="@color/textOnPrimaryInvert"
-                    android:textColorHighlight="@color/textOnPrimaryInvert"
-                    android:backgroundTint="@color/primary"
-                    android:layout_margin="10dp"/>
-
-                <Button
-                    android:id="@+id/deleteListButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/delete_list"
-                    android:visibility="gone"
-                    android:textColor="@color/delete"
-                    android:textColorHighlight="@color/delete"
-                    android:backgroundTint="@color/delete_red"
-                    android:layout_margin="10dp"/>
+                    <Button
+                        android:id="@+id/listActionButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:backgroundTint="@color/primary"
+                        android:text="@string/add_list"
+                        android:textColor="@color/textOnPrimaryInvert"
+                        android:textColorHighlight="@color/textOnPrimaryInvert"
+                        android:visibility="visible" />
 
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>
