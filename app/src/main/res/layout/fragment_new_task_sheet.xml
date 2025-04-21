@@ -110,47 +110,53 @@
                         android:maxHeight="500dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    >
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/timePickerButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
                         android:backgroundTint="@android:color/transparent"
                         android:text="@string/select_time"
                         android:textColor="@color/primary"
-                        tools:ignore="TextContrastCheck" />
+                        tools:ignore="TextContrastCheck"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/saveButton"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/enable_disable_button_color"
+                        android:enabled="false"
+                        android:text="@string/save"
+                        android:textColor="@color/enable_disable_text_color"
+                        tools:ignore="TextContrastCheck"
+                        app:layout_constraintStart_toEndOf="@id/timePickerButton"
+                        app:layout_constraintEnd_toStartOf="@id/datePickerButton"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/datePickerButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
                         android:backgroundTint="@android:color/transparent"
                         android:text="@string/select_date"
                         android:textColor="@color/primary"
-                        tools:ignore="TextContrastCheck" />
-                </LinearLayout>
+                        tools:ignore="TextContrastCheck"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/saveButton"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/saveButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:backgroundTint="@color/enable_disable_button_color"
-                    android:enabled="false"
-                    android:text="@string/save"
-                    android:textColor="@color/enable_disable_text_color"
-                    tools:ignore="TextContrastCheck" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.cardview.widget.CardView>
