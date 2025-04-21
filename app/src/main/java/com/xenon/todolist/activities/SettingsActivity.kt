@@ -20,6 +20,7 @@ import com.xenon.todolist.databinding.ActivitySettingsBinding
 import java.util.Locale
 
 
+@Suppress("DEPRECATION")
 class SettingsActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySettingsBinding

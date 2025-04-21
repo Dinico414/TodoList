@@ -114,9 +114,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="horizontal"
                     android:layout_marginBottom="10dp"
-                    >
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/timePickerButton"
@@ -126,11 +125,11 @@
                         android:backgroundTint="@android:color/transparent"
                         android:text="@string/select_time"
                         android:textColor="@color/primary"
-                        tools:ignore="TextContrastCheck"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/saveButton"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        tools:ignore="TextContrastCheck" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/saveButton"
@@ -141,11 +140,11 @@
                         android:enabled="false"
                         android:text="@string/save"
                         android:textColor="@color/enable_disable_text_color"
-                        tools:ignore="TextContrastCheck"
-                        app:layout_constraintStart_toEndOf="@id/timePickerButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/datePickerButton"
+                        app:layout_constraintStart_toEndOf="@id/timePickerButton"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        tools:ignore="TextContrastCheck" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/datePickerButton"
@@ -155,11 +154,11 @@
                         android:backgroundTint="@android:color/transparent"
                         android:text="@string/select_date"
                         android:textColor="@color/primary"
-                        tools:ignore="TextContrastCheck"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/saveButton"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        tools:ignore="TextContrastCheck" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
