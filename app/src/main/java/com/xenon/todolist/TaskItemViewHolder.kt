@@ -46,7 +46,7 @@ class TaskItemViewHolder(
             calendar.timeInMillis = taskItem.dueTime
             val formattedTime = timeFormat.format(calendar.time)
             val formattedDate = dateFormat.format(calendar.time)
-            binding.dueTime.text = "$formattedTime - $formattedDate"
+            "$formattedTime - $formattedDate".also { binding.dueTime.text = it }
         } else {
             binding.dueTime.text = ""
         }
