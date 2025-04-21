@@ -1,6 +1,8 @@
 package com.xenon.todolist.viewmodel
 
+import android.util.Log
 import com.xenon.todolist.TaskItem
+import kotlin.math.max
 
 class TaskItemViewModel : LiveListViewModel<TaskItem>() {
     private var sortType = SortType.BY_COMPLETENESS
@@ -40,10 +42,14 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
         when (sortType) {
             SortType.BY_COMPLETENESS -> {
                 var pivotIdx = items.indexOfFirst { v -> v.isCompleted() && v != item }
-                if (pivotIdx > 0) pivotIdx -= 1
-                if (pivotIdx < 0) pivotIdx = items.size - 1
+                if (pivotIdx < 0) pivotIdx = max(items.size - 1, 0)
 
-                newIdx = if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx else if (pivotIdx < currentIdx - 1) pivotIdx + 1 else currentIdx
+                newIdx =
+                    if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx - 1
+                    else if (!item.isCompleted() && currentIdx >= pivotIdx) pivotIdx
+                    else currentIdx
+
+                Log.d("aaa", "$newIdx ${item.isCompleted()} $currentIdx $pivotIdx")
             }
             SortType.BY_CREATION_DATE -> {
                 var pivotIdx = items.indexOfFirst { v ->
