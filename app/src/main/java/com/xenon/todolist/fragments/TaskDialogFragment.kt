@@ -1,64 +1,57 @@
 package com.xenon.todolist.fragments
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.widget.addTextChangedListener
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
-import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
+import com.xenon.todolist.databinding.FragmentTaskDialogBinding
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
 
 @Suppress("DEPRECATION")
-class NewTaskSheetFragment : BottomSheetDialogFragment() {
+class TaskDialogFragment : DialogFragment() {
     companion object {
         private lateinit var taskItemViewModel: TaskItemViewModel
         private lateinit var taskItem: TaskItem
         private var newTask = false
 
-        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskSheetFragment {
+        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): TaskDialogFragment {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
             val curTime = System.currentTimeMillis()
             Companion.taskItem = taskItem ?: TaskItem(0, "", "", curTime, curTime, -1, ArrayList())
-            return NewTaskSheetFragment()
+            return TaskDialogFragment()
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.XenonFloatingBottomSheetDialogTheme)
-    }
+    private lateinit var binding: FragmentTaskDialogBinding
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = FragmentTaskDialogBinding.inflate(LayoutInflater.from(requireContext()))
 
-    private lateinit var binding: FragmentNewTaskSheetBinding
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
 
         if (!newTask) {
-            binding.taskTitle.text = getString(com.xenon.todolist.R.string.edit_task)
+            binding.taskTitle.text = getString(R.string.edit_task)
             val editable = Editable.Factory.getInstance()
             binding.name.text = editable.newEditable(taskItem.name)
             binding.desc.text = editable.newEditable(taskItem.desc)
@@ -67,53 +60,33 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
                 updateDateButtonText()
             }
         } else {
-            binding.taskTitle.text = getString(com.xenon.todolist.R.string.new_task)
+            binding.taskTitle.text = getString(R.string.new_task)
         }
 
-        binding.saveButton.setOnClickListener {
-            dismiss()
-        }
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
         }
         binding.datePickerButton.setOnClickListener {
             openDatePicker()
         }
+
         binding.name.addTextChangedListener { text ->
             binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
-        }
-        binding.saveButton.isEnabled = binding.name.text?.isNotEmpty() == true
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
-        val screenWidth = resources.displayMetrics.widthPixels
-        val density = resources.displayMetrics.density
-
-        val screenWidthDp = (screenWidth / density).toInt()
-        val minMargin =25 //dp
-        val maxMargin = 56 // dp
-
-        val dynamicMarginDp = if (screenWidthDp > 640) {
-            ((screenWidthDp - 640) / 2).coerceAtLeast(maxMargin)
-        } else {
-            minMargin
+            taskItem.name = text.toString()
         }
 
-        val layoutParams = binding.cardView.layoutParams as ViewGroup.MarginLayoutParams
-
-        val dynamicMarginPx = (dynamicMarginDp * density).toInt()
-
-
-        layoutParams.marginStart = dynamicMarginPx
-        layoutParams.marginEnd = dynamicMarginPx
-        binding.cardView.layoutParams = layoutParams
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        if (dialog is BottomSheetDialog) {
-            dialog.behavior.skipCollapsed = true
-            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        binding.desc.addTextChangedListener { text ->
+            taskItem.desc = text.toString()
         }
+
+        binding.saveButton.setOnClickListener {
+            saveAction()
+            dismiss()
+        }
+        binding.saveButton.isEnabled = binding.name.text.toString().trim().isNotEmpty()
+
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         return dialog
     }
 
@@ -129,7 +102,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             .setTimeFormat(clockFormat)
             .setHour(cal.get(Calendar.HOUR_OF_DAY))
             .setMinute(cal.get(Calendar.MINUTE))
-            .setTitleText(getString(com.xenon.todolist.R.string.task_due))
+            .setTitleText(getString(R.string.task_due))
             .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
             .build()
 
@@ -155,7 +128,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraintsBuilder.build())
-            .setTitleText(getString(com.xenon.todolist.R.string.select_date))
+            .setTitleText(getString(R.string.select_date))
             .setSelection(cal.timeInMillis)
             .build()
 
@@ -168,6 +141,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
 
         datePicker.show(childFragmentManager, "DATE_PICKER_TAG")
     }
+
     private fun updateTimeButtonText() {
         val cal = Calendar.getInstance()
         cal.timeInMillis = taskItem.dueTime
@@ -188,32 +162,26 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         binding.datePickerButton.text = formattedDate
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentNewTaskSheetBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        saveAction()
-    }
-
     private fun saveAction() {
-        val name = binding.name.text.toString()
-        val desc = binding.desc.text.toString()
+        val name = binding.name.text.toString().trim()
+        val desc = binding.desc.text.toString().trim()
+
+        if (name.isEmpty()) {
+            return  // Prevent saving if the name is empty
+        }
 
         if (newTask) {
+            val currentTime = System.currentTimeMillis()
+            if (taskItem.dueTime == 0L || taskItem.dueTime < 0) {
+                taskItem.dueTime = currentTime
+            }
+            taskItem.name = name
+            taskItem.desc = desc
             taskItemViewModel.add(taskItem)
         } else {
             taskItem.name = name
             taskItem.desc = desc
             taskItemViewModel.update(taskItem)
         }
-        binding.name.setText("")
-        binding.desc.setText("")
     }
 }

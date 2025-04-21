@@ -16,8 +16,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +24,7 @@ import com.xenon.commons.accesspoint.R.drawable
 import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
-import com.xenon.todolist.fragments.NewTaskSheetFragment
+import com.xenon.todolist.fragments.TaskDialogFragment
 import com.xenon.todolist.fragments.TaskItemFragment
 import com.xenon.todolist.fragments.TodoListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
@@ -42,7 +40,7 @@ class MainActivity : BaseActivity() {
     private lateinit var todoListModel: TodoListViewModel
     private var currentTheme: Int = 0
 
-    private var newTaskSheet: NewTaskSheetFragment? = null
+    private var newTaskSheet: TaskDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyTheme()
@@ -67,7 +65,7 @@ class MainActivity : BaseActivity() {
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, null)
+                newTaskSheet = TaskDialogFragment.getInstance(taskItemsModel, null)
                 newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
             }
         }
@@ -223,7 +221,7 @@ class MainActivity : BaseActivity() {
         fragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
                 if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                    newTaskSheet = NewTaskSheetFragment.getInstance(taskItemsModel, taskItem)
+                    newTaskSheet = TaskDialogFragment.getInstance(taskItemsModel, taskItem)
                     newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
                 }
             }
@@ -290,6 +288,7 @@ class MainActivity : BaseActivity() {
             override fun onDrawerStateChanged(newState: Int) {}
         })
     }
+
     private fun setButtonToDeleteStyle(button: Button) {
         button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.delete_red))
         button.setTextColor(ContextCompat.getColor(button.context, color.delete))
