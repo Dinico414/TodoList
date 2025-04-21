@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.commons.accesspoint.R.color
@@ -279,6 +280,15 @@ class MainActivity : BaseActivity() {
         binding.listActionButton.setOnClickListener {
             showAddListDialog()
         }
+        binding.drawerLayout?.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerOpened(drawerView: View) {}
+            override fun onDrawerClosed(drawerView: View) {
+                Log.d("aaa", "closed")
+                todoListModel.uncheckAll()
+            }
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
     }
     private fun setButtonToDeleteStyle(button: Button) {
         button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.delete_red))

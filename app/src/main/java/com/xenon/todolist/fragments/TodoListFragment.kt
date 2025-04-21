@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -119,10 +120,10 @@ class TodoListFragment : Fragment(R.layout.fragment_todo_lists) {
                         adapter.notifyItemMoved(change.idx, change.idx2)
                     }
                     LiveListViewModel.ListChangedType.UPDATE -> {
-                        adapter.notifyItemChanged(change.idx)
+                        adapter.notifyItemChanged(change.idx, change.payload)
                     }
                     LiveListViewModel.ListChangedType.MOVED_AND_UPDATED -> {
-                        adapter.notifyItemChanged(change.idx)
+                        adapter.notifyItemChanged(change.idx, change.payload)
                         adapter.notifyItemMoved(change.idx, change.idx2)
                         if (change.idx == 0) {
                             binding.todoListRecyclerView.scrollToPosition(0)

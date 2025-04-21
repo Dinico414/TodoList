@@ -17,6 +17,11 @@ class TodoListAdapter(
     private var taskListList: List<TodoList>,
     private val clickListener: TodoListClickListener?,
 ) : RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
+    enum class BindAction(val i: Int) {
+        REBIND(Int.MAX_VALUE),
+        CHECKED_STATE_CHANGED(1),
+        SELECTED_STATE_CHANGED(2)
+    }
 
     private var selectedItemPosition = -1
     private val checkedItems: ArrayList<TodoList> = ArrayList()
@@ -31,8 +36,8 @@ class TodoListAdapter(
     }
 
     fun selectItem(position: Int) {
-        notifyItemChanged(selectedItemPosition)
-        notifyItemChanged(position)
+        notifyItemChanged(selectedItemPosition, BindAction.SELECTED_STATE_CHANGED)
+        notifyItemChanged(position, BindAction.SELECTED_STATE_CHANGED)
         selectedItemPosition = position
     }
 
@@ -106,15 +111,27 @@ class TodoListAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        if (payloads.lastOrNull() == null) {
+        var action = 0
+        payloads.forEach { payload ->
+            val a = payload as? BindAction ?: BindAction.REBIND
+            action = action or a.i
+        }
+        Log.d("aaa", "$position $action ${taskListList[position].checked}")
+        if (action == 0 || action == BindAction.REBIND.i) {
             super.onBindViewHolder(holder, position, payloads)
             return
         }
-        else if (checkedItems.isNotEmpty())
-            holder.setChecked(checkedItems.contains(taskListList[position]))
-        else
-            holder.setCheckboxState(false)
-        holder.setSelected(selectedItemPosition == position)
+        if (action and BindAction.CHECKED_STATE_CHANGED.i > 0) {
+            if (checkedItems.remove(taskListList[position])) {
+                clickListener?.onItemChecked(taskListList[position], position, checkedItems)
+            }
+            if (checkedItems.isNotEmpty())
+                holder.setChecked(taskListList[position].checked)
+            else
+                holder.setCheckboxState(false)
+        }
+        if (action and BindAction.SELECTED_STATE_CHANGED.i > 0)
+            holder.setSelected(selectedItemPosition == position)
     }
 
     override fun getItemCount(): Int = taskListList.size
