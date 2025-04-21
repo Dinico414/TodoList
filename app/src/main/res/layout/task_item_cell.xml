@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/tile_low_alpha"
         android:backgroundTint="@color/inverseSurface"
-        android:clipToOutline="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageButton
@@ -47,9 +47,9 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:text="@string/place_holder" />
+            android:text="@string/place_holder"
+            android:textAlignment="viewEnd"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

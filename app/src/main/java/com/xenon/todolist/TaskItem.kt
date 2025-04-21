@@ -11,10 +11,11 @@ data class TaskItem(
     override var id: Int,
     var name: String,
     var desc: String,
-    var dueTime: Long,
+    var dueTime: Long = -1,
     var createdDate: Long,
-    var completedDate: Long,
-    val children: ArrayList<TaskItem>
+    var completedDate: Long = -1,
+    val children: ArrayList<TaskItem> = ArrayList()
+
 ) : LiveListItem {
 
     fun isCompleted() = completedDate >= 0

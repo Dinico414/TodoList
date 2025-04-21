@@ -154,15 +154,19 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener { selectedDate ->
-            cal.timeInMillis = selectedDate
-            dueDate = cal.timeInMillis
+            val dateCal = Calendar.getInstance(TimeZone.getTimeZone("UTC")) // New Calendar for date
+            dateCal.timeInMillis = selectedDate
+            dateCal.set(Calendar.HOUR_OF_DAY, 0)
+            dateCal.set(Calendar.MINUTE, 0)
+            dateCal.set(Calendar.SECOND, 0)
+            dateCal.set(Calendar.MILLISECOND, 0)
+
+            dueDate = dateCal.timeInMillis
             updateDateButtonText()
         }
 
         datePicker.show(childFragmentManager, "DATE_PICKER_TAG")
     }
-
-
     private fun updateTimeButtonText() {
         val cal = Calendar.getInstance()
         cal.timeInMillis = dueTime
@@ -198,18 +202,33 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         val name = binding.name.text.toString()
         val desc = binding.desc.text.toString()
 
-        val cal = Calendar.getInstance()
+        var finalDueTime = -1L // Initialize to -1 (no due date/time)
+
         if (dueDate > 0) {
+            val cal = Calendar.getInstance()
             cal.timeInMillis = dueDate
-        }
-        if (dueTime > 0) {
+
+            if (dueTime > 0) { // If time is also selected, combine date and time
+                val timeCal = Calendar.getInstance()
+                timeCal.timeInMillis = dueTime
+                cal.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
+                cal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
+            } else {
+                // Ensure time is reset to midnight if only date is selected
+                cal.set(Calendar.HOUR_OF_DAY, 0)
+                cal.set(Calendar.MINUTE, 0)
+                cal.set(Calendar.SECOND, 0)
+                cal.set(Calendar.MILLISECOND, 0)
+            }
+            finalDueTime = cal.timeInMillis // Use combined or date-only time
+        } else if (dueTime > 0) { // Only time is selected, use current date
+            val cal = Calendar.getInstance()
             val timeCal = Calendar.getInstance()
             timeCal.timeInMillis = dueTime
             cal.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
             cal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
+            finalDueTime = cal.timeInMillis
         }
-
-        val finalDueTime = if (dueDate > 0 || dueTime > 0) cal.timeInMillis else -1
 
         if (taskItem == null) {
             val newTask = TaskItem(0, name, desc, finalDueTime, System.currentTimeMillis(), -1, ArrayList())
@@ -224,6 +243,4 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         binding.name.setText("")
         binding.desc.setText("")
         dismiss()
-    }
-
-}
+    }}
