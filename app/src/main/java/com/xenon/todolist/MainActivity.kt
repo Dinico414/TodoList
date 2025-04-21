@@ -7,6 +7,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
@@ -14,6 +16,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.commons.accesspoint.R.color
@@ -75,6 +79,12 @@ class MainActivity : BaseActivity() {
             selectedIdx = 0
         val todoList = todoListModel.getList()[selectedIdx]
         taskItemsModel.setList(todoList.items)
+
+//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
+//            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+//            binding.listActionButton.visibility = if(imeVisible) View.GONE else View.VISIBLE
+//            insets
+//        }
     }
 
     override fun onResume() {
