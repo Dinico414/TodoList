@@ -42,7 +42,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
         when (sortType) {
             SortType.BY_COMPLETENESS -> {
                 var pivotIdx = items.indexOfFirst { v -> v.isCompleted() && v != item }
-                if (pivotIdx < 0) pivotIdx = max(items.size - 1, 0)
+                if (pivotIdx < 0) pivotIdx = items.size
 
                 newIdx =
                     if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx - 1
