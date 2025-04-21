@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/border_margin"
             android:background="@drawable/tile_cutout"
-            android:clipToOutline="true">
+            >
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -58,7 +58,7 @@
                 android:layout_marginTop="?attr/actionBarSize"
                 android:background="@drawable/tile_background_100"
                 android:backgroundTint="@color/surfaceContainer"
-                android:clipToOutline="true" />
+                />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/NewTaskButton"
@@ -109,7 +109,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:layout_weight="0"
                     android:backgroundTint="@color/primary"
                     android:text="@string/add_list"
                     android:textColor="@color/textOnPrimaryInvert"

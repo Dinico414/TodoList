@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:background="@drawable/tile_cutout"
-            >
+            android:clipToOutline="true">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -63,6 +63,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/tile_background_100"
                 android:backgroundTint="@color/surfaceContainer"
+                android:clipToOutline="true"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
             <Button
@@ -103,7 +104,7 @@
                 android:layout_marginTop="?attr/actionBarSize"
                 android:background="@drawable/tile_background_100"
                 android:backgroundTint="@color/surfaceContainer"
-                />
+                android:clipToOutline="true" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/NewTaskButton"
