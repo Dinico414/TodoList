@@ -12,6 +12,7 @@ data class TaskItem(
     var name: String,
     var desc: String,
     var dueTime: Long = -1,
+    var dueDate: Long = -1,
     var createdDate: Long,
     var completedDate: Long = -1,
     val children: ArrayList<TaskItem> = ArrayList()
@@ -35,4 +36,7 @@ data class TaskItem(
 
     private fun checkedColor(context: Context) = ContextCompat.getColor(context, R.color.primary)
     private fun uncheckedColor(context: Context) = ContextCompat.getColor(context, R.color.checkbox)
+
+    val dueDateTime: Long
+        get() = dueTime + dueDate
 }
