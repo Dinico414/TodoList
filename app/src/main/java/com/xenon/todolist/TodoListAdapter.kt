@@ -11,6 +11,8 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TodoListCellBinding
+import java.lang.Math.pow
+import kotlin.math.pow
 
 class TodoListAdapter(
     private val context: Context,
@@ -18,13 +20,38 @@ class TodoListAdapter(
     private val clickListener: TodoListClickListener?,
 ) : RecyclerView.Adapter<TodoListAdapter.TodoListViewHolder>() {
     enum class BindAction(val i: Int) {
-        REBIND(Int.MAX_VALUE),
+        REBIND(0),
         CHECKED_STATE_CHANGED(1),
-        SELECTED_STATE_CHANGED(2)
+        ALL_UNCHECKED(2),
+        SELECTED_STATE_CHANGED(4)
     }
 
     private var selectedItemPosition = -1
     private val checkedItems: ArrayList<TodoList> = ArrayList()
+
+    private val listener = object : TodoListClickListener {
+        override fun onItemEdited(taskList: TodoList, position: Int) {
+            clickListener?.onItemEdited(taskList, position)
+        }
+
+        override fun onItemSelected(taskList: TodoList, position: Int) {
+            clickListener?.onItemSelected(taskList, position)
+            notifyItemRangeChanged(0, itemCount, true)
+        }
+
+        override fun onItemChecked(taskList: TodoList, position: Int, list: List<TodoList>) {
+            if (taskList.checked) {
+                checkedItems.add(taskList)
+                if (checkedItems.size == 1)
+                    notifyItemRangeChanged(0, itemCount, true)
+            } else {
+                checkedItems.remove(taskList)
+                if (checkedItems.isEmpty())
+                    notifyItemRangeChanged(0, itemCount, true)
+            }
+            clickListener?.onItemChecked(taskList, position, checkedItems)
+        }
+    }
 
     init {
         updateCheckedItemsList()
@@ -56,29 +83,7 @@ class TodoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoListViewHolder {
         val from = LayoutInflater.from(parent.context)
         val binding = TodoListCellBinding.inflate(from, parent, false)
-        return TodoListViewHolder(parent.context, binding, object : TodoListClickListener {
-            override fun onItemEdited(taskList: TodoList, position: Int) {
-                clickListener?.onItemEdited(taskList, position)
-            }
-
-            override fun onItemSelected(taskList: TodoList, position: Int) {
-                clickListener?.onItemSelected(taskList, position)
-                notifyItemRangeChanged(0, itemCount, true)
-            }
-
-            override fun onItemChecked(taskList: TodoList, position: Int, list: List<TodoList>) {
-                if (taskList.checked) {
-                    checkedItems.add(taskList)
-                    if (checkedItems.size == 1)
-                        notifyItemRangeChanged(0, itemCount, true)
-                } else {
-                    checkedItems.remove(taskList)
-                    if (checkedItems.isEmpty())
-                        notifyItemRangeChanged(0, itemCount, true)
-                }
-                clickListener?.onItemChecked(taskList, position, checkedItems)
-            }
-        })
+        return TodoListViewHolder(parent.context, binding, listener)
     }
 
     override fun onBindViewHolder(holder: TodoListViewHolder, position: Int) {
@@ -114,21 +119,35 @@ class TodoListAdapter(
         var action = 0
         payloads.forEach { payload ->
             val a = payload as? BindAction ?: BindAction.REBIND
-            action = action or a.i
+            if (a.i == 0) {
+                action = 0
+                return@forEach
+            }
+            action = action.or(a.i)
         }
         Log.d("aaa", "$position $action ${taskListList[position].checked}")
-        if (action == 0 || action == BindAction.REBIND.i) {
+        if (action == 0) {
             super.onBindViewHolder(holder, position, payloads)
             return
         }
+        if (action and BindAction.ALL_UNCHECKED.i > 0) {
+            checkedItems.clear()
+            holder.setCheckboxState(false)
+            clickListener?.onItemChecked(taskListList[position], position, checkedItems)
+        }
         if (action and BindAction.CHECKED_STATE_CHANGED.i > 0) {
-            if (checkedItems.remove(taskListList[position])) {
+            val i = checkedItems.indexOf(taskListList[position])
+            if (taskListList[position].checked == (i < 0)) {
+                if (i >= 0)
+                    checkedItems.remove(taskListList[position])
+                else
+                    checkedItems.add(taskListList[position])
                 clickListener?.onItemChecked(taskListList[position], position, checkedItems)
+                if (checkedItems.isNotEmpty())
+                    holder.setChecked(taskListList[position].checked)
+                else
+                    holder.setCheckboxState(false)
             }
-            if (checkedItems.isNotEmpty())
-                holder.setChecked(taskListList[position].checked)
-            else
-                holder.setCheckboxState(false)
         }
         if (action and BindAction.SELECTED_STATE_CHANGED.i > 0)
             holder.setSelected(selectedItemPosition == position)

@@ -10,7 +10,7 @@ class TodoListViewModel : LiveListViewModel<TodoList>() {
     fun uncheckAll() {
         getList().forEachIndexed { i, item ->
             item.checked = false
-            update(i, TodoListAdapter.BindAction.CHECKED_STATE_CHANGED)
+            update(i, TodoListAdapter.BindAction.ALL_UNCHECKED)
         }
     }
 }
