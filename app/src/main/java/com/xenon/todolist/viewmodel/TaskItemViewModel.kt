@@ -32,7 +32,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
         when (type) {
             SortType.BY_COMPLETENESS -> list.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
             SortType.BY_CREATION_DATE -> list.sortBy { taskItem -> taskItem.createdDate }
-            SortType.BY_DUE_DATE -> list.sortBy { taskItem -> taskItem.dueTime }
+            SortType.BY_DUE_DATE -> list.sortBy { taskItem -> taskItem.dueDateTime }
             else -> {}
         }
     }
@@ -53,7 +53,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             }
             SortType.BY_CREATION_DATE -> {
                 var pivotIdx = items.indexOfFirst { v ->
-                    v.createdDate > item.createdDate || v.dueTime == item.dueTime && v != item
+                    v.createdDate > item.createdDate || v.dueDateTime == item.dueDateTime && v != item
                 }
                 if (pivotIdx > 0) pivotIdx -= 1
                 else if (pivotIdx < 0) pivotIdx = items.size - 1
@@ -62,7 +62,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             }
             SortType.BY_DUE_DATE -> {
                 var pivotIdx = items.indexOfFirst { v ->
-                    v.dueTime > item.dueTime || v.dueTime == item.dueTime && v != item
+                    v.dueTime > item.dueTime || v.dueDateTime == item.dueDateTime && v != item
                 }
                 if (pivotIdx > 0) pivotIdx -= 1
                 else if (pivotIdx < 0) pivotIdx = items.size - 1

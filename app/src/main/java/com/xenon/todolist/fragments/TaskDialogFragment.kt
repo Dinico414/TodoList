@@ -1,6 +1,7 @@
 package com.xenon.todolist.fragments
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
@@ -22,6 +23,7 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -35,8 +37,8 @@ class TaskDialogFragment : DialogFragment() {
         fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): TaskDialogFragment {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
-            val curTime = System.currentTimeMillis()
-            Companion.taskItem = taskItem ?: TaskItem(0, "", "", curTime, curTime, -1, ArrayList())
+            val curTime = Instant.now().toEpochMilli()
+            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, ArrayList())
             return TaskDialogFragment()
         }
     }
@@ -80,7 +82,6 @@ class TaskDialogFragment : DialogFragment() {
         }
 
         binding.saveButton.setOnClickListener {
-            saveAction()
             dismiss()
         }
         binding.saveButton.isEnabled = binding.name.text.toString().trim().isNotEmpty()
@@ -90,13 +91,18 @@ class TaskDialogFragment : DialogFragment() {
         return dialog
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        saveAction()
+    }
 
     private fun openTimePicker() {
         val isSystem24Hour = is24HourFormat(requireContext())
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
+        var dueTime = if(taskItem.dueTime > 0) taskItem.dueTime else Instant.now().toEpochMilli()
         val cal = Calendar.getInstance()
-        cal.timeInMillis = taskItem.dueTime
+        cal.timeInMillis = dueTime
 
         val picker = MaterialTimePicker.Builder()
             .setTimeFormat(clockFormat)
@@ -107,8 +113,7 @@ class TaskDialogFragment : DialogFragment() {
             .build()
 
         picker.addOnPositiveButtonClickListener {
-            cal.set(Calendar.MILLISECOND, 0)
-            cal.set(Calendar.SECOND, 0)
+            cal.timeInMillis = 0
             cal.set(Calendar.MINUTE, picker.minute)
             cal.set(Calendar.HOUR_OF_DAY, picker.hour)
 
@@ -120,8 +125,9 @@ class TaskDialogFragment : DialogFragment() {
     }
 
     private fun openDatePicker() {
-        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        cal.timeInMillis = taskItem.dueTime
+        val cal = Calendar.getInstance()
+        var dueTime = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
+        cal.timeInMillis = dueTime
 
         val constraintsBuilder = CalendarConstraints.Builder();
         constraintsBuilder.setValidator(DateValidatorPointForward.now());
@@ -133,9 +139,9 @@ class TaskDialogFragment : DialogFragment() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener { selectedDate ->
-            val time = Instant.ofEpochMilli(taskItem.dueTime).atZone(ZoneId.of("UTC")).toLocalTime()
-            val date = Instant.ofEpochMilli(selectedDate).atZone(ZoneId.of("UTC")).toLocalDate()
-            taskItem.dueTime = time.atDate(date).toInstant(OffsetDateTime.now().offset).toEpochMilli()
+            val time = Instant.ofEpochMilli(dueTime).atZone(ZoneId.systemDefault()).toLocalTime()
+            val date = Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()
+            taskItem.dueDate = time.atDate(date).toInstant(OffsetDateTime.now().offset).toEpochMilli()
             updateDateButtonText()
         }
 
@@ -154,7 +160,7 @@ class TaskDialogFragment : DialogFragment() {
 
     private fun updateDateButtonText() {
         val cal = Calendar.getInstance()
-        cal.timeInMillis = taskItem.dueTime
+        cal.timeInMillis = taskItem.dueDate
 
         val dateFormat = DateFormat.getDateFormat(requireContext())
         val formattedDate = dateFormat.format(cal.time)
@@ -166,22 +172,15 @@ class TaskDialogFragment : DialogFragment() {
         val name = binding.name.text.toString().trim()
         val desc = binding.desc.text.toString().trim()
 
-        if (name.isEmpty()) {
-            return  // Prevent saving if the name is empty
+        if (name.isNotEmpty()) {
+            taskItem.name = name
         }
+        taskItem.desc = desc
 
-        if (newTask) {
-            val currentTime = System.currentTimeMillis()
-            if (taskItem.dueTime == 0L || taskItem.dueTime < 0) {
-                taskItem.dueTime = currentTime
-            }
-            taskItem.name = name
-            taskItem.desc = desc
-            taskItemViewModel.add(taskItem)
-        } else {
-            taskItem.name = name
-            taskItem.desc = desc
+        if (!newTask) {
             taskItemViewModel.update(taskItem)
+        } else if (name.isNotEmpty()) {
+            taskItemViewModel.add(taskItem)
         }
     }
 }

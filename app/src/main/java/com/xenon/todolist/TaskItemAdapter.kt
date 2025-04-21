@@ -84,7 +84,7 @@ class TaskItemViewHolder(
 
         if (taskItem.dueTime >= 0) {
             val calendar = Calendar.getInstance()
-            calendar.timeInMillis = taskItem.dueTime
+            calendar.timeInMillis = taskItem.dueDateTime
             val formattedTime = timeFormat.format(calendar.time)
             val formattedDate = dateFormat.format(calendar.time)
 
