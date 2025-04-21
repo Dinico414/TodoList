@@ -14,6 +14,7 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R
@@ -21,6 +22,7 @@ import com.xenon.todolist.TaskItem
 import com.xenon.todolist.databinding.FragmentNewTaskSheetBinding
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.util.Calendar
+import java.util.TimeZone
 
 @Suppress("DEPRECATION")
 class NewTaskSheetFragment : BottomSheetDialogFragment() {
@@ -42,6 +44,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentNewTaskSheetBinding
     private var dueTime: Long = -1
+    private var dueDate: Long = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +57,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             if (taskItem!!.dueTime >= 0) {
                 dueTime = taskItem!!.dueTime
                 updateTimeButtonText()
+                updateDateButtonText()
             }
         } else {
             binding.taskTitle.text = getString(com.xenon.todolist.R.string.new_task)
@@ -64,6 +68,9 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         }
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
+        }
+        binding.datePickerButton.setOnClickListener {
+            openDatePicker()
         }
         binding.name.addTextChangedListener { text ->
             binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
@@ -109,7 +116,7 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
         val cal = Calendar.getInstance()
-        if (taskItem != null) {
+        if (taskItem != null && taskItem!!.dueTime > 0) {
             cal.timeInMillis = taskItem?.dueTime ?: System.currentTimeMillis()
         }
 
@@ -128,15 +135,31 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
             cal.set(Calendar.MINUTE, picker.minute)
             cal.set(Calendar.HOUR_OF_DAY, picker.hour)
 
-            if (cal.timeInMillis < System.currentTimeMillis()) {
-                cal.add(Calendar.DAY_OF_WEEK, 1)
-            }
-
             dueTime = cal.timeInMillis
             updateTimeButtonText()
         }
 
         picker.show(childFragmentManager, "TAG")
+    }
+
+    private fun openDatePicker() {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        if (taskItem != null && taskItem!!.dueTime > 0) {
+            cal.timeInMillis = taskItem?.dueTime ?: System.currentTimeMillis()
+        }
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(getString(com.xenon.todolist.R.string.select_date))
+            .setSelection(cal.timeInMillis)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selectedDate ->
+            cal.timeInMillis = selectedDate
+            dueDate = cal.timeInMillis
+            updateDateButtonText()
+        }
+
+        datePicker.show(childFragmentManager, "DATE_PICKER_TAG")
     }
 
 
@@ -149,6 +172,17 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
 
         binding.timePickerButton.text = formattedTime
     }
+
+    private fun updateDateButtonText() {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = dueDate
+
+        val dateFormat = DateFormat.getDateFormat(requireContext())
+        val formattedDate = dateFormat.format(cal.time)
+
+        binding.datePickerButton.text = formattedDate
+    }
+
 
 
     override fun onCreateView(
@@ -163,14 +197,28 @@ class NewTaskSheetFragment : BottomSheetDialogFragment() {
     private fun saveAction() {
         val name = binding.name.text.toString()
         val desc = binding.desc.text.toString()
+
+        val cal = Calendar.getInstance()
+        if (dueDate > 0) {
+            cal.timeInMillis = dueDate
+        }
+        if (dueTime > 0) {
+            val timeCal = Calendar.getInstance()
+            timeCal.timeInMillis = dueTime
+            cal.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
+            cal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
+        }
+
+        val finalDueTime = if (dueDate > 0 || dueTime > 0) cal.timeInMillis else -1
+
         if (taskItem == null) {
-            val newTask = TaskItem(0, name, desc, dueTime, System.currentTimeMillis(), -1, ArrayList())
+            val newTask = TaskItem(0, name, desc, finalDueTime, System.currentTimeMillis(), -1, ArrayList())
             taskItemViewModel?.add(newTask)
         } else {
             taskItem!!.name = name
             taskItem!!.desc = desc
-            Log.d("", "updated to $dueTime")
-            if (dueTime >= 0) taskItem!!.dueTime = dueTime
+            Log.d("", "updated to $finalDueTime")
+            taskItem!!.dueTime = finalDueTime
             taskItemViewModel?.update(taskItem!!)
         }
         binding.name.setText("")

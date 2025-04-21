@@ -50,5 +50,6 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
             android:text="@string/place_holder" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

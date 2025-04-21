@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.text.DateFormat
+import java.util.Calendar
 
 interface TaskItemClickListener {
     fun editTaskItem(taskItem: TaskItem)
@@ -17,7 +17,9 @@ class TaskItemViewHolder(
     private val binding: TaskItemCellBinding,
     private val clickListener: TaskItemClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val timeFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+    private val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
+    private val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
+
     fun bindTaskItem(taskItem: TaskItem) {
         binding.name.text = taskItem.name
 
@@ -39,9 +41,14 @@ class TaskItemViewHolder(
             clickListener.editTaskItem(taskItem)
         }
 
-        if (taskItem.dueTime >= 0)
-            binding.dueTime.text = timeFormat.format(taskItem.dueTime)
-        else
+        if (taskItem.dueTime >= 0) {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = taskItem.dueTime
+            val formattedTime = timeFormat.format(calendar.time)
+            val formattedDate = dateFormat.format(calendar.time)
+            binding.dueTime.text = "$formattedTime - $formattedDate"
+        } else {
             binding.dueTime.text = ""
+        }
     }
 }

@@ -7,6 +7,7 @@
     <string name="description">Description</string>
     <string name="name">Name*</string>
     <string name="select_time">select Time</string>
+    <string name="select_date">select Date</string>
     <string name="todo_list">ToDo-List</string>
     <string name="app_name">To-Do List</string>
     <string name="no_tasks">no Tasks</string>

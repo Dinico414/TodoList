@@ -23,8 +23,7 @@
             android:layout_height="wrap_content"
             android:scrollbarSize="6dp"
             android:scrollbarThumbVertical="@drawable/scrollhandle"
-            android:scrollbarTrackVertical="@color/surfaceContainer"
-            >
+            android:scrollbarTrackVertical="@color/surfaceContainer">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,8 +71,8 @@
                     app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:cursorColor="@color/primary"
                     app:endIconTint="@color/primary"
-                    app:startIconTint="@color/primary"
-                    app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
+                    app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2"
+                    app:startIconTint="@color/primary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name"
@@ -111,18 +110,36 @@
                         android:maxHeight="500dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/timePickerButton"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginHorizontal="20dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="@string/select_time"
-                    android:textColor="@color/primary"
-                    tools:ignore="TextContrastCheck" />
+                    android:orientation="horizontal">
 
-                <Button
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/timePickerButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="20dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/select_time"
+                        android:textColor="@color/primary"
+                        tools:ignore="TextContrastCheck" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/datePickerButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="20dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/select_date"
+                        android:textColor="@color/primary"
+                        tools:ignore="TextContrastCheck" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
