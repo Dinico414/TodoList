@@ -25,8 +25,6 @@ import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.tanh
 
 @Suppress("DEPRECATION")
@@ -160,8 +158,6 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            private var lastDraw: Boolean = false
-
             override fun getMovementFlags(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder
@@ -188,7 +184,11 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
 
                 if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
                     // Scale up the item when dragging starts
-                    viewHolder.itemView.animate().scaleX(1.02f).scaleY(1.02f).setDuration(200).start()
+                    viewHolder.itemView.animate().scaleX(1.02f).scaleY(1.02f).setDuration(200)
+                        .start()
+                    // Elevate smoothly when dragging starts
+                    viewHolder.itemView.animate().z(20f).setDuration(200).start()
+
                 }
             }
 
@@ -205,35 +205,22 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-//                val thresholdInDp = 100.0f
-//                val thresholdInPixels = (thresholdInDp * resources.displayMetrics.density).toInt()
-//                val limitedDX = if (dX < -thresholdInPixels) -thresholdInPixels.toFloat() else dX
-
                 var limitedDX = dX
 
-                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-                    if (lastDraw) {
-                        lastDraw = false
-                        viewHolder.itemView.elevation = 0f
-                        return
-                    }
-                    viewHolder.itemView.elevation = 100f
-                }
-                else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
 
                     val swipeThreshold = getSwipeThreshold(viewHolder)
                     val swipeThresholdPx = viewHolder.itemView.width * swipeThreshold
                     limitedDX = -swipeThresholdPx * abs(tanh(0.8f * dX / swipeThresholdPx)).toFloat()
-//                if (dX < -swipeThresholdPx) limitedDX = -limitedDX
 
                     val backgroundDrawable = ContextCompat.getDrawable(
                         context,
                         com.xenon.commons.accesspoint.R.drawable.delete_button
                     )
 
-                    val marginInDp = resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
+                    val marginInDp =
+                        resources.getDimension(com.xenon.commons.accesspoint.R.dimen.floating_margin)
                     val marginInPixels = (marginInDp / resources.displayMetrics.density).toInt()
-//                var drawableMinX = 4 * marginInPixels + (30 * resources.displayMetrics.density)
 
                     backgroundDrawable?.setBounds(
                         viewHolder.itemView.right + limitedDX.toInt() + marginInPixels,
@@ -252,7 +239,6 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                     )
 
                     c.clipPath(clipPath)
-
                     backgroundDrawable?.draw(c)
 
                     RecyclerViewSwipeDecorator.Builder(
@@ -288,7 +274,9 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
             ) {
                 super.clearView(recyclerView, viewHolder)
                 viewHolder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
-                lastDraw = true
+                //revert the elevation when the drag finishes
+                viewHolder.itemView.animate().z(7f).setDuration(200).start()
+
             }
 
             override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
