@@ -32,6 +32,7 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -76,8 +77,7 @@ class MainActivity : BaseActivity() {
         var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
         if (selectedIdx >= todoListModel.getList().size)
             selectedIdx = 0
-        val todoList = todoListModel.getList()[selectedIdx]
-        taskItemsModel.setList(todoList.items)
+        todoListModel.selectedIdx.postValue(selectedIdx)
 
 //        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
 //            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
@@ -165,7 +165,7 @@ class MainActivity : BaseActivity() {
             TodoList(
                 getString(R.string.default_todo_list),
                 ArrayList(),
-                System.currentTimeMillis()
+                Instant.now().toEpochMilli()
             )
         )
         todoListModel.setList(defaultList)
@@ -243,6 +243,8 @@ class MainActivity : BaseActivity() {
             saveTaskList()
         }
         todoListModel.selectedIdx.observe(this) { change ->
+            if (change >= todoListModel.getList().size)
+                return@observe
             val list = todoListModel.getList()[change].items
             taskItemsModel.setList(list)
             sharedPreferences.edit() { putInt("selectedTodoList", change) }
@@ -343,6 +345,7 @@ class MainActivity : BaseActivity() {
             .setPositiveButton(R.string.yes) { _, _ ->
                 if (checkedItems.size == todoListModel.getList().size) {
                     loadDefaultTodoList()
+                    todoListModel.selectedIdx.postValue(0)
                 }
                 else {
                     checkedItems.forEach {
