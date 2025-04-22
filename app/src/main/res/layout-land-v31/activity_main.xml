@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surfaceContainerLowest"
     tools:context=".MainActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -97,6 +96,13 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
 
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/todo_list_fragment"
+                    android:name="com.xenon.todolist.fragments.TodoListFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/listActionButton"
@@ -106,8 +112,7 @@
                     android:backgroundTint="@color/primary"
                     android:text="@string/add_list"
                     android:textColor="@color/textOnPrimaryInvert"
-                    android:textColorHighlight="@color/textOnPrimaryInvert"
-                    />
+                    android:textColorHighlight="@color/textOnPrimaryInvert" />
 
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>
