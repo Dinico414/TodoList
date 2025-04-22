@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskCellContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/secondaryContainer"
     android:elevation="10dp"
-    app:cardCornerRadius="20dp"
-    >
+    app:cardCornerRadius="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,8 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="15dp"
-
+            android:layout_marginHorizontal="5dp"
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/checkbox"
             android:scaleX="1.2"
@@ -40,20 +38,18 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:paddingVertical="20dp"
-            android:shadowColor="#444"
-            android:shadowDx="1.5"
-            android:shadowDy="1.3"
-            android:shadowRadius="1"
-            android:text="@string/place_holder" />
+            android:text="@string/place_holder"
+            android:textColor="@color/onPrimaryContainer" />
 
         <TextView
             android:id="@+id/dueTime"
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="@string/place_holder"
-            android:textAlignment="viewEnd"/>
+            android:textAlignment="viewEnd"
+            android:textColor="@color/onPrimaryContainer" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
