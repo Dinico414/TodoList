@@ -1,15 +1,14 @@
 package com.xenon.todolist
 
 import android.content.Context
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
-import android.util.Log
+import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
-import com.xenon.todolist.fragments.TaskDialogFragment
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -29,9 +28,7 @@ class TaskItemAdapter(
         holder.bindTaskItem(taskItems[position])
 
         val horizontalMarginInPx = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            10.toFloat(),
-            context.resources.displayMetrics
+            TypedValue.COMPLEX_UNIT_DIP, 10.toFloat(), context.resources.displayMetrics
         ).toInt()
 
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
@@ -61,15 +58,23 @@ class TaskItemViewHolder(
         if (taskItem.isCompleted()) {
             binding.name.alpha = 0.5f
             binding.dueTime.alpha = 0.5f
-
-            val matrix = ColorMatrix()
-            matrix.setSaturation(0f)
-            val filter = ColorMatrixColorFilter(matrix)
-            binding.taskCellContainer.background.colorFilter = filter
+            ViewCompat.setBackgroundTintList(
+                binding.taskCellContainer, ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        context, com.xenon.commons.accesspoint.R.color.surfaceContainerHighest
+                    )
+                )
+            )
         } else {
             binding.name.alpha = 1f
             binding.dueTime.alpha = 1f
-            binding.taskCellContainer.background.clearColorFilter()
+            ViewCompat.setBackgroundTintList(
+                binding.taskCellContainer, ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        context, com.xenon.commons.accesspoint.R.color.secondaryContainer
+                    )
+                )
+            )
         }
 
         binding.completeButton.setImageResource(taskItem.imageResource())
@@ -89,15 +94,15 @@ class TaskItemViewHolder(
 
 
             val hasTime =
-                taskItem.dueTime > 0 &&
-                        (calender.get(Calendar.HOUR_OF_DAY) != 0 || calender.get(Calendar.MINUTE) != 0)
+                taskItem.dueTime > 0 && (calender.get(Calendar.HOUR_OF_DAY) != 0 || calender.get(
+                    Calendar.MINUTE
+                ) != 0)
 
             calender.timeInMillis = taskItem.dueDate
             val formattedDate = dateFormat.format(calender.time)
             val hasDate =
-                taskItem.dueDate > 0 &&
-                        (calender.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR) ||
-                        calender.get(Calendar.DAY_OF_YEAR) != Calendar.getInstance()
+                taskItem.dueDate > 0 && (calender.get(Calendar.YEAR) != Calendar.getInstance()
+                    .get(Calendar.YEAR) || calender.get(Calendar.DAY_OF_YEAR) != Calendar.getInstance()
                     .get(Calendar.DAY_OF_YEAR))
 
             binding.dueTime.text = when {
