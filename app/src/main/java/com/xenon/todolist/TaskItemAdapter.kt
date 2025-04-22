@@ -3,11 +3,13 @@ package com.xenon.todolist
 import android.content.Context
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
+import com.xenon.todolist.fragments.TaskDialogFragment
 import java.text.DateFormat
 import java.util.Calendar
 
@@ -82,19 +84,23 @@ class TaskItemViewHolder(
             clickListener.editTaskItem(taskItem)
         }
 
-        if (taskItem.dueTime >= 0) {
-            val calendar = Calendar.getInstance()
-            calendar.timeInMillis = taskItem.dueDateTime
-            val formattedTime = timeFormat.format(calendar.time)
-            val formattedDate = dateFormat.format(calendar.time)
+        if (taskItem.dueDateTime >= 0) {
+            val calender = Calendar.getInstance()
+            calender.timeInMillis = taskItem.dueTime
+            val formattedTime = timeFormat.format(calender.time)
 
-            // Check if both time and date are present
+
             val hasTime =
-                calendar.get(Calendar.HOUR_OF_DAY) != 0 || calendar.get(Calendar.MINUTE) != 0
+                taskItem.dueTime > 0 &&
+                        (calender.get(Calendar.HOUR_OF_DAY) != 0 || calender.get(Calendar.MINUTE) != 0)
+
+            calender.timeInMillis = taskItem.dueDate
+            val formattedDate = dateFormat.format(calender.time)
             val hasDate =
-                calendar.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR) ||
-                        calendar.get(Calendar.DAY_OF_YEAR) != Calendar.getInstance()
-                    .get(Calendar.DAY_OF_YEAR)
+                taskItem.dueDate > 0 &&
+                        (calender.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR) ||
+                        calender.get(Calendar.DAY_OF_YEAR) != Calendar.getInstance()
+                    .get(Calendar.DAY_OF_YEAR))
 
             binding.dueTime.text = when {
                 hasTime && hasDate -> "$formattedTime\n$formattedDate" // Both time and date

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.core.widget.addTextChangedListener
@@ -21,11 +22,7 @@ import com.xenon.todolist.TaskItem
 import com.xenon.todolist.databinding.FragmentTaskDialogBinding
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.time.Instant
-import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.Calendar
-import java.util.TimeZone
 
 @Suppress("DEPRECATION")
 class TaskDialogFragment : DialogFragment() {
@@ -57,10 +54,10 @@ class TaskDialogFragment : DialogFragment() {
             val editable = Editable.Factory.getInstance()
             binding.name.text = editable.newEditable(taskItem.name)
             binding.desc.text = editable.newEditable(taskItem.desc)
-            if (taskItem.dueTime >= 0) {
+            if (taskItem.dueTime > 0)
                 updateTimeButtonText()
+            if (taskItem.dueDate > 0)
                 updateDateButtonText()
-            }
         } else {
             binding.taskTitle.text = getString(R.string.new_task)
         }
@@ -126,8 +123,8 @@ class TaskDialogFragment : DialogFragment() {
 
     private fun openDatePicker() {
         val cal = Calendar.getInstance()
-        var dueTime = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
-        cal.timeInMillis = dueTime
+        var dueDate = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
+        cal.timeInMillis = dueDate
 
         val constraintsBuilder = CalendarConstraints.Builder();
         constraintsBuilder.setValidator(DateValidatorPointForward.now());
@@ -139,9 +136,8 @@ class TaskDialogFragment : DialogFragment() {
             .build()
 
         datePicker.addOnPositiveButtonClickListener { selectedDate ->
-            val time = Instant.ofEpochMilli(dueTime).atZone(ZoneId.systemDefault()).toLocalTime()
-            val date = Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()
-            taskItem.dueDate = time.atDate(date).toInstant(OffsetDateTime.now().offset).toEpochMilli()
+            cal.timeInMillis = selectedDate
+            taskItem.dueDate = cal.timeInMillis
             updateDateButtonText()
         }
 
