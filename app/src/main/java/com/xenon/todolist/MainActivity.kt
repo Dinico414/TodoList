@@ -74,6 +74,11 @@ class MainActivity : BaseActivity() {
         setupToolbar()
         loadTodoList()
 
+        var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
+        if (selectedIdx >= todoListModel.getList().size)
+            selectedIdx = 0
+        todoListModel.selectedIdx.postValue(selectedIdx)
+
 //        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
 //            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
 //            binding.listActionButton.visibility = if(imeVisible) View.GONE else View.VISIBLE
@@ -151,25 +156,19 @@ class MainActivity : BaseActivity() {
             todoListModel.setList(list)
         } catch (e: Exception) {
             loadDefaultTodoList()
-            return
         }
-        var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
-        if (selectedIdx >= todoListModel.getList().size)
-            selectedIdx = 0
-        val todoList = todoListModel.getList()[selectedIdx]
-        taskItemsModel.setList(todoList.items)
     }
 
     private fun loadDefaultTodoList() {
         val defaultList = ArrayList<TodoList>()
-        val item = TodoList(
-            getString(R.string.default_todo_list),
-            ArrayList(),
-            Instant.now().toEpochMilli()
+        defaultList.add(
+            TodoList(
+                getString(R.string.default_todo_list),
+                ArrayList(),
+                Instant.now().toEpochMilli()
+            )
         )
-        defaultList.add(item)
         todoListModel.setList(defaultList)
-        taskItemsModel.setList(item.items)
     }
 
     private fun saveTaskList() {
@@ -244,6 +243,8 @@ class MainActivity : BaseActivity() {
             saveTaskList()
         }
         todoListModel.selectedIdx.observe(this) { change ->
+            if (change >= todoListModel.getList().size)
+                return@observe
             val list = todoListModel.getList()[change].items
             taskItemsModel.setList(list)
             sharedPreferences.edit() { putInt("selectedTodoList", change) }
@@ -344,6 +345,7 @@ class MainActivity : BaseActivity() {
             .setPositiveButton(R.string.yes) { _, _ ->
                 if (checkedItems.size == todoListModel.getList().size) {
                     loadDefaultTodoList()
+                    todoListModel.selectedIdx.postValue(0)
                 }
                 else {
                     checkedItems.forEach {

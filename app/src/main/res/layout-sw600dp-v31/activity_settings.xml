@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_main"
@@ -11,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/border_margin"
         android:background="@drawable/tile_cutout"
-        >
+        android:clipToOutline="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -30,7 +31,7 @@
                 app:collapsedTitleGravity="left"
                 app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
                 app:collapsedTitleTextColor="@color/textOnPrimary"
-                app:expandedTitleGravity="center|center"
+                app:expandedTitleGravity="center|center_vertical"
                 app:expandedTitleTextAppearance="@style/ActionBar.XenonExpanedTitleStyle"
                 app:expandedTitleTextColor="@color/primary"
                 app:layout_constraintVertical_weight="100"
@@ -43,10 +44,10 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="@drawable/ic_arrow_left_vector"
                     app:navigationIconTint="@color/onSurface"
                     app:buttonGravity="bottom"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_arrow_left_vector" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -56,6 +57,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/tile_background_100"
             android:backgroundTint="@color/surfaceContainer"
+            android:clipToOutline="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <LinearLayout

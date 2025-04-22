@@ -18,6 +18,7 @@
             android:layout_marginVertical="10dp"
             android:background="@drawable/tile_inputbox"
             android:backgroundTint="@color/transparent"
+            android:clipToOutline="true"
             app:counterEnabled="false"
             app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
             app:cursorColor="@color/primary"
@@ -45,6 +46,7 @@
             android:layout_marginVertical="10dp"
             android:background="@drawable/tile_inputbox"
             android:backgroundTint="@color/transparent"
+            android:clipToOutline="true"
             app:cursorColor="@color/primary"
             app:endIconTint="@color/primary"
             app:startIconTint="@color/primary">
