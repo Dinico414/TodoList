@@ -32,6 +32,7 @@ import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -72,12 +73,6 @@ class MainActivity : BaseActivity() {
 
         setupToolbar()
         loadTodoList()
-
-        var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
-        if (selectedIdx >= todoListModel.getList().size)
-            selectedIdx = 0
-        val todoList = todoListModel.getList()[selectedIdx]
-        taskItemsModel.setList(todoList.items)
 
 //        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
 //            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
@@ -156,19 +151,25 @@ class MainActivity : BaseActivity() {
             todoListModel.setList(list)
         } catch (e: Exception) {
             loadDefaultTodoList()
+            return
         }
+        var selectedIdx = sharedPreferences.getInt("selectedTodoList", 0)
+        if (selectedIdx >= todoListModel.getList().size)
+            selectedIdx = 0
+        val todoList = todoListModel.getList()[selectedIdx]
+        taskItemsModel.setList(todoList.items)
     }
 
     private fun loadDefaultTodoList() {
         val defaultList = ArrayList<TodoList>()
-        defaultList.add(
-            TodoList(
-                getString(R.string.default_todo_list),
-                ArrayList(),
-                System.currentTimeMillis()
-            )
+        val item = TodoList(
+            getString(R.string.default_todo_list),
+            ArrayList(),
+            Instant.now().toEpochMilli()
         )
+        defaultList.add(item)
         todoListModel.setList(defaultList)
+        taskItemsModel.setList(item.items)
     }
 
     private fun saveTaskList() {
