@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/SettingsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general"
+            android:textAlignment="center" />
+
+
+        <LinearLayout
+            android:id="@+id/language_selection_holder"
+            style="@style/SettingsTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/SettingsSelectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/language_selection_value"
+                style="@style/SettingsSelectionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="English" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/theme_selection_holder"
+            style="@style/SettingsTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/SettingsSelectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Theme" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/theme_selection_value"
+                style="@style/SettingsSelectionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="System" />
+
+        </LinearLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/amoled_dark_switch"
+            style="@style/SettingsSelectionSwitches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:text="@string/amoled"
+            />
+
+        <LinearLayout
+            android:id="@+id/clear_button_holder"
+            style="@style/SettingsTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+            style="@style/SettingsSelectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_data" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/about_holder"
+            style="@style/SettingsTile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/SettingsSelectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/about_text"
+                style="@style/SettingsSelectionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Version" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

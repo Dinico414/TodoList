@@ -67,10 +67,8 @@ class TaskItemViewHolder(
             val filter = ColorMatrixColorFilter(matrix)
             binding.taskCellContainer.background.colorFilter = filter
         } else {
-            binding.name.paintFlags = 0
-            binding.dueTime.paintFlags = 0
-            binding.name.alpha = 1.0f
-            binding.dueTime.alpha = 1.0f
+            binding.name.alpha = 1f
+            binding.dueTime.alpha = 1f
             binding.taskCellContainer.background.clearColorFilter()
         }
 
