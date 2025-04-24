@@ -8,10 +8,13 @@
     android:backgroundTint="@color/secondaryContainer"
     android:elevation="10dp"
     app:cardCornerRadius="20dp">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/tile_low_alpha"
         android:backgroundTint="@color/inverseSurface"
         android:gravity="center_vertical"
@@ -52,4 +55,60 @@
             android:textColor="@color/onPrimaryContainer" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/notificationText"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="2"/>
+<ImageView
+    android:id="@+id/notificationIcon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/add"
+    android:visibility="gone"
+    tools:visibility="visible"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/descIcon"
+            android:src="@drawable/add"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/highImportanceIcon"
+            android:src="@drawable/add"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/highestImportanceIcon"
+            android:src="@drawable/add"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stepText"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="2"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stepsIcon"
+            android:src="@drawable/add"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </LinearLayout>
+</LinearLayout>
 </androidx.cardview.widget.CardView>
