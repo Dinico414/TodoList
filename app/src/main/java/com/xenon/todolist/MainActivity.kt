@@ -4,14 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -93,6 +97,7 @@ class MainActivity : BaseActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            Log.d("bbb", "CLICK 4 ${menuItem.title}")
             when (menuItem.itemId) {
                 R.id.search -> {}
                 R.id.sort -> openSortDialog()
@@ -104,6 +109,34 @@ class MainActivity : BaseActivity() {
         binding.toolbar.setNavigationOnClickListener {
             binding.drawerLayout?.openDrawer(binding.navView!!)
         }
+
+        val searchItem = binding.toolbar.menu.findItem(R.id.search)
+        val searchView = searchItem.actionView as SearchView?
+        searchView?.apply {
+            this.setOnSearchClickListener {
+                binding.collapsingToolbar?.setCollapsedTitleTextColor(Color.TRANSPARENT)
+                Toast.makeText(this@MainActivity, "aaa", Toast.LENGTH_SHORT).show()
+            }
+            this.setOnCloseListener {
+                binding.collapsingToolbar?.setCollapsedTitleTextColor(resources.getColor(color.textOnPrimary))
+                false
+            }
+            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Log.d("bbb", query ?: "")
+                    return true
+                }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Log.d("bbb", newText ?: "")
+                    return false
+                }
+            })
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d("bbb", "CLICK 3 ${item.title}")
+        return super.onOptionsItemSelected(item)
     }
 
     private fun openSortDialog() {
