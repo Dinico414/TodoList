@@ -31,6 +31,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isEmpty
 import androidx.core.view.marginTop
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
@@ -177,6 +178,8 @@ class MainActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback {
             if (searchView?.isIconified == false) {
+                searchView.setQuery("", false)
+                searchView.clearFocus()
                 searchView.isIconified = true
             }
         }
