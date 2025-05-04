@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -115,7 +116,6 @@ class MainActivity : BaseActivity() {
         searchView?.apply {
             this.setOnSearchClickListener {
                 binding.collapsingToolbar?.setCollapsedTitleTextColor(Color.TRANSPARENT)
-                Toast.makeText(this@MainActivity, "aaa", Toast.LENGTH_SHORT).show()
             }
             this.setOnCloseListener {
                 binding.collapsingToolbar?.setCollapsedTitleTextColor(resources.getColor(color.textOnPrimary))
@@ -123,20 +123,19 @@ class MainActivity : BaseActivity() {
             }
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    Log.d("bbb", query ?: "")
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    Log.d("bbb", newText ?: "")
                     return false
                 }
             })
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("bbb", "CLICK 3 ${item.title}")
-        return super.onOptionsItemSelected(item)
+        onBackPressedDispatcher.addCallback {
+            if (searchView?.isIconified == false) {
+                searchView.isIconified = true
+            }
+        }
     }
 
     private fun openSortDialog() {
