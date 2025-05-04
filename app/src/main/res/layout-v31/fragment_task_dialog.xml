@@ -7,141 +7,135 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-        <androidx.core.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="6dp"
+        android:scrollbarThumbVertical="@drawable/scrollhandle"
+        android:scrollbarTrackVertical="@color/surfaceContainer">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbarSize="6dp"
-            android:scrollbarThumbVertical="@drawable/scrollhandle"
-            android:scrollbarTrackVertical="@color/surfaceContainer">
+            android:orientation="vertical"
+            tools:context=".fragments.TaskDialogFragment">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/taskTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:context=".fragments.TaskDialogFragment">
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/new_task"
+                android:textAlignment="center"
+                android:textColor="@color/icon"
+                android:textSize="30sp"
+                tools:ignore="TextContrastCheck" />
 
-                <TextView
-                    android:id="@+id/taskTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/new_task"
-                    android:textAlignment="center"
-                    android:textColor="@color/icon"
-                    android:textSize="30sp"
-                    tools:ignore="TextContrastCheck" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_input"
+                style="@style/XenonInputFilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/tile_inputbox"
+                android:backgroundTint="@color/transparent"
+                android:clipToOutline="true"
+                app:counterEnabled="false"
+                app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/name_input"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="10dp"
-                    android:background="@drawable/tile_inputbox"
-                    android:backgroundTint="@color/transparent"
-                    android:clipToOutline="true"
-                    app:counterEnabled="false"
-                    app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:cursorColor="@color/primary"
-                    app:endIconTint="@color/primary"
-                    app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:startIconTint="@color/primary">
+                    android:layout_height="match_parent"
+                    android:autofillHints=""
+                    android:hint="@string/name"
+                    android:inputType="text" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/name"
-                        style="@style/XenonInputFilledBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints=""
-                        android:hint="@string/name"
-                        android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/desc_input"
+                style="@style/XenonInputFilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/tile_inputbox"
+                android:backgroundTint="@color/transparent"
+                android:clipToOutline="true">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/desc_input"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/desc"
                     style="@style/XenonInputFilledBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="10dp"
-                    android:background="@drawable/tile_inputbox"
-                    android:backgroundTint="@color/transparent"
-                    android:clipToOutline="true"
-                    app:cursorColor="@color/primary"
-                    app:endIconTint="@color/primary"
-                    app:startIconTint="@color/primary">
+                    android:layout_height="match_parent"
+                    android:autofillHints=""
+                    android:hint="@string/description"
+                    android:inputType="text|textMultiLine"
+                    android:maxHeight="500dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/desc"
-                        style="@style/XenonInputFilledBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints=""
-                        android:hint="@string/description"
-                        android:inputType="text|textMultiLine"
-                        android:maxHeight="500dp" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/timePickerButton"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginVertical="10dp"
-                    android:orientation="horizontal">
+                    android:backgroundTint="@android:color/transparent"
+                    android:maxLines="1"
+                    android:text="@string/select_time"
+                    android:textColor="@color/primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/saveButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/timePickerButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/select_time"
-                        android:maxLines="1"
-                        android:textColor="@color/primary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/saveButton"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TextContrastCheck" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saveButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/enable_disable_button_color"
+                    android:enabled="false"
+                    android:maxLines="1"
+                    android:text="@string/save"
+                    android:textColor="@color/enable_disable_text_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/datePickerButton"
+                    app:layout_constraintStart_toEndOf="@id/timePickerButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/saveButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/enable_disable_button_color"
-                        android:enabled="false"
-                        android:text="@string/save"
-                        android:maxLines="1"
-                        android:textColor="@color/enable_disable_text_color"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/datePickerButton"
-                        app:layout_constraintStart_toEndOf="@id/timePickerButton"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TextContrastCheck" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/datePickerButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@android:color/transparent"
-                        android:maxLines="1"
-                        android:text="@string/select_date"
-                        android:textColor="@color/primary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/saveButton"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TextContrastCheck" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/datePickerButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@android:color/transparent"
+                    android:maxLines="1"
+                    android:text="@string/select_date"
+                    android:textColor="@color/primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/saveButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="TextContrastCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
