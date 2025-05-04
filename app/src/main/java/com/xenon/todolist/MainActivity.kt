@@ -10,29 +10,18 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.RadioGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isEmpty
-import androidx.core.view.marginTop
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -444,7 +433,7 @@ class MainActivity : BaseActivity() {
         titleEditText.setSelection(item.name.length)
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.edit_list)
-            .setPositiveButton(R.string.yes) { _, _ ->
+            .setPositiveButton(R.string.ok) { _, _ ->
                 item.name = titleEditText.text.toString()
                 todoListModel.update(item, true)
                 onComplete()
