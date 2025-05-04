@@ -17,7 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.SearchView
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -26,8 +26,6 @@ import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.xenon.commons.accesspoint.R.color
-import com.xenon.commons.accesspoint.R.drawable
 import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.databinding.ActivityMainBinding
@@ -137,13 +135,27 @@ class MainActivity : BaseActivity() {
 
         val searchItem = binding.toolbar.menu.findItem(R.id.search)
         val searchView = searchItem.actionView as SearchView?
+
+        val backPressedCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (searchView?.isIconified == false) {
+                    searchView.setQuery("", false)
+                    searchView.clearFocus()
+                    searchView.isIconified = true
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(backPressedCallback)
+
         searchView?.apply {
             this.setOnSearchClickListener {
                 binding.collapsingToolbar?.setCollapsedTitleTextColor(Color.TRANSPARENT)
+                backPressedCallback.isEnabled = true
 //                binding.toolbar.navigationIcon = null
             }
             this.setOnCloseListener {
-                binding.collapsingToolbar?.setCollapsedTitleTextColor(resources.getColor(color.textOnPrimary))
+                binding.collapsingToolbar?.setCollapsedTitleTextColor(resources.getColor(com.xenon.commons.accesspoint.R.color.textOnPrimary))
+                backPressedCallback.isEnabled = false
 //                binding.toolbar.navigationIcon = resources.getDrawable(drawable.ic_navigation_vector)
                 false
             }
@@ -163,14 +175,6 @@ class MainActivity : BaseActivity() {
                     return false
                 }
             })
-        }
-
-        onBackPressedDispatcher.addCallback {
-            if (searchView?.isIconified == false) {
-                searchView.setQuery("", false)
-                searchView.clearFocus()
-                searchView.isIconified = true
-            }
         }
     }
 
@@ -263,19 +267,19 @@ class MainActivity : BaseActivity() {
                 val snackbarView = snackbar.view
                 snackbarView.background = ContextCompat.getDrawable(
                     this,
-                    drawable.tile_popup
+                    com.xenon.commons.accesspoint.R.drawable.tile_popup
                 )
                 val textColor = ContextCompat.getColor(
                     this,
-                    color.inverseOnSurface
+                    com.xenon.commons.accesspoint.R.color.inverseOnSurface
                 )
                 val actionTextColor = ContextCompat.getColor(
                     this,
-                    color.inversePrimary
+                    com.xenon.commons.accesspoint.R.color.inversePrimary
                 )
                 val backgroundTint = ContextCompat.getColor(
                     this,
-                    color.inverseSurface
+                    com.xenon.commons.accesspoint.R.color.inverseSurface
                 )
                 snackbar.setTextColor(textColor)
                     .setActionTextColor(actionTextColor)
@@ -359,13 +363,13 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setButtonToDeleteStyle(button: Button) {
-        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.delete_red))
-        button.setTextColor(ContextCompat.getColor(button.context, color.delete))
+        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete_red))
+        button.setTextColor(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete))
     }
 
     private fun setButtonToAddListStyle(button: Button) {
-        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, color.primary))
-        button.setTextColor(ContextCompat.getColor(button.context, color.textOnPrimaryInvert))
+        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.primary))
+        button.setTextColor(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.textOnPrimaryInvert))
     }
 
     private fun showAddListDialog() {
