@@ -22,6 +22,8 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
 
     private var maxTaskId = -1
     protected var items = ArrayList<T>()
+    protected var filteredItems = items
+    protected var currentFilter: ((T) -> Boolean)? = null
 
     private fun queueListEvent(event: ListEvent<T>) {
         listEventQueue.add(event)
@@ -31,19 +33,35 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
     /**
      * returned list should not be modified
      */
-    fun getList(): ArrayList<T> {
-        return items
+    fun getList(): List<T> {
+        return filteredItems.toList()
     }
     open fun setList(list: ArrayList<T>) {
         items = list
         for (i in 0 until list.size) {
             list[i].id = i
         }
-        if (list.size > 0) {
+        if (list.isNotEmpty()) {
             maxTaskId = list.maxBy { v -> v.id }.id
             sortItems()
         }
+        filteredItems = items
+        if (currentFilter != null)
+            setListFilter(currentFilter!!)
         queueListEvent(ListEvent(ListChangedType.OVERWRITTEN))
+    }
+
+    fun setListFilter(filter: (T) -> Boolean) {
+        currentFilter = filter
+        // TODO: Animate filter change
+//        val prevFilteredItems = filteredItems
+        filteredItems = items.filter(filter) as ArrayList<T>
+        queueListEvent(ListEvent(ListChangedType.OVERWRITTEN))
+    }
+
+    fun clearFilter() {
+        currentFilter = null
+        filteredItems = items
     }
 
     protected open fun sortItems() {
@@ -58,6 +76,10 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         maxTaskId++
         item.id = maxTaskId
         items.add(to, item)
+
+        if (currentFilter != null && !currentFilter!!.invoke(item))
+            return
+
         queueListEvent(ListEvent(ListChangedType.ADD, item, to))
     }
 
@@ -69,6 +91,9 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
 
     fun remove(idx: Int) {
         val item = items.removeAt(idx)
+        // Not thread safe if you modify currentFilter concurrently
+        if (currentFilter != null && !currentFilter!!.invoke(item))
+            return
         queueListEvent(ListEvent(ListChangedType.REMOVE, item, idx))
     }
 

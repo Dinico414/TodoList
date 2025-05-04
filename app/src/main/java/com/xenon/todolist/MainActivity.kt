@@ -116,9 +116,11 @@ class MainActivity : BaseActivity() {
         searchView?.apply {
             this.setOnSearchClickListener {
                 binding.collapsingToolbar?.setCollapsedTitleTextColor(Color.TRANSPARENT)
+//                binding.toolbar.navigationIcon = null
             }
             this.setOnCloseListener {
                 binding.collapsingToolbar?.setCollapsedTitleTextColor(resources.getColor(color.textOnPrimary))
+//                binding.toolbar.navigationIcon = resources.getDrawable(drawable.ic_navigation_vector)
                 false
             }
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -126,6 +128,8 @@ class MainActivity : BaseActivity() {
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText != null)
+                        taskItemsModel.setListFilter { item -> item.name.contains(newText) }
                     return false
                 }
             })
