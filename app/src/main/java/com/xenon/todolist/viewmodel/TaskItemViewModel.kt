@@ -48,8 +48,6 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
                     if (item.isCompleted() && currentIdx < pivotIdx) pivotIdx - 1
                     else if (!item.isCompleted() && currentIdx >= pivotIdx) pivotIdx
                     else currentIdx
-
-                Log.d("aaa", "$newIdx ${item.isCompleted()} $currentIdx $pivotIdx")
             }
             SortType.BY_CREATION_DATE -> {
                 var pivotIdx = items.indexOfFirst { v ->

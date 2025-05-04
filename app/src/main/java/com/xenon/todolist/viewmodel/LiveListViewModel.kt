@@ -1,5 +1,6 @@
 package com.xenon.todolist.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -22,8 +23,8 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
 
     private var maxTaskId = -1
     protected var items = ArrayList<T>()
-    protected var filteredItems = items
-    protected var currentFilter: ((T) -> Boolean)? = null
+    private var filteredItems = items
+    private var currentFilter: ((T) -> Boolean)? = null
 
     private fun queueListEvent(event: ListEvent<T>) {
         listEventQueue.add(event)
@@ -33,8 +34,8 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
     /**
      * returned list should not be modified
      */
-    fun getList(): List<T> {
-        return filteredItems.toList()
+    fun getList(): ArrayList<T> {
+        return filteredItems
     }
     open fun setList(list: ArrayList<T>) {
         items = list
@@ -46,8 +47,8 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
             sortItems()
         }
         filteredItems = items
-        if (currentFilter != null)
-            setListFilter(currentFilter!!)
+        val f = currentFilter
+        f?.apply { setListFilter(f) }
         queueListEvent(ListEvent(ListChangedType.OVERWRITTEN))
     }
 
@@ -77,8 +78,11 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         item.id = maxTaskId
         items.add(to, item)
 
-        if (currentFilter != null && !currentFilter!!.invoke(item))
-            return
+        val f = currentFilter
+        f?.apply {
+            if (!f.invoke(item)) return
+            setListFilter(f)
+        }
 
         queueListEvent(ListEvent(ListChangedType.ADD, item, to))
     }
@@ -91,9 +95,11 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
 
     fun remove(idx: Int) {
         val item = items.removeAt(idx)
-        // Not thread safe if you modify currentFilter concurrently
-        if (currentFilter != null && !currentFilter!!.invoke(item))
-            return
+        val f = currentFilter
+        f?.apply {
+            if (!f.invoke(item)) return
+            setListFilter(f)
+        }
         queueListEvent(ListEvent(ListChangedType.REMOVE, item, idx))
     }
 

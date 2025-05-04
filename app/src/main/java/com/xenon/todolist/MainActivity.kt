@@ -313,7 +313,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupTodoListFragment() {
-        val fragment = binding.todoListFragment!!.getFragment<TodoListFragment>()
+        val fragment = binding.todoListFragment.getFragment<TodoListFragment>()
         todoListModel = fragment.getViewModel()
         todoListModel.liveListEvent.observe(this) { change ->
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
@@ -363,7 +363,6 @@ class MainActivity : BaseActivity() {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerOpened(drawerView: View) {}
             override fun onDrawerClosed(drawerView: View) {
-                Log.d("aaa", "closed")
                 todoListModel.uncheckAll()
             }
             override fun onDrawerStateChanged(newState: Int) {}
