@@ -104,6 +104,7 @@
             android:outlineSpotShadowColor="@color/transparent">
 
             <LinearLayout
+                android:id="@+id/drawer_linear_root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/border_margin"

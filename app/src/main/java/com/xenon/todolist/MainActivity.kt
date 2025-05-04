@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -11,8 +12,13 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.Toast
@@ -21,6 +27,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.marginTop
+import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -89,6 +101,28 @@ class MainActivity : BaseActivity() {
 //            binding.listActionButton.visibility = if(imeVisible) View.GONE else View.VISIBLE
 //            insets
 //        }
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+//        val statusBarHeight = resources.getDimensionPixelSize(
+//            resources.getIdentifier("status_bar_height", "dimen", "android"));
+//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
+//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
+//            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
+//            binding.root.updatePadding(top = insets.top)
+//            WindowInsetsCompat.CONSUMED
+//        }
+        val statusBarHeight = getResources().getDimensionPixelSize(
+            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
+
+        binding.coordinatorLayoutMain.updatePadding(top = statusBarHeight)
+        binding.drawerLinearRoot?.apply {
+            val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+            lp.topMargin = statusBarHeight
+            this.layoutParams = lp
+        }
     }
 
     override fun onResume() {
