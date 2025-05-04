@@ -5,7 +5,11 @@ import androidx.core.content.ContextCompat
 import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.viewmodel.LiveListItem
 import kotlinx.serialization.Serializable
+import java.text.DateFormat
 import java.time.Instant
+
+private val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
+private val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
 
 @Serializable
 data class TaskItem(
@@ -40,4 +44,10 @@ data class TaskItem(
 
     val dueDateTime: Long
         get() = dueTime + dueDate
+
+    val dueDateString: String
+        get() = dateFormat.format(dueDate)
+
+    val dueTimeString: String
+        get() = timeFormat.format(dueTime)
 }

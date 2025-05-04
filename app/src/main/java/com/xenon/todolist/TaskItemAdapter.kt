@@ -49,9 +49,6 @@ class TaskItemViewHolder(
     private val binding: TaskItemCellBinding,
     private val clickListener: TaskItemClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
-    private val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
-
     fun bindTaskItem(taskItem: TaskItem) {
         binding.name.text = taskItem.name
 
@@ -90,8 +87,6 @@ class TaskItemViewHolder(
         if (taskItem.dueDateTime >= 0) {
             val calender = Calendar.getInstance()
             calender.timeInMillis = taskItem.dueTime
-            val formattedTime = timeFormat.format(calender.time)
-
 
             val hasTime =
                 taskItem.dueTime > 0 && (calender.get(Calendar.HOUR_OF_DAY) != 0 || calender.get(
@@ -99,16 +94,15 @@ class TaskItemViewHolder(
                 ) != 0)
 
             calender.timeInMillis = taskItem.dueDate
-            val formattedDate = dateFormat.format(calender.time)
             val hasDate =
                 taskItem.dueDate > 0 && (calender.get(Calendar.YEAR) != Calendar.getInstance()
                     .get(Calendar.YEAR) || calender.get(Calendar.DAY_OF_YEAR) != Calendar.getInstance()
                     .get(Calendar.DAY_OF_YEAR))
 
             binding.dueTime.text = when {
-                hasTime && hasDate -> "$formattedTime\n$formattedDate" // Both time and date
-                hasTime -> formattedTime // Only time
-                hasDate -> formattedDate // Only date
+                hasTime && hasDate -> "${taskItem.dueTimeString}\n${taskItem.dueDateString}" // Both time and date
+                hasTime -> taskItem.dueTimeString // Only time
+                hasDate -> taskItem.dueDateString // Only date
                 else -> "" // Neither (shouldn't happen if dueTime >= 0, but handle for safety)
             }
         } else {

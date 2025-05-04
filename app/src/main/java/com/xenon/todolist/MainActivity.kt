@@ -128,8 +128,14 @@ class MainActivity : BaseActivity() {
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText != null)
-                        taskItemsModel.setListFilter { item -> item.name.contains(newText) }
+                    if (newText != null) {
+                        val text = newText.lowercase()
+                        taskItemsModel.setListFilter { item ->
+                            item.name.lowercase().contains(text)
+                                    || item.dueTimeString.lowercase().contains(newText)
+                                    || item.dueDateString.lowercase().contains(newText)
+                        }
+                    }
                     return false
                 }
             })
