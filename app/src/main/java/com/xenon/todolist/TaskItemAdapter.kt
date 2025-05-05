@@ -1,5 +1,6 @@
 package com.xenon.todolist
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.TypedValue
@@ -49,6 +50,7 @@ class TaskItemViewHolder(
     private val binding: TaskItemCellBinding,
     private val clickListener: TaskItemClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
+    @SuppressLint("SetTextI18n")
     fun bindTaskItem(taskItem: TaskItem) {
         binding.name.text = taskItem.name
 

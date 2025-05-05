@@ -7,7 +7,10 @@ import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
@@ -16,6 +19,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.xenon.commons.accesspoint.R.color
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
 import com.xenon.todolist.databinding.FragmentTaskDialogBinding
@@ -47,6 +51,17 @@ class TaskDialogFragment : DialogFragment() {
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .create()
+
+        // Initially hide the more options layout
+        binding.moreOptionsLayout!!.visibility = View.GONE
+        binding.moreOptionsButton.text = getString(R.string.more_options)
+        binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            null,
+            ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down),
+            null
+        )
+
 
         if (!newTask) {
             binding.taskTitle.text = getString(R.string.edit_task)
@@ -88,6 +103,38 @@ class TaskDialogFragment : DialogFragment() {
                         taskItem.highestImportance = true
                     }
                 }
+            }
+        }
+
+        // Add click listener for the more options button
+
+        binding.moreOptionsButton.setOnClickListener {
+            val arrowDropDown = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down)
+            val arrowDropUp = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_up)
+            val primaryColor = ContextCompat.getColor(requireContext(), color.primary)
+
+            // Apply tint to drawables
+            arrowDropDown?.let { DrawableCompat.setTint(it, primaryColor) }
+            arrowDropUp?.let { DrawableCompat.setTint(it, primaryColor) }
+
+            if (binding.moreOptionsLayout!!.visibility == View.GONE) {
+                binding.moreOptionsLayout!!.visibility = View.VISIBLE
+                binding.moreOptionsButton.text = getString(R.string.less_options)
+                binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    arrowDropUp, // Use the tinted drawable
+                    null
+                )
+            } else {
+                binding.moreOptionsLayout!!.visibility = View.GONE
+                binding.moreOptionsButton.text = getString(R.string.more_options)
+                binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    arrowDropDown, // Use the tinted drawable
+                    null
+                )
             }
         }
 
