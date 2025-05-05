@@ -43,4 +43,8 @@
     <string name="edit_list">Liste umbenennen</string>
     <string name="more_options">mehr Optionen</string>
     <string name="less_options">weniger Optionen</string>
+    <string name="low">Niedrig</string>
+    <string name="high">Hoch</string>
+    <string name="highest">Höchste</string>
+    <string name="priority">Priorität</string>
 </resources>
