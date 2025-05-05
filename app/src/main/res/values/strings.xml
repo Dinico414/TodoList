@@ -43,4 +43,6 @@
     <string name="version_with_prefix">v.%1$s</string>
     <string name="delete_list">Delete selected list(s)</string>
     <string name="edit_list">Rename list</string>
+    <string name="more_options">more options</string>
+    <string name="less_options">less options</string>
 </resources>
