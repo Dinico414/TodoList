@@ -58,82 +58,134 @@
 
         </LinearLayout>
 
-<!--Beta, daher ausgeblendet-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="15dp"
-            android:gravity="center_vertical"
-            android:paddingBottom="7dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true"
+            android:paddingHorizontal="15dp">
 
-            <TextView
-                android:id="@+id/notificationText"
+            <LinearLayout
+                android:id="@+id/notificationGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:alpha="0.5"
-                android:textColor="@color/onPrimaryContainer"/>
+                android:layout_marginEnd="3dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="7dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-            <ImageView
-                android:id="@+id/notificationIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/alert"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:layout_marginEnd="3dp"/>
+                <TextView
+                    android:id="@+id/notificationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:text="2"
+                    android:textColor="@color/onPrimaryContainer"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/notificationIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/alert" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/descIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:paddingBottom="7dp"
                 android:src="@drawable/description"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:layout_marginEnd="3dp"/>
+                android:visibility="gone"
+
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/highImportanceIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:paddingBottom="7dp"
                 android:src="@drawable/high_importance"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:layout_marginEnd="3dp" />
+                android:visibility="gone"
+
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/highestImportanceIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:paddingBottom="7dp"
                 android:src="@drawable/highest_importance"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:layout_marginEnd="3dp" />
-
-            <TextView
-                android:id="@+id/stepText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:alpha="0.5"
-                android:textColor="@color/onPrimaryContainer" />
-
-            <ImageView
-                android:id="@+id/stepsIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/steps"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:visibility="visible" />
-        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stepGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="7dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/stepText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:text="2"
+                    android:textColor="@color/onPrimaryContainer"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/stepsIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/steps"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/filesGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="7dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/filesText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:text="2"
+                    android:textColor="@color/onPrimaryContainer"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/filesIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/attached_file"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

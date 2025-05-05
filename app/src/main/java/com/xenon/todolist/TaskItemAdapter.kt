@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.databinding.TaskItemCellBinding
-import java.text.DateFormat
 import java.util.Calendar
 
 class TaskItemAdapter(
@@ -103,10 +103,56 @@ class TaskItemViewHolder(
                 hasTime && hasDate -> "${taskItem.dueTimeString}\n${taskItem.dueDateString}" // Both time and date
                 hasTime -> taskItem.dueTimeString // Only time
                 hasDate -> taskItem.dueDateString // Only date
-                else -> "" // Neither (shouldn't happen if dueTime >= 0, but handle for safety)
+                else -> "" // Neither
             }
+
         } else {
             binding.dueTime.text = ""
         }
+
+//        // Check if notification exists and set visibility of notificationGroup
+//        if (taskItem.notification > 0) {
+//            binding.notificationGroup.visibility = View.VISIBLE
+//            binding.notificationText.text = taskItem.notification.toString()
+//        } else {
+//            binding.notificationGroup.visibility = View.GONE
+//        }
+//
+        // Check if description exists and set visibility of descIcon
+        if (taskItem.desc.isNotEmpty()) {
+            binding.descIcon.visibility = View.VISIBLE
+        } else {
+            binding.descIcon.visibility = View.GONE
+        }
+//
+//        // Check if highImportance exists and set visibility of highImportanceIcon
+//        if (taskItem.highImportance) {
+//            binding.highImportanceIcon.visibility = View.VISIBLE
+//        } else {
+//            binding.highImportanceIcon.visibility = View.GONE
+//        }
+//
+//        // Check if highestImportance exists and set visibility of highestImportanceIcon
+//        if (taskItem.highestImportance) {
+//            binding.highestImportanceIcon.visibility = View.VISIBLE
+//        } else {
+//            binding.highImportanceIcon.visibility = View.GONE
+//        }
+//
+//        // Check if steps exists and set visibility of stepGroup
+//        if (taskItem.steps > 0) {
+//            binding.stepGroup.visibility = View.VISIBLE
+//            binding.stepText.text = taskItem.steps.toString()
+//        } else {
+//            binding.stepGroup.visibility = View.GONE
+//        }
+//
+//        // Check if files exists and set visibility of filesGroup
+//        if (taskItem.files > 0) {
+//            binding.filesGroup.visibility = View.VISIBLE
+//            binding.filesText.text = taskItem.files.toString()
+//        } else {
+//            binding.filesGroup.visibility = View.GONE
+//        }
     }
 }
