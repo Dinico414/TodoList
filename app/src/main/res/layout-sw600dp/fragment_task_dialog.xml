@@ -99,26 +99,27 @@
                     tools:ignore="TextContrastCheck"/>
 
                 <LinearLayout
-                    android:id="@+id/moreOptionsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="20dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/priority"
-                        android:paddingStart="25dp"
-                        android:paddingEnd="25sp"
                         android:textColor="@color/onSurface"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
+
+                    <Space
+                        android:layout_width="15dp"
+                        android:layout_height="wrap_content"/>
 
                     <com.google.android.material.button.MaterialButtonToggleGroup
                         android:id="@+id/importanceToggleGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
                         android:layout_marginVertical="10dp"
                         app:selectionRequired="true"
                         app:singleSelection="true">
@@ -129,8 +130,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/low"
                             android:checked="true"
+                            android:text="@string/low"
                             tools:ignore="VisualLintButtonSize" />
 
                         <com.google.android.material.button.MaterialButton
@@ -152,6 +153,7 @@
                             tools:ignore="VisualLintButtonSize" />
 
                     </com.google.android.material.button.MaterialButtonToggleGroup>
+
                 </LinearLayout>
 
 
