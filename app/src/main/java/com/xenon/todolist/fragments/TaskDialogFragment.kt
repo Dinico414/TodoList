@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.core.widget.addTextChangedListener
@@ -35,7 +34,7 @@ class TaskDialogFragment : DialogFragment() {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
             val curTime = Instant.now().toEpochMilli()
-            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, ArrayList())
+            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, highImportance = false, highestImportance = false, children = ArrayList())
             return TaskDialogFragment()
         }
     }
@@ -58,9 +57,40 @@ class TaskDialogFragment : DialogFragment() {
                 updateTimeButtonText()
             if (taskItem.dueDate > 0)
                 updateDateButtonText()
+
+            // Set initial state of importance toggle group
+            when {
+                taskItem.highestImportance -> binding.importanceToggleGroup!!.check(R.id.highestImportanceButton)
+                taskItem.highImportance -> binding.importanceToggleGroup!!.check(R.id.highImportanceButton)
+                else -> binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
+            }
+
         } else {
             binding.taskTitle.text = getString(R.string.new_task)
+            // For new tasks, default to low importance
+            binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
         }
+
+        // Add listener to update taskItem properties based on importance selection
+        binding.importanceToggleGroup!!.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.lowImportanceButton -> {
+                        taskItem.highImportance = false
+                        taskItem.highestImportance = false
+                    }
+                    R.id.highImportanceButton -> {
+                        taskItem.highImportance = true
+                        taskItem.highestImportance = false
+                    }
+                    R.id.highestImportanceButton -> {
+                        taskItem.highImportance = false
+                        taskItem.highestImportance = true
+                    }
+                }
+            }
+        }
+
 
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
@@ -172,6 +202,8 @@ class TaskDialogFragment : DialogFragment() {
             taskItem.name = name
         }
         taskItem.desc = desc
+
+        // Importance is already updated in the listener, no need to update here
 
         if (!newTask) {
             taskItemViewModel.update(taskItem)

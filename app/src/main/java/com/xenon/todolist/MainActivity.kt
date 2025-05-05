@@ -243,7 +243,7 @@ class MainActivity : BaseActivity() {
         todoListModel.setList(defaultList)
     }
 
-    private fun saveTaskList() {
+    private fun saveTodoList() {
         val json = Json.encodeToString(todoListModel.getList())
         with(sharedPreferences.edit()) {
             putString("todoList", json)
@@ -287,7 +287,7 @@ class MainActivity : BaseActivity() {
                     .show()
             }
 
-            saveTaskList()
+            saveTodoList()
         }
 
         fragment.setClickListener(object : TaskItemClickListener {
@@ -312,7 +312,7 @@ class MainActivity : BaseActivity() {
             if (change.type == LiveListViewModel.ListChangedType.ADD) {
                 todoListModel.selectedIdx.value = change.idx
             }
-            saveTaskList()
+            saveTodoList()
         }
         todoListModel.selectedIdx.observe(this) { change ->
             if (change >= todoListModel.getList().size)

@@ -6,7 +6,6 @@ import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.viewmodel.LiveListItem
 import kotlinx.serialization.Serializable
 import java.text.DateFormat
-import java.time.Instant
 
 private val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
 private val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
@@ -20,6 +19,11 @@ data class TaskItem(
     var dueDate: Long = -1,
     var createdDate: Long,
     var completedDate: Long = -1,
+    var highImportance: Boolean = false,
+    var highestImportance: Boolean = false,
+    var steps: Int = 0,
+    var files: Int = 0,
+    var notification: Int = 0,
     val children: ArrayList<TaskItem> = ArrayList()
 
 ) : LiveListItem {

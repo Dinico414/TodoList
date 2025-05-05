@@ -110,49 +110,49 @@ class TaskItemViewHolder(
             binding.dueTime.text = ""
         }
 
-//        // Check if notification exists and set visibility of notificationGroup
-//        if (taskItem.notification > 0) {
-//            binding.notificationGroup.visibility = View.VISIBLE
-//            binding.notificationText.text = taskItem.notification.toString()
-//        } else {
-//            binding.notificationGroup.visibility = View.GONE
-//        }
-//
+        // Check if notification exists and set visibility of notificationGroup
+        if (taskItem.notification > 0) {
+            binding.notificationGroup.visibility = View.VISIBLE
+            binding.notificationText.text = taskItem.notification.toString()
+        } else {
+            binding.notificationGroup.visibility = View.GONE
+        }
+
         // Check if description exists and set visibility of descIcon
         if (taskItem.desc.isNotEmpty()) {
             binding.descIcon.visibility = View.VISIBLE
         } else {
             binding.descIcon.visibility = View.GONE
         }
-//
-//        // Check if highImportance exists and set visibility of highImportanceIcon
-//        if (taskItem.highImportance) {
-//            binding.highImportanceIcon.visibility = View.VISIBLE
-//        } else {
-//            binding.highImportanceIcon.visibility = View.GONE
-//        }
-//
-//        // Check if highestImportance exists and set visibility of highestImportanceIcon
-//        if (taskItem.highestImportance) {
-//            binding.highestImportanceIcon.visibility = View.VISIBLE
-//        } else {
-//            binding.highImportanceIcon.visibility = View.GONE
-//        }
-//
-//        // Check if steps exists and set visibility of stepGroup
-//        if (taskItem.steps > 0) {
-//            binding.stepGroup.visibility = View.VISIBLE
-//            binding.stepText.text = taskItem.steps.toString()
-//        } else {
-//            binding.stepGroup.visibility = View.GONE
-//        }
-//
-//        // Check if files exists and set visibility of filesGroup
-//        if (taskItem.files > 0) {
-//            binding.filesGroup.visibility = View.VISIBLE
-//            binding.filesText.text = taskItem.files.toString()
-//        } else {
-//            binding.filesGroup.visibility = View.GONE
-//        }
+
+        // Check if highImportance exists and set visibility of highImportanceIcon
+        if (taskItem.highImportance) {
+            binding.highImportanceIcon.visibility = View.VISIBLE
+        } else {
+            binding.highImportanceIcon.visibility = View.GONE
+        }
+
+// Check if highestImportance exists and set visibility of highestImportanceIcon
+        if (taskItem.highestImportance) {
+            binding.highestImportanceIcon.visibility = View.VISIBLE
+        } else {
+            binding.highestImportanceIcon.visibility = View.GONE
+        }
+
+        // Check if steps exists and set visibility of stepGroup
+        if (taskItem.steps > 0) {
+            binding.stepGroup.visibility = View.VISIBLE
+            binding.stepText.text = taskItem.steps.toString()
+        } else {
+            binding.stepGroup.visibility = View.GONE
+        }
+
+        // Check if files exists and set visibility of filesGroup
+        if (taskItem.files > 0) {
+            binding.filesGroup.visibility = View.VISIBLE
+            binding.filesText.text = taskItem.files.toString()
+        } else {
+            binding.filesGroup.visibility = View.GONE
+        }
     }
 }
