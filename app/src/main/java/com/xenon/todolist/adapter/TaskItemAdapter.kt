@@ -1,4 +1,4 @@
-package com.xenon.todolist
+package com.xenon.todolist.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.TaskItem
 import com.xenon.todolist.databinding.TaskItemCellBinding
 import java.util.Calendar
 
@@ -60,7 +62,7 @@ class TaskItemViewHolder(
             ViewCompat.setBackgroundTintList(
                 binding.taskCellContainer, ColorStateList.valueOf(
                     ContextCompat.getColor(
-                        context, com.xenon.commons.accesspoint.R.color.surfaceContainerHighest
+                        context, R.color.surfaceContainerHighest
                     )
                 )
             )
@@ -70,7 +72,7 @@ class TaskItemViewHolder(
             ViewCompat.setBackgroundTintList(
                 binding.taskCellContainer, ColorStateList.valueOf(
                     ContextCompat.getColor(
-                        context, com.xenon.commons.accesspoint.R.color.secondaryContainer
+                        context, R.color.secondaryContainer
                     )
                 )
             )

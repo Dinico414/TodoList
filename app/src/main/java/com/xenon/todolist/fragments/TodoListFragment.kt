@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
 import com.xenon.todolist.TodoList
-import com.xenon.todolist.TodoListAdapter
+import com.xenon.todolist.adapter.TodoListAdapter
 import com.xenon.todolist.databinding.FragmentTodoListsBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel

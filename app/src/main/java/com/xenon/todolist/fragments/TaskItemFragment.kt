@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
-import com.xenon.todolist.TaskItemAdapter
-import com.xenon.todolist.TaskItemClickListener
+import com.xenon.todolist.adapter.TaskItemAdapter
+import com.xenon.todolist.adapter.TaskItemClickListener
 import com.xenon.todolist.databinding.FragmentTaskItemsBinding
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel

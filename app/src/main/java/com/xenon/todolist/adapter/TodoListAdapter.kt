@@ -1,4 +1,4 @@
-package com.xenon.todolist
+package com.xenon.todolist.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.xenon.commons.accesspoint.R
+import com.xenon.todolist.TodoList
 import com.xenon.todolist.databinding.TodoListCellBinding
-import java.lang.Math.pow
-import kotlin.math.pow
 
 class TodoListAdapter(
     private val context: Context,
@@ -199,9 +199,9 @@ class TodoListAdapter(
 
         fun setSelected(state: Boolean) {
             val color = if (state) {
-                ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.primary)
+                ContextCompat.getColor(context, R.color.primary)
             } else {
-                ContextCompat.getColor(context, com.xenon.commons.accesspoint.R.color.transparent)
+                ContextCompat.getColor(context, R.color.transparent)
             }
             val alpha = if (state) 0.5f else 0.0f
             val tintedColor = ColorUtils.setAlphaComponent(color, (255 * alpha).toInt())
@@ -217,13 +217,13 @@ class TodoListAdapter(
                 binding.selectedCheckbox.buttonTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
                         context,
-                        com.xenon.commons.accesspoint.R.color.primary
+                        R.color.primary
                     )
                 )
             } else {
                 val color = ContextCompat.getColor(
                     context,
-                    com.xenon.commons.accesspoint.R.color.textOnPrimary
+                    R.color.textOnPrimary
                 )
                 val halfAlphaColor = ColorUtils.setAlphaComponent(color, (255 * 0.5).toInt())
                 binding.selectedCheckbox.buttonTintList = ColorStateList.valueOf(halfAlphaColor)

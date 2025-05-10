@@ -2,7 +2,7 @@ package com.xenon.todolist.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.xenon.todolist.TodoList
-import com.xenon.todolist.TodoListAdapter
+import com.xenon.todolist.adapter.TodoListAdapter
 
 class TodoListViewModel : LiveListViewModel<TodoList>() {
     val selectedIdx = MutableLiveData<Int>(0)

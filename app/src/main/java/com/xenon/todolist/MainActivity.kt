@@ -29,6 +29,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.activities.BaseActivity
 import com.xenon.todolist.activities.SettingsActivity
+import com.xenon.todolist.adapter.TaskItemClickListener
+import com.xenon.todolist.adapter.TodoListAdapter
 import com.xenon.todolist.databinding.ActivityMainBinding
 import com.xenon.todolist.fragments.TaskDialogFragment
 import com.xenon.todolist.fragments.TaskItemFragment
