@@ -1,121 +1,118 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <EditText
-        android:id="@+id/listNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:inputType="text"
-        android:hint="@string/name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <requestFocus/>
-    </EditText>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<?xml version="1.0" encoding="utf-8"?><!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent"-->
-<!--    android:orientation="vertical"-->
-<!--    tools:context=".fragments.TaskDialogFragment">-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/cardTitle"-->
+<!--    <EditText-->
+<!--        android:id="@+id/listNameEditText"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        android:layout_marginTop="15dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:text="@string/create_task_list_dialog"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/icon"-->
-<!--        android:textSize="30sp"-->
-<!--        tools:ignore="TextContrastCheck" />-->
+<!--        android:layout_margin="24dp"-->
+<!--        android:inputType="text"-->
+<!--        android:hint="@string/name"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent">-->
+<!--        <requestFocus/>-->
+<!--    </EditText>-->
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/listNameEditTextInput"-->
-<!--        style="@style/XenonInputFilledBox"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        android:layout_marginVertical="10dp"-->
-<!--        android:background="@drawable/tile_inputbox"-->
-<!--        android:backgroundTint="@color/transparent"-->
-<!--        app:counterEnabled="false"-->
-<!--        app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"-->
-<!--        app:cursorColor="@color/primary"-->
-<!--        app:endIconTint="@color/primary"-->
-<!--        app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2"-->
-<!--        app:startIconTint="@color/primary">-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.TaskDialogFragment">
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/listNameEditText"-->
-<!--            style="@style/XenonInputFilledBox"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:autofillHints=""-->
-<!--            android:hint="@string/name"-->
-<!--            android:inputType="text" />-->
+    <TextView
+        android:id="@+id/cardTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/create_task_list_dialog"
+        android:textAlignment="center"
+        android:textColor="@color/icon"
+        android:textSize="30sp"
+        tools:ignore="TextContrastCheck" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/listNameEditTextInput"
+        style="@style/XenonInputFilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@drawable/tile_inputbox"
+        android:backgroundTint="@color/transparent"
+        android:clipToOutline="true"
+        app:counterEnabled="false"
+        app:counterTextAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:errorTextAppearance="@style/TextAppearance.AppCompat.Body2">
 
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginVertical="10dp"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <Space-->
-<!--            android:id="@+id/space"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/save"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/save"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:backgroundTint="@color/enable_disable_button_color"-->
-<!--            android:enabled="false"-->
-<!--            android:maxLines="1"-->
-<!--            android:text="@string/save"-->
-<!--            android:textColor="@color/enable_disable_text_color"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/cancel"-->
-<!--            app:layout_constraintStart_toEndOf="@id/space"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:ignore="TextContrastCheck" />-->
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/cancel"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:backgroundTint="@android:color/transparent"-->
-<!--            android:maxLines="1"-->
-<!--            android:text="@string/cancel"-->
-<!--            android:textColor="@color/primary"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@id/save"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:ignore="TextContrastCheck" />-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/listNameEditText"
+            style="@style/XenonInputFilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints=""
+            android:hint="@string/name"
+            android:inputType="text" />
 
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </com.google.android.material.textfield.TextInputLayout>
 
-<!--</LinearLayout>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/save"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/enable_disable_button_color"
+            android:enabled="false"
+            android:maxLines="1"
+            android:text="@string/save"
+            android:textColor="@color/enable_disable_text_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cancel"
+            app:layout_constraintStart_toEndOf="@id/space"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            android:maxLines="1"
+            android:text="@string/cancel"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/save"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

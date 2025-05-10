@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.activities.BaseActivity
@@ -375,25 +376,31 @@ class MainActivity : BaseActivity() {
     private fun showAddListDialog() {
         val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
         val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
+        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
         val builder = MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.create_task_list_dialog)
-            .setPositiveButton(R.string.save) { _, _ ->
-                val taskListName = titleEditText.text.toString()
-                if (taskListName.isNotBlank())
-                    todoListModel.add(
-                        TodoList(
-                            taskListName,
-                            ArrayList(),
-                            System.currentTimeMillis()
-                        )
-                    )
-            }
-            .setNegativeButton(R.string.cancel, null)
             .setView(addTaskView)
-
         val dialog = builder.create()
+
+        saveBtn.setOnClickListener {
+            val taskListName = titleEditText.text.toString()
+            if (taskListName.isNotBlank()) {
+                todoListModel.add(
+                    TodoList(
+                        taskListName,
+                        ArrayList(),
+                        System.currentTimeMillis()
+                    )
+                )
+            }
+            dialog.dismiss()
+        }
+        cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            saveBtn.isEnabled = false
             titleEditText.requestFocus()
         }
         titleEditText.addTextChangedListener(object : TextWatcher {
@@ -401,7 +408,7 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = p0?.isNotBlank() ?: false
+                saveBtn.isEnabled = p0?.isNotBlank() == true
             }
 
             override fun afterTextChanged(p0: Editable?) {
