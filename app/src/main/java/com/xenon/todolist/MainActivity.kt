@@ -135,14 +135,26 @@ class MainActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
-        val statusBarHeight = getResources().getDimensionPixelSize(
-            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
-        binding.coordinatorLayoutMain.updatePadding(top = statusBarHeight)
+        val statusBarHeight = resources.getDimensionPixelSize(
+            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
+        )
+        val navHeight = resources.getDimensionPixelSize(
+            Resources.getSystem().getIdentifier("navigation_bar_height", "dimen", "android")
+        )
+
+        // Setting margins of specific elements to avoid navbar giving the statusbar a background
+        binding.coordinatorLayoutMain.updatePadding(
+            top = statusBarHeight + binding.coordinatorLayoutMain.paddingTop,
+            bottom = navHeight + binding.coordinatorLayoutMain.paddingBottom
+        )
         binding.drawerLinearRoot?.apply {
             val lp = this.layoutParams as ViewGroup.MarginLayoutParams
             lp.topMargin = statusBarHeight + lp.topMargin
+            lp.bottomMargin = navHeight + lp.bottomMargin
             this.layoutParams = lp
         }
+
+        // This method doesnt seem to work on some devices
 //        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
 //            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
 //            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
@@ -160,7 +172,6 @@ class MainActivity : BaseActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            Log.d("bbb", "CLICK 4 ${menuItem.title}")
             when (menuItem.itemId) {
                 R.id.search -> {}
                 R.id.sort -> openSortDialog()
