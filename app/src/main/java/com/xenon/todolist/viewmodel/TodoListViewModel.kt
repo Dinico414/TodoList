@@ -14,6 +14,13 @@ class TodoListViewModel : LiveListViewModel<TodoList>() {
         }
     }
 
+    override fun setList(list: ArrayList<TodoList>) {
+        list.forEachIndexed { i, item ->
+            item.checked = false
+        }
+        super.setList(list)
+    }
+
     override fun add(item: TodoList, idx: Int) {
         super.add(item, idx)
         val newIdx = if (idx < 0) getList().size - 1 else idx
