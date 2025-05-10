@@ -22,6 +22,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.button.MaterialButton
@@ -41,6 +43,9 @@ import com.xenon.todolist.viewmodel.TodoListViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
+
+val Int.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -87,38 +92,32 @@ class MainActivity : BaseActivity() {
             selectedIdx = 0
         todoListModel.selectedIdx.postValue(selectedIdx)
 
-//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
-//            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-//            binding.listActionButton.visibility = if(imeVisible) View.GONE else View.VISIBLE
-//            insets
-//        }
-
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-//        val statusBarHeight = resources.getDimensionPixelSize(
-//            resources.getIdentifier("status_bar_height", "dimen", "android"));
-//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
-//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
-//            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
-//            binding.root.updatePadding(top = insets.top)
-//            WindowInsetsCompat.CONSUMED
-//        }
-        val statusBarHeight = getResources().getDimensionPixelSize(
-            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
-
-        binding.coordinatorLayoutMain.updatePadding(top = statusBarHeight)
-        binding.drawerLinearRoot?.apply {
-            val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-            lp.topMargin = statusBarHeight
-            this.layoutParams = lp
-        }
+        fixMargins()
     }
 
     override fun onResume() {
         super.onResume()
         applyTheme(true)
+    }
+
+    private fun fixMargins() {
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//        )
+        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
+
+            binding.coordinatorLayoutMain.updatePadding(top = insets.top)
+            binding.drawerLinearRoot?.apply {
+                val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+                lp.topMargin = insets.top + 15.dp
+                this.layoutParams = lp
+            }
+
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setupToolbar() {
