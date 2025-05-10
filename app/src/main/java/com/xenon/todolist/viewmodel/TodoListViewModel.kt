@@ -13,4 +13,23 @@ class TodoListViewModel : LiveListViewModel<TodoList>() {
             update(i, TodoListAdapter.BindAction.ALL_UNCHECKED)
         }
     }
+
+    override fun add(item: TodoList, idx: Int) {
+        super.add(item, idx)
+        val newIdx = if (idx < 0) getList().size - 1 else idx
+        selectedIdx.postValue(newIdx)
+    }
+
+    override fun remove(idx: Int) {
+        super.remove(idx)
+        val selIdx = selectedIdx.value
+        selIdx?.apply {
+            if (idx == selIdx) {
+                selectedIdx.postValue(0)
+            }
+            else if (idx < selIdx) {
+                selectedIdx.postValue(selIdx - 1)
+            }
+        }
+    }
 }

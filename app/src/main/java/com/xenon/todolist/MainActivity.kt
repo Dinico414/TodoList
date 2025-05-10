@@ -435,6 +435,7 @@ class MainActivity : BaseActivity() {
                     checkedItems.forEach {
                         todoListModel.remove(it)
                     }
+                    todoListModel.uncheckAll()
                 }
                 onComplete()
             }

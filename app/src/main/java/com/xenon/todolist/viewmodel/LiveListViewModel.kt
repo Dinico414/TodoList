@@ -72,7 +72,7 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         return currentIdx
     }
 
-    fun add(item: T, idx: Int = -1) {
+    open fun add(item: T, idx: Int = -1) {
         val to = calculateItemPosition(item, if (idx < 0) items.size else idx)
         maxTaskId++
         item.id = maxTaskId
@@ -93,7 +93,7 @@ open class LiveListViewModel<T: LiveListItem> : ViewModel() {
         remove(idx)
     }
 
-    fun remove(idx: Int) {
+    open fun remove(idx: Int) {
         val item = items.removeAt(idx)
         val f = currentFilter
         f?.apply {
