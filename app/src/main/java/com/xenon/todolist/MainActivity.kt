@@ -6,10 +6,13 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
+import android.hardware.SensorManager
+import android.hardware.display.DisplayManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -30,6 +33,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import com.google.android.material.button.MaterialButton
@@ -118,7 +122,8 @@ class MainActivity : BaseActivity() {
 //                            .filterIsInstance<FoldingFeature>()
                             .firstOrNull()
                         // Use information from the foldingFeature object.
-                        if (foldingFeature is FoldingFeature) Toast.makeText(this@MainActivity, "${foldingFeature?.state.toString()} ${foldingFeature?.isSeparating} ${foldingFeature?.orientation.toString()} ${foldingFeature?.occlusionType.toString()}", Toast.LENGTH_SHORT).show()
+//                        if (foldingFeature is FoldingFeature) Toast.makeText(this@MainActivity, "${foldingFeature?.state.toString()} ${foldingFeature?.isSeparating} ${foldingFeature?.orientation.toString()} ${foldingFeature?.occlusionType.toString()}", Toast.LENGTH_SHORT).show()
+//                        else if (foldingFeature is DisplayFeature) Toast.makeText(this@MainActivity, "${foldingFeature.toString()}", Toast.LENGTH_SHORT).show()
                     }
 
             }
@@ -131,43 +136,59 @@ class MainActivity : BaseActivity() {
     }
 
     private fun fixMargins() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-        val statusBarHeight = resources.getDimensionPixelSize(
-            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
-        )
-        val navHeight = resources.getDimensionPixelSize(
-            Resources.getSystem().getIdentifier("navigation_bar_height", "dimen", "android")
-        )
-
-        // Setting margins of specific elements to avoid navbar giving the statusbar a background
-        binding.coordinatorLayoutMain.updatePadding(
-            top = statusBarHeight + binding.coordinatorLayoutMain.paddingTop,
-            bottom = navHeight + binding.coordinatorLayoutMain.paddingBottom
-        )
-        binding.drawerLinearRoot?.apply {
-            val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-            lp.topMargin = statusBarHeight + lp.topMargin
-            lp.bottomMargin = navHeight + lp.bottomMargin
-            this.layoutParams = lp
-        }
-
-        // This method doesnt seem to work on some devices
-//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
-//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
-//            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//        )
+//        val statusBarHeight = resources.getDimensionPixelSize(
+//            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
+//        )
+//        var navHeight = resources.getDimensionPixelSize(
+//            Resources.getSystem().getIdentifier("navigation_bar_height", "dimen", "android")
+//        )
+//        if (navHeight < 15.dp) navHeight = 15.dp
 //
-//            binding.coordinatorLayoutMain.updatePadding(top = insets.top)
-//            binding.drawerLinearRoot?.apply {
-//                val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-//                lp.topMargin = insets.top + lp.topMargin
-//                this.layoutParams = lp
-//            }
+////        val displayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
+////        displayManager.registerDisplayListener(object : DisplayManager.DisplayListener{
+////            override fun onDisplayAdded(displayId: Int) {}
+////            override fun onDisplayRemoved(displayId: Int) {}
+////            override fun onDisplayChanged(displayId: Int) {}
+////        }, null)
+////        val ol = object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+////            override fun onOrientationChanged(orientation: Int) {
+////
+////            }
+////        }
+////        if (ol.canDetectOrientation()) ol.enable() else ol.disable()
 //
-//            WindowInsetsCompat.CONSUMED
+//        // Setting margins of specific elements to avoid navbar giving the statusbar a background
+//        binding.coordinatorLayoutMain.updatePadding(
+//            top = statusBarHeight + binding.coordinatorLayoutMain.paddingTop,
+//            bottom = navHeight + binding.coordinatorLayoutMain.paddingBottom
+//        )
+//        binding.drawerLinearRoot?.apply {
+//            val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+//            lp.topMargin = statusBarHeight + lp.topMargin
+//            lp.bottomMargin = navHeight + lp.bottomMargin
+//            this.layoutParams = lp
 //        }
+
+//        // This method doesnt seem to work on some devices
+        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
+
+            binding.coordinatorLayoutMain.updatePadding(top = insets.top)
+            binding.drawerLinearRoot?.apply {
+                val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+                lp.topMargin = insets.top + lp.topMargin
+                this.layoutParams = lp
+            }
+
+            Toast.makeText(this, insets.toString(), Toast.LENGTH_LONG).show()
+
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setupToolbar() {
