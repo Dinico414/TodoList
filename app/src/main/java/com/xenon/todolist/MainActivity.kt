@@ -118,7 +118,7 @@ class MainActivity : BaseActivity() {
                             .filterIsInstance<FoldingFeature>()
                             .firstOrNull()
                         // Use information from the foldingFeature object.
-                        Toast.makeText(this@MainActivity, "Fold toggled ${foldingFeature?.state.toString()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "${foldingFeature?.state.toString()} ${foldingFeature?.isSeparating} ${foldingFeature?.orientation.toString()} ${foldingFeature?.occlusionType.toString()}", Toast.LENGTH_SHORT).show()
                     }
 
             }
