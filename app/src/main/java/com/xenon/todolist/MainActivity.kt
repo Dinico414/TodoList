@@ -115,10 +115,10 @@ class MainActivity : BaseActivity() {
                     .collect { layoutInfo ->
                         // New posture information.
                         val foldingFeature = layoutInfo.displayFeatures
-                            .filterIsInstance<FoldingFeature>()
+//                            .filterIsInstance<FoldingFeature>()
                             .firstOrNull()
                         // Use information from the foldingFeature object.
-                        Toast.makeText(this@MainActivity, "${foldingFeature?.state.toString()} ${foldingFeature?.isSeparating} ${foldingFeature?.orientation.toString()} ${foldingFeature?.occlusionType.toString()}", Toast.LENGTH_SHORT).show()
+                        if (foldingFeature is FoldingFeature) Toast.makeText(this@MainActivity, "${foldingFeature?.state.toString()} ${foldingFeature?.isSeparating} ${foldingFeature?.orientation.toString()} ${foldingFeature?.occlusionType.toString()}", Toast.LENGTH_SHORT).show()
                     }
 
             }
@@ -131,23 +131,31 @@ class MainActivity : BaseActivity() {
     }
 
     private fun fixMargins() {
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
-            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
-
-            binding.coordinatorLayoutMain.updatePadding(top = insets.top)
-            binding.drawerLinearRoot?.apply {
-                val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-                lp.topMargin = insets.top + lp.topMargin
-                this.layoutParams = lp
-            }
-
-            WindowInsetsCompat.CONSUMED
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        val statusBarHeight = getResources().getDimensionPixelSize(
+            Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
+        binding.coordinatorLayoutMain.updatePadding(top = statusBarHeight)
+        binding.drawerLinearRoot?.apply {
+            val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+            lp.topMargin = statusBarHeight + lp.topMargin
+            this.layoutParams = lp
         }
+//        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
+//            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout())
+//            v.updatePadding(insets.left, 0, insets.right, insets.bottom)
+//
+//            binding.coordinatorLayoutMain.updatePadding(top = insets.top)
+//            binding.drawerLinearRoot?.apply {
+//                val lp = this.layoutParams as ViewGroup.MarginLayoutParams
+//                lp.topMargin = insets.top + lp.topMargin
+//                this.layoutParams = lp
+//            }
+//
+//            WindowInsetsCompat.CONSUMED
+//        }
     }
 
     private fun setupToolbar() {
