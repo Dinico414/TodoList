@@ -54,7 +54,8 @@ android {
 }
 
 dependencies {
-    implementation (libs.dinico414.xenon.commons)
+    implementation(libs.dinico414.xenon.commons)
+    implementation("androidx.window:window:1.3.0")
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.core.ktx)
     implementation(libs.constraintlayout)
@@ -69,5 +70,4 @@ dependencies {
     implementation(libs.recyclerview.swipedecorator)
     implementation(libs.androidx.recyclerview)
     implementation(libs.play.services.auth)
-
 }

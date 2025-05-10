@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -26,6 +27,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -40,12 +46,18 @@ import com.xenon.todolist.fragments.TodoListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import com.xenon.todolist.viewmodel.TodoListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
+import kotlin.math.roundToInt
 
 val Int.dp: Int
-    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+    get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
+
+val Float.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -93,6 +105,24 @@ class MainActivity : BaseActivity() {
         todoListModel.selectedIdx.postValue(selectedIdx)
 
         fixMargins()
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Safely collects from WindowInfoTracker when the lifecycle is
+                // STARTED and stops collection when the lifecycle is STOPPED.
+                WindowInfoTracker.getOrCreate(this@MainActivity)
+                    .windowLayoutInfo(this@MainActivity)
+                    .collect { layoutInfo ->
+                        // New posture information.
+                        val foldingFeature = layoutInfo.displayFeatures
+                            .filterIsInstance<FoldingFeature>()
+                            .firstOrNull()
+                        // Use information from the foldingFeature object.
+                        Toast.makeText(this@MainActivity, "Fold toggled ${foldingFeature?.state.toString()}", Toast.LENGTH_SHORT).show()
+                    }
+
+            }
+        }
     }
 
     override fun onResume() {
@@ -112,7 +142,7 @@ class MainActivity : BaseActivity() {
             binding.coordinatorLayoutMain.updatePadding(top = insets.top)
             binding.drawerLinearRoot?.apply {
                 val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-                lp.topMargin = insets.top + 15.dp
+                lp.topMargin = insets.top + lp.topMargin
                 this.layoutParams = lp
             }
 
