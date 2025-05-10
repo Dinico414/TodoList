@@ -17,8 +17,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -375,15 +375,19 @@ class MainActivity : BaseActivity() {
 
     private fun showAddListDialog() {
         val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
-        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+
+        val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
+        val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
         val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
+
         val builder = MaterialAlertDialogBuilder(this)
             .setView(addTaskView)
         val dialog = builder.create()
 
+        title.text = resources.getText(R.string.add_list)
         saveBtn.setOnClickListener {
-            val taskListName = titleEditText.text.toString()
+            val taskListName = nameEditText.text.toString()
             if (taskListName.isNotBlank()) {
                 todoListModel.add(
                     TodoList(
@@ -401,9 +405,9 @@ class MainActivity : BaseActivity() {
 
         dialog.setOnShowListener {
             saveBtn.isEnabled = false
-            titleEditText.requestFocus()
+            nameEditText.requestFocus()
         }
-        titleEditText.addTextChangedListener(object : TextWatcher {
+        nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
@@ -438,19 +442,42 @@ class MainActivity : BaseActivity() {
 
     private fun showEditListDialog(item: TodoList, onComplete: () -> Unit) {
         val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
-        val titleEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
-        titleEditText.setText(item.name)
-        titleEditText.setSelection(item.name.length)
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.edit_list)
-            .setPositiveButton(R.string.ok) { _, _ ->
-                item.name = titleEditText.text.toString()
-                todoListModel.update(item, true)
-                onComplete()
-            }
-            .setNegativeButton(R.string.cancel, null)
+
+        val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
+        val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
+        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
+
+        val dialog = MaterialAlertDialogBuilder(this)
             .setView(addTaskView)
-            .show()
+            .create()
+
+        title.text = resources.getText(R.string.edit_list)
+        nameEditText.setText(item.name)
+        nameEditText.setSelection(item.name.length)
+        saveBtn.setOnClickListener {
+            item.name = nameEditText.text.toString()
+            todoListModel.update(item, true)
+            onComplete()
+            dialog.dismiss()
+        }
+        saveBtn.isEnabled = item.name.isNotEmpty()
+        cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        nameEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                saveBtn.isEnabled = p0?.isNotBlank() == true
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+
+        dialog.show()
     }
 
     private fun applyTheme(recreateActivity: Boolean = false) {
