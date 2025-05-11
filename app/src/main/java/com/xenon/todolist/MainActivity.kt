@@ -108,7 +108,7 @@ class MainActivity : BaseActivity() {
             selectedIdx = 0
         todoListModel.selectedIdx.postValue(selectedIdx)
 
-        fixMargins()
+//        fixMargins()
 
         lifecycleScope.launch(Dispatchers.Main) {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
