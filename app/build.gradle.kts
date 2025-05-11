@@ -12,8 +12,8 @@ android {
         applicationId = "com.xenon.todolist"
         minSdk = 29
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.6.5"
+        versionCode = 6
+        versionName = "1.7.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
