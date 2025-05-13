@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.xenon.todolist"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.xenon.todolist"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 6
         versionName = "1.7.5"
 
