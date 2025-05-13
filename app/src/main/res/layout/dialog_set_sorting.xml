@@ -52,6 +52,14 @@
                 android:paddingBottom="@dimen/border_margin"
                 android:text="@string/sort_by_completeness"/>
 
+            <RadioButton
+                android:id="@+id/sorting_dialog_radio_by_importance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/border_margin"
+                android:paddingBottom="@dimen/border_margin"
+                android:text="sort_by_importance"/>
+
         </RadioGroup>
     </LinearLayout>
 </ScrollView>

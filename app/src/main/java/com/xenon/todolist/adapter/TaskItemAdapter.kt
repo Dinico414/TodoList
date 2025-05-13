@@ -130,14 +130,14 @@ class TaskItemViewHolder(
         }
 
         // Check if highImportance exists and set visibility of highImportanceIcon
-        if (taskItem.highImportance) {
+        if (taskItem.isHighImportance()) {
             binding.highImportanceIcon.visibility = View.VISIBLE
         } else {
             binding.highImportanceIcon.visibility = View.GONE
         }
 
 // Check if highestImportance exists and set visibility of highestImportanceIcon
-        if (taskItem.highestImportance) {
+        if (taskItem.isHighestImportance()) {
             binding.highestImportanceIcon.visibility = View.VISIBLE
         } else {
             binding.highestImportanceIcon.visibility = View.GONE

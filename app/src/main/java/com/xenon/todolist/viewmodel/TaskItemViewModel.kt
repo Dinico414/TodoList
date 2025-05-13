@@ -8,7 +8,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
     private var sortType = SortType.BY_COMPLETENESS
 
     enum class SortType {
-        NONE, BY_COMPLETENESS, BY_CREATION_DATE, BY_DUE_DATE
+        NONE, BY_COMPLETENESS, BY_CREATION_DATE, BY_DUE_DATE, BY_IMPORTANCE
     }
 
     override fun sortItems() {
@@ -33,6 +33,7 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             SortType.BY_COMPLETENESS -> list.sortBy { taskItem -> if (taskItem.isCompleted()) 1 else 0 }
             SortType.BY_CREATION_DATE -> list.sortBy { taskItem -> taskItem.createdDate }
             SortType.BY_DUE_DATE -> list.sortBy { taskItem -> taskItem.dueDateTime }
+            SortType.BY_IMPORTANCE -> list.sortBy { taskItem -> taskItem.importance }
             else -> {}
         }
     }
@@ -67,6 +68,14 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
 
                 newIdx = if (currentIdx < pivotIdx) pivotIdx else currentIdx
             }
+            SortType.BY_IMPORTANCE -> {
+                var pivotIdx = items.indexOfFirst { v ->
+                    v.importance > item.importance || v.dueDateTime == item.dueDateTime && v != item
+                }
+                if (pivotIdx > 0) pivotIdx -= 1
+                else if (pivotIdx < 0) pivotIdx = items.size - 1
+                newIdx = if (currentIdx < pivotIdx) pivotIdx else currentIdx
+            }
             else -> {
                 newIdx = currentIdx
             }
@@ -82,6 +91,9 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
             return false
         }
         else if (sortType == SortType.BY_DUE_DATE && items[from].dueTime != items[to].dueTime) {
+            return false
+        }
+        else if (sortType == SortType.BY_IMPORTANCE && items[from].importance != items[to].importance) {
             return false
         }
         return super.move(from, to)

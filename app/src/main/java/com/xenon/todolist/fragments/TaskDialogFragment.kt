@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.xenon.commons.accesspoint.R.color
+import com.xenon.todolist.Importance
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
 import com.xenon.todolist.databinding.FragmentTaskDialogBinding
@@ -38,7 +39,8 @@ class TaskDialogFragment : DialogFragment() {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
             val curTime = Instant.now().toEpochMilli()
-            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, highImportance = false, highestImportance = false, children = ArrayList())
+            // Update TaskItem initialization to use the Importance enum
+            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, importance = Importance.NO_IMPORTANCE, children = ArrayList())
             return TaskDialogFragment()
         }
     }
@@ -73,11 +75,11 @@ class TaskDialogFragment : DialogFragment() {
             if (taskItem.dueDate > 0)
                 updateDateButtonText()
 
-            // Set initial state of importance toggle group
-            when {
-                taskItem.highestImportance -> binding.importanceToggleGroup!!.check(R.id.highestImportanceButton)
-                taskItem.highImportance -> binding.importanceToggleGroup!!.check(R.id.highImportanceButton)
-                else -> binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
+            // Set initial state of importance toggle group based on the Importance enum
+            when (taskItem.importance) {
+                Importance.HIGHEST_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.highestImportanceButton)
+                Importance.HIGH_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.highImportanceButton)
+                Importance.NO_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
             }
 
         } else {
@@ -89,19 +91,11 @@ class TaskDialogFragment : DialogFragment() {
         // Add listener to update taskItem properties based on importance selection
         binding.importanceToggleGroup!!.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
             if (isChecked) {
-                when (checkedId) {
-                    R.id.lowImportanceButton -> {
-                        taskItem.highImportance = false
-                        taskItem.highestImportance = false
-                    }
-                    R.id.highImportanceButton -> {
-                        taskItem.highImportance = true
-                        taskItem.highestImportance = false
-                    }
-                    R.id.highestImportanceButton -> {
-                        taskItem.highImportance = false
-                        taskItem.highestImportance = true
-                    }
+                taskItem.importance = when (checkedId) {
+                    R.id.lowImportanceButton -> Importance.NO_IMPORTANCE
+                    R.id.highImportanceButton -> Importance.HIGH_IMPORTANCE
+                    R.id.highestImportanceButton -> Importance.HIGHEST_IMPORTANCE
+                    else -> Importance.NO_IMPORTANCE // Default to no importance
                 }
             }
         }
@@ -218,7 +212,7 @@ class TaskDialogFragment : DialogFragment() {
             updateDateButtonText()
         }
 
-        datePicker.show(childFragmentManager, "DATE_PICKER_TAG")
+        datePicker.show(childFragmentManager, "DATE_PICKER_TAG)")
     }
 
     private fun updateTimeButtonText() {

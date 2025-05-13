@@ -10,6 +10,13 @@ import java.text.DateFormat
 private val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
 private val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
 
+// Define the Importance enum
+enum class Importance(val value: Int) {
+    NO_IMPORTANCE(0),
+    HIGH_IMPORTANCE(1),
+    HIGHEST_IMPORTANCE(2)
+}
+
 @Serializable
 data class TaskItem(
     override var id: Int,
@@ -19,8 +26,8 @@ data class TaskItem(
     var dueDate: Long = -1,
     var createdDate: Long,
     var completedDate: Long = -1,
-    var highImportance: Boolean = false,
-    var highestImportance: Boolean = false,
+    // Replace the boolean flags with the Importance enum
+    var importance: Importance = Importance.NO_IMPORTANCE,
     var steps: Int = 0,
     var files: Int = 0,
     var notification: Int = 0,
@@ -54,4 +61,8 @@ data class TaskItem(
 
     val dueTimeString: String
         get() = timeFormat.format(dueTime)
+
+    // You can add helper functions to check importance level if needed
+    fun isHighImportance() = importance == Importance.HIGH_IMPORTANCE
+    fun isHighestImportance() = importance == Importance.HIGHEST_IMPORTANCE
 }
