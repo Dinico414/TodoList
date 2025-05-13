@@ -55,7 +55,7 @@ android {
 
 dependencies {
     implementation(libs.dinico414.xenon.commons)
-    implementation("androidx.window:window:1.3.0")
+    implementation(libs.androidx.window)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.core.ktx)
     implementation(libs.constraintlayout)

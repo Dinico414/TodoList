@@ -1,65 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sorting_dialog_scrollview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/border_margin"
+    android:paddingTop="@dimen/border_margin">
 
-    <LinearLayout
-        android:id="@+id/sorting_dialog_holder"
+
+    <View
+        android:id="@+id/sorting_dialog_divider_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/border_margin"
-        android:paddingTop="@dimen/border_margin">
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone"/>
 
-        <RadioGroup
-            android:id="@+id/sorting_dialog_radio_sorting"
+    <ScrollView
+        android:id="@+id/sorting_dialog_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/sorting_dialog_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/border_margin">
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/sorting_dialog_radio_by_none"
+            <RadioGroup
+                android:id="@+id/sorting_dialog_radio_sorting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/border_margin"
-                android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_none"/>
+                android:layout_marginBottom="@dimen/border_margin">
 
-            
-            <RadioButton
-                android:id="@+id/sorting_dialog_radio_by_creation_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/border_margin"
-                android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_creation_date"/>
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_none"/>
 
-            <RadioButton
-                android:id="@+id/sorting_dialog_radio_by_due_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/border_margin"
-                android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_due_date"/>
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_creation_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_creation_date"/>
+
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_due_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_due_date"/>
+
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_completeness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_completeness"/>
+
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_name"/>
+
+                <RadioButton
+                    android:id="@+id/sorting_dialog_radio_by_importance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/border_margin"
+                    android:paddingBottom="@dimen/border_margin"
+                    android:text="@string/sort_by_importance"/>
+
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+    <View
+        android:id="@+id/sorting_dialog_divider_2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone"/>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/sorting_dialog_toggle_direction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
 
-            <RadioButton
-                android:id="@+id/sorting_dialog_radio_by_completeness"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/border_margin"
-                android:paddingBottom="@dimen/border_margin"
-                android:text="@string/sort_by_completeness"/>
 
-            <RadioButton
-                android:id="@+id/sorting_dialog_radio_by_importance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/border_margin"
-                android:paddingBottom="@dimen/border_margin"
-                android:text="sort_by_importance"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sorting_dialog_ascending"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/ascending"
+            app:icon="@drawable/sort_ascending"
+            tools:ignore="VisualLintButtonSize" />
 
-        </RadioGroup>
-    </LinearLayout>
-</ScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sorting_dialog_descending"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/descending"
+            app:icon="@drawable/sort_descending"
+            tools:ignore="VisualLintButtonSize" />
+
+
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+</LinearLayout>

@@ -6,19 +6,16 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
-import android.hardware.SensorManager
-import android.hardware.display.DisplayManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import android.widget.ScrollView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -33,10 +30,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.window.layout.DisplayFeature
-import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xenon.todolist.activities.BaseActivity
@@ -253,14 +249,44 @@ class MainActivity : BaseActivity() {
     private fun openSortDialog() {
         val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
         val radioView = view.findViewById<RadioGroup>(R.id.sorting_dialog_radio_sorting)
+        val directionToggleGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.sorting_dialog_toggle_direction) // Assuming you added this
+        val scrollView = view.findViewById<ScrollView>(R.id.sorting_dialog_scrollview)
+        val dividerTop = view.findViewById<View>(R.id.sorting_dialog_divider_1)
+        val dividerBottom = view.findViewById<View>(R.id.sorting_dialog_divider_2)
+
+        // Set initial sort type selection
         radioView.check(
             when (taskItemsModel.getSortType()) {
                 TaskItemViewModel.SortType.BY_COMPLETENESS -> R.id.sorting_dialog_radio_by_completeness
                 TaskItemViewModel.SortType.BY_CREATION_DATE -> R.id.sorting_dialog_radio_by_creation_date
                 TaskItemViewModel.SortType.BY_DUE_DATE -> R.id.sorting_dialog_radio_by_due_date
+                TaskItemViewModel.SortType.BY_NAME -> R.id.sorting_dialog_radio_by_name
+                TaskItemViewModel.SortType.BY_IMPORTANCE -> R.id.sorting_dialog_radio_by_importance
                 else -> R.id.sorting_dialog_radio_by_none
             }
         )
+
+        // Set initial sort direction selection
+        when (taskItemsModel.getSortDirection()) {
+            TaskItemViewModel.SortDirection.ASCENDING -> directionToggleGroup.check(R.id.sorting_dialog_ascending) // Assuming you added this ID
+            TaskItemViewModel.SortDirection.DESCENDING -> directionToggleGroup.check(R.id.sorting_dialog_descending) // Assuming you added this ID
+        }
+
+        scrollView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                scrollView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                val canScroll = scrollView.height < scrollView.getChildAt(0).height
+
+                if (canScroll) {
+                    dividerTop.visibility = View.VISIBLE
+                    dividerBottom.visibility = View.VISIBLE
+                } else {
+                    dividerTop.visibility = View.GONE
+                    dividerBottom.visibility = View.GONE
+                }
+            }
+        })
 
         MaterialAlertDialogBuilder(this)
             .setPositiveButton(R.string.ok) { _, _ ->
@@ -268,13 +294,23 @@ class MainActivity : BaseActivity() {
                     R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
                     R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
                     R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
+                    R.id.sorting_dialog_radio_by_name -> TaskItemViewModel.SortType.BY_NAME
+                    R.id.sorting_dialog_radio_by_importance -> TaskItemViewModel.SortType.BY_IMPORTANCE
                     else -> TaskItemViewModel.SortType.NONE
                 }
+
+                val sortDirection = when (directionToggleGroup.checkedButtonId) { // Get checked button ID
+                    R.id.sorting_dialog_ascending -> TaskItemViewModel.SortDirection.ASCENDING // Assuming you added this ID
+                    R.id.sorting_dialog_descending -> TaskItemViewModel.SortDirection.DESCENDING // Assuming you added this ID
+                    else -> TaskItemViewModel.SortDirection.ASCENDING // Default to ascending
+                }
+
                 with(sharedPreferences.edit()) {
                     putString("sortType", sortType.name)
+                    putString("sortDirection", sortDirection.name) // Save the sort direction
                     apply()
                 }
-                taskItemsModel.setSortType(sortType)
+                taskItemsModel.setSortType(sortType, sortDirection) // Call with both type and direction
             }
             .setNegativeButton(R.string.cancel, null)
             .setTitle(R.string.sort_by)

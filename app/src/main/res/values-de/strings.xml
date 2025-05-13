@@ -47,4 +47,9 @@
     <string name="high">Hoch</string>
     <string name="highest">Höchste</string>
     <string name="priority">Priorität</string>
+    <string name="sort_by_importance">Priorität</string>
+    <string name="sort_by_name">Name</string>
+    <string name="ascending">Aufsteigend</string>
+    <string name="descending">Absteigend</string>
+
 </resources>

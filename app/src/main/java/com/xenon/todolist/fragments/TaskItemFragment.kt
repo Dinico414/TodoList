@@ -48,11 +48,24 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
         val sharedPref = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
 
         taskItemsModel = ViewModelProvider(this)[TaskItemViewModel::class.java]
-        val currentSortType = sharedPref.getString("sortType", null)
-        if (currentSortType != null) {
-            val t = TaskItemViewModel.SortType.valueOf(currentSortType)
-            taskItemsModel.setSortType(t)
+
+        val currentSortTypeString = sharedPref.getString("sortType", null)
+        val currentSortDirectionString = sharedPref.getString("sortDirection", null) // Get the saved direction
+
+        val currentSortType = if (currentSortTypeString != null) {
+            TaskItemViewModel.SortType.valueOf(currentSortTypeString)
+        } else {
+            TaskItemViewModel.SortType.NONE // Default sort type if none is saved
         }
+
+        val currentSortDirection = if (currentSortDirectionString != null) {
+            TaskItemViewModel.SortDirection.valueOf(currentSortDirectionString)
+        } else {
+            TaskItemViewModel.SortDirection.ASCENDING // Default direction if none is saved
+        }
+
+        // Call setSortType with both type and direction
+        taskItemsModel.setSortType(currentSortType, currentSortDirection)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -183,7 +196,7 @@ class TaskItemFragment : Fragment(R.layout.fragment_task_items) {
                 super.onSelectedChanged(viewHolder, actionState)
 
                 if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
-                    // Scale up the item when dragging starts
+                    // Scale sorting_dialog_ascending the item when dragging starts
                     viewHolder.itemView.animate().scaleX(1.02f).scaleY(1.02f).setDuration(200)
                         .start()
                     // Elevate smoothly when dragging starts

@@ -40,7 +40,8 @@ class TaskDialogFragment : DialogFragment() {
             newTask = taskItem == null
             val curTime = Instant.now().toEpochMilli()
             // Update TaskItem initialization to use the Importance enum
-            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, importance = Importance.NO_IMPORTANCE, children = ArrayList())
+            // Add moreOptionsExpanded with a default value
+            Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, importance = Importance.NO_IMPORTANCE, children = ArrayList(), moreOptionsExpanded = false)
             return TaskDialogFragment()
         }
     }
@@ -54,7 +55,7 @@ class TaskDialogFragment : DialogFragment() {
             .setView(binding.root)
             .create()
 
-        // Initially hide the more options layout
+        // Initially hide the more options layout and set button text/drawable
         binding.moreOptionsLayout!!.visibility = View.GONE
         binding.moreOptionsButton.text = getString(R.string.more_options)
         binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -63,7 +64,6 @@ class TaskDialogFragment : DialogFragment() {
             ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down),
             null
         )
-
 
         if (!newTask) {
             binding.taskTitle.text = getString(R.string.edit_task)
@@ -82,10 +82,32 @@ class TaskDialogFragment : DialogFragment() {
                 Importance.NO_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
             }
 
+            // Set initial state of more options based on TaskItem
+            if (taskItem.moreOptionsExpanded) {
+                binding.moreOptionsLayout!!.visibility = View.VISIBLE
+                binding.moreOptionsButton.text = getString(R.string.less_options)
+                binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_up),
+                    null
+                )
+            } else {
+                binding.moreOptionsLayout!!.visibility = View.GONE
+                binding.moreOptionsButton.text = getString(R.string.more_options)
+                binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down),
+                    null
+                )
+            }
+
         } else {
             binding.taskTitle.text = getString(R.string.new_task)
-            // For new tasks, default to low importance
+            // For new tasks, default to low importance and not expanded more options
             binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
+            taskItem.moreOptionsExpanded = false // Default to not expanded for new tasks
         }
 
         // Add listener to update taskItem properties based on importance selection
@@ -101,7 +123,6 @@ class TaskDialogFragment : DialogFragment() {
         }
 
         // Add click listener for the more options button
-
         binding.moreOptionsButton.setOnClickListener {
             val arrowDropDown = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down)
             val arrowDropUp = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_up)
@@ -120,6 +141,7 @@ class TaskDialogFragment : DialogFragment() {
                     arrowDropUp, // Use the tinted drawable
                     null
                 )
+                taskItem.moreOptionsExpanded = true // Update the property
             } else {
                 binding.moreOptionsLayout!!.visibility = View.GONE
                 binding.moreOptionsButton.text = getString(R.string.more_options)
@@ -129,9 +151,9 @@ class TaskDialogFragment : DialogFragment() {
                     arrowDropDown, // Use the tinted drawable
                     null
                 )
+                taskItem.moreOptionsExpanded = false // Update the property
             }
         }
-
 
         binding.timePickerButton.setOnClickListener {
             openTimePicker()
@@ -244,7 +266,7 @@ class TaskDialogFragment : DialogFragment() {
         }
         taskItem.desc = desc
 
-        // Importance is already updated in the listener, no need to update here
+        // Importance and moreOptionsExpanded are already updated in their respective listeners, no need to update here
 
         if (!newTask) {
             taskItemViewModel.update(taskItem)
