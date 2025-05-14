@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -19,8 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:background="@drawable/tile_cutout"
-            >
+            android:background="@drawable/tile_cutout">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -102,8 +102,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="?attr/actionBarSize"
                 android:background="@drawable/tile_background_100"
-                android:backgroundTint="@color/surfaceContainer"
-                />
+                android:backgroundTint="@color/surfaceContainer" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/NewTaskButton"

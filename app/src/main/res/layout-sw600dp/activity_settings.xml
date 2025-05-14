@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/border_margin"
-        android:background="@drawable/tile_cutout"
-        >
+        android:background="@drawable/tile_cutout">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -44,10 +43,10 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:navigationIconTint="@color/onSurface"
                     app:buttonGravity="bottom"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/ic_arrow_left_vector" />
+                    app:navigationIcon="@drawable/ic_arrow_left_vector"
+                    app:navigationIconTint="@color/onSurface" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -127,8 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="5dp"
-                    android:text="@string/amoled"
-                    />
+                    android:text="@string/amoled" />
 
                 <LinearLayout
                     android:id="@+id/clear_button_holder"
