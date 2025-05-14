@@ -62,6 +62,9 @@ data class TaskItem(
     val dueTimeString: String
         get() = timeFormat.format(dueTime)
 
+    val description: String
+        get() = desc.ifEmpty { "No description" }
+
     fun isHighImportance() = importance == Importance.HIGH_IMPORTANCE
     fun isHighestImportance() = importance == Importance.HIGHEST_IMPORTANCE
 }

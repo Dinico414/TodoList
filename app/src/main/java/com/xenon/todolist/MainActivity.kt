@@ -238,6 +238,7 @@ class MainActivity : BaseActivity() {
                             item.name.lowercase().contains(text)
                                     || item.dueTimeString.lowercase().contains(newText)
                                     || item.dueDateString.lowercase().contains(newText)
+                                    || item.description.lowercase().contains(newText)
                         }
                     }
                     return false
