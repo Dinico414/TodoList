@@ -57,25 +57,25 @@ class TaskDialogFragment : DialogFragment() {
             .setView(binding.root)
             .create()
 
-        binding.taskDialogScrollview!!.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        binding.taskDialogScrollview.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                         override fun onGlobalLayout() {
-                                binding.taskDialogScrollview!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                binding.taskDialogScrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                               val canScroll = binding.taskDialogScrollview!!.height < binding.taskDialogScrollview!!.getChildAt(0).height
+                               val canScroll = binding.taskDialogScrollview.height < binding.taskDialogScrollview.getChildAt(0).height
 
                                 if (canScroll) {
-                                        binding.taskDialogDivider1!!.visibility = View.VISIBLE
-                                        binding.taskDialogDivider2!!.visibility = View.VISIBLE
+                                        binding.taskDialogDivider1.visibility = View.VISIBLE
+                                        binding.taskDialogDivider2.visibility = View.VISIBLE
                                     } else {
-                                        binding.taskDialogDivider1!!.visibility = View.GONE
-                                        binding.taskDialogDivider2!!.visibility = View.GONE
+                                        binding.taskDialogDivider1.visibility = View.GONE
+                                        binding.taskDialogDivider2.visibility = View.GONE
                                     }
                             }
                     })
 
                // Initially hide the dividers
-                binding.taskDialogDivider1!!.visibility = View.GONE
-               binding.taskDialogDivider2!!.visibility = View.GONE
+                binding.taskDialogDivider1.visibility = View.GONE
+               binding.taskDialogDivider2.visibility = View.GONE
         // Initially hide the more options layout and set button text/drawable
         binding.moreOptionsLayout!!.visibility = View.GONE
         binding.moreOptionsButton.text = getString(R.string.more_options)
@@ -211,7 +211,7 @@ class TaskDialogFragment : DialogFragment() {
         val isSystem24Hour = is24HourFormat(requireContext())
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
-        var dueTime = if(taskItem.dueTime > 0) taskItem.dueTime else Instant.now().toEpochMilli()
+        val dueTime = if(taskItem.dueTime > 0) taskItem.dueTime else Instant.now().toEpochMilli()
         val cal = Calendar.getInstance()
         cal.timeInMillis = dueTime
 
@@ -237,7 +237,7 @@ class TaskDialogFragment : DialogFragment() {
 
     private fun openDatePicker() {
         val cal = Calendar.getInstance()
-        var dueDate = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
+        val dueDate = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
         cal.timeInMillis = dueDate
 
         val constraintsBuilder = CalendarConstraints.Builder();

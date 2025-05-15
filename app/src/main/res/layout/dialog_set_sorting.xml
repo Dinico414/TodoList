@@ -19,6 +19,7 @@
         android:textAlignment="center"
         android:textColor="@color/icon"
         android:textSize="30sp"
+        android:visibility="gone"
         tools:ignore="TextContrastCheck" />
 
     <View
@@ -146,7 +147,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginVertical="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Space
             android:id="@+id/space"
