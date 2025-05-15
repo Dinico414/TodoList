@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:backgroundTint="@android:color/transparent"
-                android:fitsSystemWindows="true">
+                >
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/dummy_toolbar"

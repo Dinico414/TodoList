@@ -28,13 +28,12 @@
                 android:layout_height="280dp"
                 android:layout_marginBottom="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:fitsSystemWindows="true">
+               >
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
                     app:collapsedTitleGravity="center|center_vertical"
                     app:collapsedTitleTextAppearance="@style/ActionBar.XenonCollapsedTitleStyle"
                     app:collapsedTitleTextColor="@color/textOnPrimary"
