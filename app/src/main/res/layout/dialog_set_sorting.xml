@@ -19,7 +19,7 @@
         android:textAlignment="center"
         android:textColor="@color/icon"
         android:textSize="30sp"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:ignore="TextContrastCheck" />
 
     <View
@@ -148,7 +148,7 @@
         android:layout_gravity="center"
         android:layout_marginVertical="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <Space
             android:id="@+id/space"
@@ -165,7 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/primary"
-            android:enabled="false"
+            android:enabled="true"
             android:maxLines="1"
             android:text="@string/ok"
             android:textColor="@color/onPrimary"
@@ -191,6 +191,5 @@
             tools:ignore="TextContrastCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </LinearLayout>

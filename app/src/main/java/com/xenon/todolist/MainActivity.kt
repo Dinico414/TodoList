@@ -255,6 +255,9 @@ class MainActivity : BaseActivity() {
         val dividerTop = view.findViewById<View>(R.id.sorting_dialog_divider_1)
         val dividerBottom = view.findViewById<View>(R.id.sorting_dialog_divider_2)
 
+        val saveBtn = view.findViewById<MaterialButton>(R.id.ok)
+        val cancelBtn = view.findViewById<MaterialButton>(R.id.cancel)
+
         // Set initial sort type selection
         radioView.check(
             when (taskItemsModel.getSortType()) {
@@ -289,34 +292,40 @@ class MainActivity : BaseActivity() {
             }
         })
 
-        MaterialAlertDialogBuilder(this)
-            .setPositiveButton(R.string.ok) { _, _ ->
-                val sortType = when (radioView.checkedRadioButtonId) {
-                    R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
-                    R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
-                    R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
-                    R.id.sorting_dialog_radio_by_name -> TaskItemViewModel.SortType.BY_NAME
-                    R.id.sorting_dialog_radio_by_importance -> TaskItemViewModel.SortType.BY_IMPORTANCE
-                    else -> TaskItemViewModel.SortType.NONE
-                }
-
-                val sortDirection = when (directionToggleGroup.checkedButtonId) { // Get checked button ID
-                    R.id.sorting_dialog_ascending -> TaskItemViewModel.SortDirection.ASCENDING // Assuming you added this ID
-                    R.id.sorting_dialog_descending -> TaskItemViewModel.SortDirection.DESCENDING // Assuming you added this ID
-                    else -> TaskItemViewModel.SortDirection.ASCENDING // Default to ascending
-                }
-
-                with(sharedPreferences.edit()) {
-                    putString("sortType", sortType.name)
-                    putString("sortDirection", sortDirection.name) // Save the sort direction
-                    apply()
-                }
-                taskItemsModel.setSortType(sortType, sortDirection) // Call with both type and direction
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .setTitle(R.string.sort_by)
+        val dialog = MaterialAlertDialogBuilder(this)
+//            .setTitle(R.string.sort_by)
             .setView(view)
-            .show()
+            .create()
+
+        saveBtn.setOnClickListener {
+            val sortType = when (radioView.checkedRadioButtonId) {
+                R.id.sorting_dialog_radio_by_creation_date -> TaskItemViewModel.SortType.BY_CREATION_DATE
+                R.id.sorting_dialog_radio_by_completeness -> TaskItemViewModel.SortType.BY_COMPLETENESS
+                R.id.sorting_dialog_radio_by_due_date -> TaskItemViewModel.SortType.BY_DUE_DATE
+                R.id.sorting_dialog_radio_by_name -> TaskItemViewModel.SortType.BY_NAME
+                R.id.sorting_dialog_radio_by_importance -> TaskItemViewModel.SortType.BY_IMPORTANCE
+                else -> TaskItemViewModel.SortType.NONE
+            }
+
+            val sortDirection = when (directionToggleGroup.checkedButtonId) { // Get checked button ID
+                R.id.sorting_dialog_ascending -> TaskItemViewModel.SortDirection.ASCENDING // Assuming you added this ID
+                R.id.sorting_dialog_descending -> TaskItemViewModel.SortDirection.DESCENDING // Assuming you added this ID
+                else -> TaskItemViewModel.SortDirection.ASCENDING // Default to ascending
+            }
+
+            with(sharedPreferences.edit()) {
+                putString("sortType", sortType.name)
+                putString("sortDirection", sortDirection.name) // Save the sort direction
+                apply()
+            }
+            taskItemsModel.setSortType(sortType, sortDirection) // Call with both type and direction
+            dialog.dismiss()
+        }
+        cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun openSettingsActivity() {

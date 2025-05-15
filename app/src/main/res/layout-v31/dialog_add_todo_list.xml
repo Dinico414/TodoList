@@ -92,7 +92,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
