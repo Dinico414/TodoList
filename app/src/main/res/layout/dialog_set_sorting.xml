@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/border_margin"
     android:paddingTop="@dimen/border_margin">
 
+    <TextView
+        android:id="@+id/sortTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/sort_by"
+        android:textAlignment="center"
+        android:textColor="@color/icon"
+        android:textSize="30sp"
+        tools:ignore="TextContrastCheck" />
 
     <View
         android:id="@+id/sorting_dialog_divider_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ScrollView
         android:id="@+id/sorting_dialog_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbarSize="6dp"
+        android:scrollbarThumbVertical="@drawable/scrollhandle"
+        android:scrollbarTrackVertical="@color/surfaceContainer">
 
         <LinearLayout
             android:id="@+id/sorting_dialog_holder"
@@ -40,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_none"/>
+                    android:text="@string/sort_by_none" />
 
                 <RadioButton
                     android:id="@+id/sorting_dialog_radio_by_creation_date"
@@ -48,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_creation_date"/>
+                    android:text="@string/sort_by_creation_date" />
 
                 <RadioButton
                     android:id="@+id/sorting_dialog_radio_by_due_date"
@@ -56,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_due_date"/>
+                    android:text="@string/sort_by_due_date" />
 
                 <RadioButton
                     android:id="@+id/sorting_dialog_radio_by_completeness"
@@ -64,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_completeness"/>
+                    android:text="@string/sort_by_completeness" />
 
                 <RadioButton
                     android:id="@+id/sorting_dialog_radio_by_name"
@@ -72,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_name"/>
+                    android:text="@string/sort_by_name" />
 
                 <RadioButton
                     android:id="@+id/sorting_dialog_radio_by_importance"
@@ -80,17 +95,18 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/border_margin"
                     android:paddingBottom="@dimen/border_margin"
-                    android:text="@string/sort_by_importance"/>
+                    android:text="@string/sort_by_importance" />
 
             </RadioGroup>
         </LinearLayout>
     </ScrollView>
+
     <View
         android:id="@+id/sorting_dialog_divider_2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/sorting_dialog_toggle_direction"
@@ -99,7 +115,6 @@
         android:layout_marginTop="10dp"
         app:selectionRequired="true"
         app:singleSelection="true">
-
 
 
         <com.google.android.material.button.MaterialButton
@@ -124,8 +139,56 @@
             tools:ignore="VisualLintButtonSize" />
 
 
-
     </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ok"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/primary"
+            android:enabled="false"
+            android:maxLines="1"
+            android:text="@string/ok"
+            android:textColor="@color/onPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cancel"
+            app:layout_constraintStart_toEndOf="@id/space"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/transparent"
+            android:maxLines="1"
+            android:text="@string/cancel"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ok"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </LinearLayout>

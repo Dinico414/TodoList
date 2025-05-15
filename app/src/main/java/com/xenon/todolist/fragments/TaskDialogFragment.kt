@@ -8,9 +8,11 @@ import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
@@ -55,6 +57,25 @@ class TaskDialogFragment : DialogFragment() {
             .setView(binding.root)
             .create()
 
+        binding.taskDialogScrollview!!.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                                binding.taskDialogScrollview!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                               val canScroll = binding.taskDialogScrollview!!.height < binding.taskDialogScrollview!!.getChildAt(0).height
+
+                                if (canScroll) {
+                                        binding.taskDialogDivider1!!.visibility = View.VISIBLE
+                                        binding.taskDialogDivider2!!.visibility = View.VISIBLE
+                                    } else {
+                                        binding.taskDialogDivider1!!.visibility = View.GONE
+                                        binding.taskDialogDivider2!!.visibility = View.GONE
+                                    }
+                            }
+                    })
+
+               // Initially hide the dividers
+                binding.taskDialogDivider1!!.visibility = View.GONE
+               binding.taskDialogDivider2!!.visibility = View.GONE
         // Initially hide the more options layout and set button text/drawable
         binding.moreOptionsLayout!!.visibility = View.GONE
         binding.moreOptionsButton.text = getString(R.string.more_options)
@@ -77,9 +98,9 @@ class TaskDialogFragment : DialogFragment() {
 
             // Set initial state of importance toggle group based on the Importance enum
             when (taskItem.importance) {
-                Importance.HIGHEST_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.highestImportanceButton)
-                Importance.HIGH_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.highImportanceButton)
-                Importance.NO_IMPORTANCE -> binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
+                Importance.HIGHEST_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.highestImportanceButton)
+                Importance.HIGH_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.highImportanceButton)
+                Importance.NO_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.lowImportanceButton)
             }
 
             // Set initial state of more options based on TaskItem
@@ -106,12 +127,12 @@ class TaskDialogFragment : DialogFragment() {
         } else {
             binding.taskTitle.text = getString(R.string.new_task)
             // For new tasks, default to low importance and not expanded more options
-            binding.importanceToggleGroup!!.check(R.id.lowImportanceButton)
+            binding.importanceToggleGroup.check(R.id.lowImportanceButton)
             taskItem.moreOptionsExpanded = false // Default to not expanded for new tasks
         }
 
         // Add listener to update taskItem properties based on importance selection
-        binding.importanceToggleGroup!!.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
+        binding.importanceToggleGroup.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
             if (isChecked) {
                 taskItem.importance = when (checkedId) {
                     R.id.lowImportanceButton -> Importance.NO_IMPORTANCE
@@ -132,7 +153,7 @@ class TaskDialogFragment : DialogFragment() {
             arrowDropDown?.let { DrawableCompat.setTint(it, primaryColor) }
             arrowDropUp?.let { DrawableCompat.setTint(it, primaryColor) }
 
-            if (binding.moreOptionsLayout!!.visibility == View.GONE) {
+            if (binding.moreOptionsLayout!!.isGone) {
                 binding.moreOptionsLayout!!.visibility = View.VISIBLE
                 binding.moreOptionsButton.text = getString(R.string.less_options)
                 binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
