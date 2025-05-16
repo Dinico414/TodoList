@@ -9,17 +9,39 @@
     android:paddingHorizontal="15dp"
     tools:context=".fragments.TaskDialogFragment">
 
-    <TextView
-        android:id="@+id/taskTitle"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/new_task"
-        android:textAlignment="center"
-        android:textColor="@color/icon"
-        android:textSize="30sp"
-        tools:ignore="TextContrastCheck" />
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/taskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_task"
+            android:textAlignment="center"
+            android:textColor="@color/icon"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <ImageButton
+            android:id="@+id/dismissButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:src="@drawable/close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/onSurface"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/task_dialog_divider_1"

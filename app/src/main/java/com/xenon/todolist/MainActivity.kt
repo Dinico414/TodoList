@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.RadioGroup
 import android.widget.ScrollView
 import android.widget.SearchView
@@ -257,6 +258,7 @@ class MainActivity : BaseActivity() {
 
         val saveBtn = view.findViewById<MaterialButton>(R.id.ok)
         val cancelBtn = view.findViewById<MaterialButton>(R.id.cancel)
+        val dismissBtn = view.findViewById<ImageButton>(R.id.dismiss)
 
         // Set initial sort type selection
         radioView.check(
@@ -324,7 +326,9 @@ class MainActivity : BaseActivity() {
         cancelBtn.setOnClickListener {
             dialog.dismiss()
         }
-
+        dismissBtn.setOnClickListener {
+            dialog.dismiss()
+        }
         dialog.show()
     }
 
@@ -497,6 +501,7 @@ class MainActivity : BaseActivity() {
         val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
         val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
+        val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
 
         val builder = MaterialAlertDialogBuilder(this)
             .setView(addTaskView)
@@ -517,6 +522,9 @@ class MainActivity : BaseActivity() {
             dialog.dismiss()
         }
         cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dismissBtn.setOnClickListener {
             dialog.dismiss()
         }
 
@@ -565,6 +573,7 @@ class MainActivity : BaseActivity() {
         val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
         val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
+        val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
 
         val dialog = MaterialAlertDialogBuilder(this)
             .setView(addTaskView)
@@ -581,6 +590,9 @@ class MainActivity : BaseActivity() {
         }
         saveBtn.isEnabled = item.name.isNotEmpty()
         cancelBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        dismissBtn.setOnClickListener {
             dialog.dismiss()
         }
         nameEditText.addTextChangedListener(object : TextWatcher {

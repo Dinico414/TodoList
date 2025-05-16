@@ -5,22 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/border_margin"
-    android:paddingTop="@dimen/border_margin">
+    android:paddingHorizontal="@dimen/border_margin">
 
-    <TextView
-        android:id="@+id/sortTitle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/sort_by"
-        android:textAlignment="center"
-        android:textColor="@color/icon"
-        android:textSize="30sp"
-        android:visibility="visible"
-        tools:ignore="TextContrastCheck" />
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/sortTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by"
+            android:textAlignment="center"
+            android:textColor="@color/icon"
+            android:textSize="30sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <ImageButton
+            android:id="@+id/dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:src="@drawable/close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/onSurface"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/sorting_dialog_divider_1"

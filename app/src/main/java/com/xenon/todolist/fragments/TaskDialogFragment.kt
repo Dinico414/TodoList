@@ -191,6 +191,9 @@ class TaskDialogFragment : DialogFragment() {
         binding.desc.addTextChangedListener { text ->
             taskItem.desc = text.toString()
         }
+        binding.dismissButton.setOnClickListener {
+            dialog.dismiss()
+        }
 
         binding.saveButton.setOnClickListener {
             dismiss()
