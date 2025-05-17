@@ -1,5 +1,7 @@
 package com.xenon.todolist.adapter
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -48,6 +50,7 @@ interface TaskItemClickListener {
     fun completeTaskItem(taskItem: TaskItem)
 }
 
+
 class TaskItemViewHolder(
     private val context: Context,
     private val binding: TaskItemCellBinding,
@@ -57,27 +60,32 @@ class TaskItemViewHolder(
     fun bindTaskItem(taskItem: TaskItem) {
         binding.name.text = taskItem.name
 
+        val startColor: Int
+        val endColor: Int
+
         if (taskItem.isCompleted()) {
             binding.name.alpha = 0.5f
             binding.dueTime.alpha = 0.5f
-            ViewCompat.setBackgroundTintList(
-                binding.taskCellContainer, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        context, R.color.surfaceContainerHighest
-                    )
-                )
-            )
+            startColor = ContextCompat.getColor(context, R.color.secondaryContainer)
+            endColor = ContextCompat.getColor(context, R.color.surfaceContainerHighest)
         } else {
             binding.name.alpha = 1f
             binding.dueTime.alpha = 1f
+            startColor = ContextCompat.getColor(context, R.color.surfaceContainerHighest)
+            endColor = ContextCompat.getColor(context, R.color.secondaryContainer)
+        }
+
+        val currentTint = binding.taskCellContainer.backgroundTintList?.defaultColor ?: startColor
+
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), currentTint, endColor)
+        colorAnimation.duration = 500
+        colorAnimation.addUpdateListener { animator ->
+            val color = animator.animatedValue as Int
             ViewCompat.setBackgroundTintList(
-                binding.taskCellContainer, ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        context, R.color.secondaryContainer
-                    )
-                )
+                binding.taskCellContainer, ColorStateList.valueOf(color)
             )
         }
+        colorAnimation.start()
 
         binding.completeButton.setImageResource(taskItem.imageResource())
 
@@ -87,19 +95,22 @@ class TaskItemViewHolder(
         }
 
         binding.completeButton.setOnClickListener {
+            val oldCompletedState = taskItem.isCompleted()
             clickListener.completeTaskItem(taskItem)
-
-            val newDrawableResId = taskItem.imageResource()
-            binding.completeButton.setImageResource(newDrawableResId)
-            val newDrawable = binding.completeButton.drawable
-            if (newDrawable is Animatable) {
-                newDrawable.start()
+            if (oldCompletedState != taskItem.isCompleted()) {
+                bindTaskItem(taskItem)
+            } else {
+                val newDrawableResId = taskItem.imageResource()
+                binding.completeButton.setImageResource(newDrawableResId)
+                val newDrawable = binding.completeButton.drawable
+                if (newDrawable is Animatable) {
+                    newDrawable.start()
+                }
             }
         }
         binding.taskCellContainer.setOnClickListener {
             clickListener.editTaskItem(taskItem)
         }
-
 
         if (taskItem.dueDateTime >= 0) {
             val calender = Calendar.getInstance()
