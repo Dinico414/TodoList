@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     kotlin("plugin.serialization") version "1.9.24"
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -13,7 +14,7 @@ android {
         minSdk = 29
         targetSdk = 36
         versionCode = 7
-        versionName = "1.7.10"
+        versionName = "1.7.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
