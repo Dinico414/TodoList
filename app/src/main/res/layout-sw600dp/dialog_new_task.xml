@@ -7,7 +7,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:paddingHorizontal="15dp"
-    tools:context=".fragments.TaskDialogFragment">
+    tools:context=".fragments.NewTaskDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

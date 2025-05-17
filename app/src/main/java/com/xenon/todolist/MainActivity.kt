@@ -41,7 +41,7 @@ import com.xenon.todolist.activities.SettingsActivity
 import com.xenon.todolist.adapter.TaskItemClickListener
 import com.xenon.todolist.adapter.TodoListAdapter
 import com.xenon.todolist.databinding.ActivityMainBinding
-import com.xenon.todolist.fragments.TaskDialogFragment
+import com.xenon.todolist.fragments.NewTaskDialogFragment
 import com.xenon.todolist.fragments.TaskItemFragment
 import com.xenon.todolist.fragments.TodoListFragment
 import com.xenon.todolist.viewmodel.LiveListViewModel
@@ -67,7 +67,7 @@ class MainActivity : BaseActivity() {
     private lateinit var todoListModel: TodoListViewModel
     private var currentTheme: Int = 0
 
-    private var newTaskSheet: TaskDialogFragment? = null
+    private var newTaskSheet: NewTaskDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyTheme()
@@ -92,7 +92,7 @@ class MainActivity : BaseActivity() {
 
         binding.NewTaskButton.setOnClickListener {
             if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                newTaskSheet = TaskDialogFragment.getInstance(taskItemsModel, null)
+                newTaskSheet = NewTaskDialogFragment.getInstance(taskItemsModel, null)
                 newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
             }
         }
@@ -415,7 +415,7 @@ class MainActivity : BaseActivity() {
         fragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
                 if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                    newTaskSheet = TaskDialogFragment.getInstance(taskItemsModel, taskItem)
+                    newTaskSheet = NewTaskDialogFragment.getInstance(taskItemsModel, taskItem)
                     newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
                 }
             }

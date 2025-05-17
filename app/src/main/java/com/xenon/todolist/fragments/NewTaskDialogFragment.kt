@@ -25,33 +25,33 @@ import com.xenon.commons.accesspoint.R.color
 import com.xenon.todolist.Importance
 import com.xenon.todolist.R
 import com.xenon.todolist.TaskItem
-import com.xenon.todolist.databinding.FragmentTaskDialogBinding
+import com.xenon.todolist.databinding.DialogNewTaskBinding
 import com.xenon.todolist.viewmodel.TaskItemViewModel
 import java.time.Instant
 import java.util.Calendar
 
 @Suppress("DEPRECATION")
-class TaskDialogFragment : DialogFragment() {
+class NewTaskDialogFragment : DialogFragment() {
     companion object {
         private lateinit var taskItemViewModel: TaskItemViewModel
         private lateinit var taskItem: TaskItem
         private var newTask = false
 
-        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): TaskDialogFragment {
+        fun getInstance(taskItemViewModel: TaskItemViewModel, taskItem: TaskItem?): NewTaskDialogFragment {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
             val curTime = Instant.now().toEpochMilli()
             // Update TaskItem initialization to use the Importance enum
             // Add moreOptionsExpanded with a default value
             Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, importance = Importance.NO_IMPORTANCE, children = ArrayList(), moreOptionsExpanded = false)
-            return TaskDialogFragment()
+            return NewTaskDialogFragment()
         }
     }
 
-    private lateinit var binding: FragmentTaskDialogBinding
+    private lateinit var binding: DialogNewTaskBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = FragmentTaskDialogBinding.inflate(LayoutInflater.from(requireContext()))
+        binding = DialogNewTaskBinding.inflate(LayoutInflater.from(requireContext()))
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
