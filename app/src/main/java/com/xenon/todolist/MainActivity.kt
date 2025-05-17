@@ -11,7 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -67,7 +67,7 @@ class MainActivity : BaseActivity() {
     private lateinit var todoListModel: TodoListViewModel
     private var currentTheme: Int = 0
 
-    private var newTaskSheet: NewTaskDialogFragment? = null
+    private var newTaskDialog: NewTaskDialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyTheme()
@@ -80,7 +80,6 @@ class MainActivity : BaseActivity() {
             title = "$title (DEBUG)"
         }
 
-
         sharedPreferences = getSharedPreferences(packageName, Context.MODE_PRIVATE)
         setupTaskItemFragment()
         setupTodoListFragment()
@@ -91,9 +90,9 @@ class MainActivity : BaseActivity() {
         )
 
         binding.NewTaskButton.setOnClickListener {
-            if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                newTaskSheet = NewTaskDialogFragment.getInstance(taskItemsModel, null)
-                newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+            if (newTaskDialog == null || !newTaskDialog!!.isAdded) {
+                newTaskDialog = NewTaskDialogFragment.getInstance(taskItemsModel, null)
+                newTaskDialog?.showNow(supportFragmentManager, newTaskDialog!!.tag)
             }
         }
 
@@ -158,7 +157,7 @@ class MainActivity : BaseActivity() {
 ////        }
 ////        if (ol.canDetectOrientation()) ol.enable() else ol.disable()
 //
-//        // Setting margins of specific elements to avoid navbar giving the statusbar a background
+//        // Setting margins of specific elements to avoid navbar giving the Status bar a background
 //        binding.coordinatorLayoutMain.updatePadding(
 //            top = statusBarHeight + binding.coordinatorLayoutMain.paddingTop,
 //            bottom = navHeight + binding.coordinatorLayoutMain.paddingBottom
@@ -170,7 +169,7 @@ class MainActivity : BaseActivity() {
 //            this.layoutParams = lp
 //        }
 
-//        // This method doesnt seem to work on some devices
+//        // This method doesn't seem to work on some devices
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.updatePadding(insets.left, 0, insets.right, insets.bottom)
@@ -178,7 +177,7 @@ class MainActivity : BaseActivity() {
             binding.coordinatorLayoutMain.updatePadding(top = insets.top)
             binding.drawerLinearRoot?.apply {
                 val lp = this.layoutParams as ViewGroup.MarginLayoutParams
-                lp.topMargin = insets.top + lp.topMargin
+                lp.topMargin += insets.top
                 this.layoutParams = lp
             }
 
@@ -193,6 +192,7 @@ class MainActivity : BaseActivity() {
             when (menuItem.itemId) {
                 R.id.search -> {}
                 R.id.sort -> openSortDialog()
+//                R.id.filter -> openFilterDialog()
                 R.id.settings -> openSettingsActivity()
                 else -> return@setOnMenuItemClickListener false
             }
@@ -251,7 +251,7 @@ class MainActivity : BaseActivity() {
     private fun openSortDialog() {
         val view = layoutInflater.inflate(R.layout.dialog_set_sorting, null)
         val radioView = view.findViewById<RadioGroup>(R.id.sorting_dialog_radio_sorting)
-        val directionToggleGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.sorting_dialog_toggle_direction) // Assuming you added this
+        val directionToggleGroup = view.findViewById<MaterialButtonToggleGroup>(R.id.sorting_dialog_toggle_direction)
         val scrollView = view.findViewById<ScrollView>(R.id.sorting_dialog_scrollview)
         val dividerTop = view.findViewById<View>(R.id.sorting_dialog_divider_1)
         val dividerBottom = view.findViewById<View>(R.id.sorting_dialog_divider_2)
@@ -259,7 +259,6 @@ class MainActivity : BaseActivity() {
         val saveBtn = view.findViewById<MaterialButton>(R.id.save)
         val dismissBtn = view.findViewById<ImageButton>(R.id.dismiss)
 
-        // Set initial sort type selection
         radioView.check(
             when (taskItemsModel.getSortType()) {
                 TaskItemViewModel.SortType.BY_COMPLETENESS -> R.id.sorting_dialog_radio_by_completeness
@@ -271,13 +270,12 @@ class MainActivity : BaseActivity() {
             }
         )
 
-        // Set initial sort direction selection
         when (taskItemsModel.getSortDirection()) {
-            TaskItemViewModel.SortDirection.ASCENDING -> directionToggleGroup.check(R.id.sorting_dialog_ascending) // Assuming you added this ID
-            TaskItemViewModel.SortDirection.DESCENDING -> directionToggleGroup.check(R.id.sorting_dialog_descending) // Assuming you added this ID
+            TaskItemViewModel.SortDirection.ASCENDING -> directionToggleGroup.check(R.id.sorting_dialog_ascending)
+            TaskItemViewModel.SortDirection.DESCENDING -> directionToggleGroup.check(R.id.sorting_dialog_descending)
         }
 
-        scrollView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        scrollView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 scrollView.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
@@ -410,9 +408,9 @@ class MainActivity : BaseActivity() {
 
         fragment.setClickListener(object : TaskItemClickListener {
             override fun editTaskItem(taskItem: TaskItem) {
-                if (newTaskSheet == null || !newTaskSheet!!.isAdded) {
-                    newTaskSheet = NewTaskDialogFragment.getInstance(taskItemsModel, taskItem)
-                    newTaskSheet?.showNow(supportFragmentManager, newTaskSheet!!.tag)
+                if (newTaskDialog == null || !newTaskDialog!!.isAdded) {
+                    newTaskDialog = NewTaskDialogFragment.getInstance(taskItemsModel, taskItem)
+                    newTaskDialog?.showNow(supportFragmentManager, newTaskDialog!!.tag)
                 }
             }
 
@@ -437,7 +435,7 @@ class MainActivity : BaseActivity() {
                 return@observe
             val list = todoListModel.getList()[change].items
             taskItemsModel.setList(list)
-            sharedPreferences.edit() { putInt("selectedTodoList", change) }
+            sharedPreferences.edit { putInt("selectedTodoList", change) }
         }
         fragment.setClickListener(object : TodoListAdapter.TodoListClickListener {
             override fun onItemEdited(taskList: TodoList, position: Int) {
@@ -480,14 +478,14 @@ class MainActivity : BaseActivity() {
         })
     }
 
-    private fun setButtonToDeleteStyle(button: Button) {
-        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete_red))
-        button.setTextColor(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete))
-    }
-
     private fun setButtonToAddListStyle(button: Button) {
         button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.primary))
         button.setTextColor(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.textOnPrimaryInvert))
+    }
+
+    private fun setButtonToDeleteStyle(button: Button) {
+        button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete_red))
+        button.setTextColor(ContextCompat.getColor(button.context, com.xenon.commons.accesspoint.R.color.delete))
     }
 
     private fun showAddListDialog() {
@@ -496,8 +494,42 @@ class MainActivity : BaseActivity() {
         val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
         val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
-//        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
         val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
+
+        val enabledBackgroundColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary)
+        val disabledBackgroundColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary)
+
+        val backgroundTintList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledBackgroundColor,
+                disabledBackgroundColor
+            )
+        )
+        saveBtn.backgroundTintList = backgroundTintList
+
+        val enabledTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onPrimary)
+        val disabledTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onPrimary)
+
+        val textColorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledTextColor,
+                disabledTextColor
+            )
+        )
+        saveBtn.setTextColor(textColorStateList)
+
+        fun updateButtonState(isEnabled: Boolean) {
+            saveBtn.isEnabled = isEnabled
+            saveBtn.alpha = if (isEnabled) 1.0f else 0.5f
+        }
 
         val builder = MaterialAlertDialogBuilder(this)
             .setView(addTaskView)
@@ -523,7 +555,7 @@ class MainActivity : BaseActivity() {
         }
 
         dialog.setOnShowListener {
-            saveBtn.isEnabled = false
+            updateButtonState(false)
             nameEditText.requestFocus()
         }
         nameEditText.addTextChangedListener(object : TextWatcher {
@@ -531,9 +563,84 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                saveBtn.isEnabled = p0?.isNotBlank() == true
+                val isNotBlank = p0?.isNotBlank() == true
+                updateButtonState(isNotBlank)
             }
 
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        dialog.show()
+    }
+
+    private fun showEditListDialog(item: TodoList, onComplete: () -> Unit) {
+        val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
+
+        val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
+        val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
+        val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
+        val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
+
+        val enabledBackgroundColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary)
+        val disabledBackgroundColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.primary)
+
+        val backgroundTintList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledBackgroundColor,
+                disabledBackgroundColor
+            )
+        )
+        saveBtn.backgroundTintList = backgroundTintList
+
+        val enabledTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onPrimary)
+        val disabledTextColor = ContextCompat.getColor(this, com.xenon.commons.accesspoint.R.color.onPrimary)
+
+        val textColorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledTextColor,
+                disabledTextColor
+            )
+        )
+        saveBtn.setTextColor(textColorStateList)
+        fun updateButtonState(isEnabled: Boolean) {
+            saveBtn.isEnabled = isEnabled
+            saveBtn.alpha = if (isEnabled) 1.0f else 0.5f
+        }
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(addTaskView)
+            .create()
+
+        title.text = resources.getText(R.string.edit_list)
+        nameEditText.setText(item.name)
+        nameEditText.setSelection(item.name.length)
+        saveBtn.setOnClickListener {
+            item.name = nameEditText.text.toString()
+            todoListModel.update(item, true)
+            onComplete()
+            dialog.dismiss()
+        }
+        val initialIsNotBlank = item.name.isNotEmpty()
+        updateButtonState(initialIsNotBlank)
+
+        dismissBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+        nameEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val isNotBlank = p0?.isNotBlank() == true
+                updateButtonState(isNotBlank) // Update enabled state and alpha
+            }
             override fun afterTextChanged(p0: Editable?) {
             }
         })
@@ -558,47 +665,6 @@ class MainActivity : BaseActivity() {
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
-    }
-
-    private fun showEditListDialog(item: TodoList, onComplete: () -> Unit) {
-        val addTaskView = layoutInflater.inflate(R.layout.dialog_add_todo_list, null)
-
-        val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
-        val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
-        val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
-        val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
-
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(addTaskView)
-            .create()
-
-        title.text = resources.getText(R.string.edit_list)
-        nameEditText.setText(item.name)
-        nameEditText.setSelection(item.name.length)
-        saveBtn.setOnClickListener {
-            item.name = nameEditText.text.toString()
-            todoListModel.update(item, true)
-            onComplete()
-            dialog.dismiss()
-        }
-        saveBtn.isEnabled = item.name.isNotEmpty()
-
-        dismissBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-        nameEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                saveBtn.isEnabled = p0?.isNotBlank() == true
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        })
-
-        dialog.show()
     }
 
     private fun applyTheme(recreateActivity: Boolean = false) {

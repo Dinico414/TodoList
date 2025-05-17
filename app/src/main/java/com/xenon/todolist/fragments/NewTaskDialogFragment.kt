@@ -2,13 +2,14 @@ package com.xenon.todolist.fragments
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.format.DateFormat
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -41,8 +42,6 @@ class NewTaskDialogFragment : DialogFragment() {
             Companion.taskItemViewModel = taskItemViewModel
             newTask = taskItem == null
             val curTime = Instant.now().toEpochMilli()
-            // Update TaskItem initialization to use the Importance enum
-            // Add moreOptionsExpanded with a default value
             Companion.taskItem = taskItem ?: TaskItem(0, "", "", -1, -1, curTime, -1, importance = Importance.NO_IMPORTANCE, children = ArrayList(), moreOptionsExpanded = false)
             return NewTaskDialogFragment()
         }
@@ -50,33 +49,67 @@ class NewTaskDialogFragment : DialogFragment() {
 
     private lateinit var binding: DialogNewTaskBinding
 
+    private fun updateSaveButtonState(isEnabled: Boolean) {
+        binding.saveButton.isEnabled = isEnabled
+        binding.saveButton.alpha = if (isEnabled) 1.0f else 0.5f
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogNewTaskBinding.inflate(LayoutInflater.from(requireContext()))
+        binding = DialogNewTaskBinding.inflate( LayoutInflater.from(requireContext()))
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .create()
 
-        binding.taskDialogScrollview.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                        override fun onGlobalLayout() {
-                                binding.taskDialogScrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        val enabledBackgroundColor = ContextCompat.getColor(requireContext(), color.primary)
+        val disabledBackgroundColor = ContextCompat.getColor(requireContext(), color.primary)
 
-                               val canScroll = binding.taskDialogScrollview.height < binding.taskDialogScrollview.getChildAt(0).height
+        val backgroundTintList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledBackgroundColor,
+                disabledBackgroundColor
+            )
+        )
+        binding.saveButton.backgroundTintList = backgroundTintList
 
-                                if (canScroll) {
-                                        binding.taskDialogDivider1.visibility = View.VISIBLE
-                                        binding.taskDialogDivider2.visibility = View.VISIBLE
-                                    } else {
-                                        binding.taskDialogDivider1.visibility = View.GONE
-                                        binding.taskDialogDivider2.visibility = View.GONE
-                                    }
-                            }
-                    })
+        val enabledTextColor = ContextCompat.getColor(requireContext(), color.onPrimary)
+        val disabledTextColor = ContextCompat.getColor(requireContext(), color.onPrimary)
 
-               // Initially hide the dividers
-                binding.taskDialogDivider1.visibility = View.GONE
-               binding.taskDialogDivider2.visibility = View.GONE
-        // Initially hide the more options layout and set button text/drawable
+        val textColorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(
+                enabledTextColor,
+                disabledTextColor
+            )
+        )
+        binding.saveButton.setTextColor(textColorStateList)
+
+
+        binding.taskDialogScrollview.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.taskDialogScrollview.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                val canScroll = binding.taskDialogScrollview.height < binding.taskDialogScrollview.getChildAt(0).height
+
+                if (canScroll) {
+                    binding.taskDialogDivider1.visibility = View.VISIBLE
+                    binding.taskDialogDivider2.visibility = View.VISIBLE
+                } else {
+                    binding.taskDialogDivider1.visibility = View.GONE
+                    binding.taskDialogDivider2.visibility = View.GONE
+                }
+            }
+        })
+
+        binding.taskDialogDivider1.visibility = View.GONE
+        binding.taskDialogDivider2.visibility = View.GONE
         binding.moreOptionsLayout!!.visibility = View.GONE
         binding.moreOptionsButton.text = getString(R.string.more_options)
         binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
@@ -96,14 +129,12 @@ class NewTaskDialogFragment : DialogFragment() {
             if (taskItem.dueDate > 0)
                 updateDateButtonText()
 
-            // Set initial state of importance toggle group based on the Importance enum
             when (taskItem.importance) {
                 Importance.HIGHEST_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.highestImportanceButton)
                 Importance.HIGH_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.highImportanceButton)
                 Importance.NO_IMPORTANCE -> binding.importanceToggleGroup.check(R.id.lowImportanceButton)
             }
 
-            // Set initial state of more options based on TaskItem
             if (taskItem.moreOptionsExpanded) {
                 binding.moreOptionsLayout!!.visibility = View.VISIBLE
                 binding.moreOptionsButton.text = getString(R.string.less_options)
@@ -126,30 +157,26 @@ class NewTaskDialogFragment : DialogFragment() {
 
         } else {
             binding.taskTitle.text = getString(R.string.new_task)
-            // For new tasks, default to low importance and not expanded more options
             binding.importanceToggleGroup.check(R.id.lowImportanceButton)
-            taskItem.moreOptionsExpanded = false // Default to not expanded for new tasks
+            taskItem.moreOptionsExpanded = false
         }
 
-        // Add listener to update taskItem properties based on importance selection
-        binding.importanceToggleGroup.addOnButtonCheckedListener { toggleGroup, checkedId, isChecked ->
+        binding.importanceToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 taskItem.importance = when (checkedId) {
                     R.id.lowImportanceButton -> Importance.NO_IMPORTANCE
                     R.id.highImportanceButton -> Importance.HIGH_IMPORTANCE
                     R.id.highestImportanceButton -> Importance.HIGHEST_IMPORTANCE
-                    else -> Importance.NO_IMPORTANCE // Default to no importance
+                    else -> Importance.NO_IMPORTANCE
                 }
             }
         }
 
-        // Add click listener for the more options button
         binding.moreOptionsButton.setOnClickListener {
             val arrowDropDown = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_down)
             val arrowDropUp = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_drop_up)
             val primaryColor = ContextCompat.getColor(requireContext(), color.primary)
 
-            // Apply tint to drawables
             arrowDropDown?.let { DrawableCompat.setTint(it, primaryColor) }
             arrowDropUp?.let { DrawableCompat.setTint(it, primaryColor) }
 
@@ -159,20 +186,20 @@ class NewTaskDialogFragment : DialogFragment() {
                 binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     null,
-                    arrowDropUp, // Use the tinted drawable
+                    arrowDropUp,
                     null
                 )
-                taskItem.moreOptionsExpanded = true // Update the property
+                taskItem.moreOptionsExpanded = true
             } else {
                 binding.moreOptionsLayout!!.visibility = View.GONE
                 binding.moreOptionsButton.text = getString(R.string.more_options)
                 binding.moreOptionsButton.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     null,
-                    arrowDropDown, // Use the tinted drawable
+                    arrowDropDown,
                     null
                 )
-                taskItem.moreOptionsExpanded = false // Update the property
+                taskItem.moreOptionsExpanded = false
             }
         }
 
@@ -184,7 +211,7 @@ class NewTaskDialogFragment : DialogFragment() {
         }
 
         binding.name.addTextChangedListener { text ->
-            binding.saveButton.isEnabled = text.toString().trim().isNotEmpty()
+            updateSaveButtonState(text.toString().trim().isNotEmpty())
             taskItem.name = text.toString()
         }
 
@@ -198,7 +225,9 @@ class NewTaskDialogFragment : DialogFragment() {
         binding.saveButton.setOnClickListener {
             dismiss()
         }
-        binding.saveButton.isEnabled = binding.name.text.toString().trim().isNotEmpty()
+
+        updateSaveButtonState(binding.name.text.toString().trim().isNotEmpty())
+
 
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
@@ -243,8 +272,8 @@ class NewTaskDialogFragment : DialogFragment() {
         val dueDate = if(taskItem.dueDate > 0) taskItem.dueDate else MaterialDatePicker.todayInUtcMilliseconds()
         cal.timeInMillis = dueDate
 
-        val constraintsBuilder = CalendarConstraints.Builder();
-        constraintsBuilder.setValidator(DateValidatorPointForward.now());
+        val constraintsBuilder = CalendarConstraints.Builder()
+        constraintsBuilder.setValidator(DateValidatorPointForward.now())
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraintsBuilder.build())
@@ -285,17 +314,15 @@ class NewTaskDialogFragment : DialogFragment() {
         val name = binding.name.text.toString().trim()
         val desc = binding.desc.text.toString().trim()
 
-        if (name.isNotEmpty()) {
+        if (name.isNotEmpty() || !newTask) {
             taskItem.name = name
-        }
-        taskItem.desc = desc
+            taskItem.desc = desc
 
-        // Importance and moreOptionsExpanded are already updated in their respective listeners, no need to update here
-
-        if (!newTask) {
-            taskItemViewModel.update(taskItem)
-        } else if (name.isNotEmpty()) {
-            taskItemViewModel.add(taskItem)
+            if (!newTask) {
+                taskItemViewModel.update(taskItem)
+            } else {
+                taskItemViewModel.add(taskItem)
+            }
         }
     }
 }
