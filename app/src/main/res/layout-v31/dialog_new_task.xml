@@ -19,10 +19,11 @@
             android:id="@+id/taskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:text="@string/new_task"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="@color/icon"
-            android:textSize="30sp"
+            android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +39,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/onSurface"
-            />
+            app:tint="@color/onSurface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -256,8 +256,7 @@ class MainActivity : BaseActivity() {
         val dividerTop = view.findViewById<View>(R.id.sorting_dialog_divider_1)
         val dividerBottom = view.findViewById<View>(R.id.sorting_dialog_divider_2)
 
-        val saveBtn = view.findViewById<MaterialButton>(R.id.ok)
-        val cancelBtn = view.findViewById<MaterialButton>(R.id.cancel)
+        val saveBtn = view.findViewById<MaterialButton>(R.id.save)
         val dismissBtn = view.findViewById<ImageButton>(R.id.dismiss)
 
         // Set initial sort type selection
@@ -295,7 +294,6 @@ class MainActivity : BaseActivity() {
         })
 
         val dialog = MaterialAlertDialogBuilder(this)
-//            .setTitle(R.string.sort_by)
             .setView(view)
             .create()
 
@@ -309,10 +307,10 @@ class MainActivity : BaseActivity() {
                 else -> TaskItemViewModel.SortType.NONE
             }
 
-            val sortDirection = when (directionToggleGroup.checkedButtonId) { // Get checked button ID
-                R.id.sorting_dialog_ascending -> TaskItemViewModel.SortDirection.ASCENDING // Assuming you added this ID
-                R.id.sorting_dialog_descending -> TaskItemViewModel.SortDirection.DESCENDING // Assuming you added this ID
-                else -> TaskItemViewModel.SortDirection.ASCENDING // Default to ascending
+            val sortDirection = when (directionToggleGroup.checkedButtonId) {
+                R.id.sorting_dialog_ascending -> TaskItemViewModel.SortDirection.ASCENDING
+                R.id.sorting_dialog_descending -> TaskItemViewModel.SortDirection.DESCENDING
+                else -> TaskItemViewModel.SortDirection.ASCENDING
             }
 
             with(sharedPreferences.edit()) {
@@ -323,9 +321,7 @@ class MainActivity : BaseActivity() {
             taskItemsModel.setSortType(sortType, sortDirection) // Call with both type and direction
             dialog.dismiss()
         }
-        cancelBtn.setOnClickListener {
-            dialog.dismiss()
-        }
+
         dismissBtn.setOnClickListener {
             dialog.dismiss()
         }
@@ -500,7 +496,7 @@ class MainActivity : BaseActivity() {
         val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
         val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
-        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
+//        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
         val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
 
         val builder = MaterialAlertDialogBuilder(this)
@@ -521,9 +517,7 @@ class MainActivity : BaseActivity() {
             }
             dialog.dismiss()
         }
-        cancelBtn.setOnClickListener {
-            dialog.dismiss()
-        }
+
         dismissBtn.setOnClickListener {
             dialog.dismiss()
         }
@@ -572,7 +566,6 @@ class MainActivity : BaseActivity() {
         val title = addTaskView.findViewById<TextView>(R.id.cardTitle)
         val nameEditText = addTaskView.findViewById<EditText>(R.id.listNameEditText)
         val saveBtn = addTaskView.findViewById<MaterialButton>(R.id.save)
-        val cancelBtn = addTaskView.findViewById<MaterialButton>(R.id.cancel)
         val dismissBtn = addTaskView.findViewById<ImageButton>(R.id.dismiss)
 
         val dialog = MaterialAlertDialogBuilder(this)
@@ -589,9 +582,7 @@ class MainActivity : BaseActivity() {
             dialog.dismiss()
         }
         saveBtn.isEnabled = item.name.isNotEmpty()
-        cancelBtn.setOnClickListener {
-            dialog.dismiss()
-        }
+
         dismissBtn.setOnClickListener {
             dialog.dismiss()
         }

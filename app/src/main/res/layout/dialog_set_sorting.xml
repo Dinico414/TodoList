@@ -17,10 +17,11 @@
             android:id="@+id/sortTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:text="@string/sort_by"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="@color/icon"
-            android:textSize="30sp"
+            android:textSize="28sp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,8 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/onSurface"
-            />
+            app:tint="@color/onSurface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -170,16 +170,16 @@
         android:visibility="visible">
 
         <Space
-            android:id="@+id/space"
+            android:id="@+id/space1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ok"
+            app:layout_constraintEnd_toStartOf="@id/save"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/ok"
+            android:id="@+id/save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -189,25 +189,19 @@
             android:text="@string/ok"
             android:textColor="@color/onPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cancel"
-            app:layout_constraintStart_toEndOf="@id/space"
+            app:layout_constraintEnd_toStartOf="@id/space2"
+            app:layout_constraintStart_toEndOf="@id/space1"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel"
+        <Space
+            android:id="@+id/space2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@android:color/transparent"
-            android:maxLines="1"
-            android:text="@string/cancel"
-            android:textColor="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/ok"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextContrastCheck" />
+            app:layout_constraintStart_toEndOf="@id/save"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
