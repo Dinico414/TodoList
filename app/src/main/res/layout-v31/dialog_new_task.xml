@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:paddingHorizontal="15dp"
     tools:context=".fragments.NewTaskDialogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp">
 
@@ -46,6 +46,7 @@
     <View
         android:id="@+id/task_dialog_divider_1"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
@@ -53,6 +54,7 @@
     <ScrollView
         android:id="@+id/task_dialog_scrollview"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbarSize="6dp"
@@ -182,6 +184,7 @@
     <View
         android:id="@+id/task_dialog_divider_2"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />

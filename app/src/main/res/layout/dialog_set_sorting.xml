@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/border_margin">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp">
 
@@ -44,6 +45,7 @@
     <View
         android:id="@+id/sorting_dialog_divider_1"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
@@ -53,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="15dp"
         android:scrollbarSize="6dp"
         android:scrollbarThumbVertical="@drawable/scrollhandle"
         android:scrollbarTrackVertical="@color/surfaceContainer">
@@ -124,6 +127,7 @@
     <View
         android:id="@+id/sorting_dialog_divider_2"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
@@ -131,6 +135,7 @@
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/sorting_dialog_toggle_direction"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         app:selectionRequired="true"
