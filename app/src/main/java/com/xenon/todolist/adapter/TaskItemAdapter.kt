@@ -3,6 +3,7 @@ package com.xenon.todolist.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.Animatable
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -79,14 +80,26 @@ class TaskItemViewHolder(
         }
 
         binding.completeButton.setImageResource(taskItem.imageResource())
-        binding.completeButton.setColorFilter(taskItem.imageColor(context))
+
+        val drawable = binding.completeButton.drawable
+        if (drawable is Animatable) {
+            drawable.start()
+        }
 
         binding.completeButton.setOnClickListener {
             clickListener.completeTaskItem(taskItem)
+
+            val newDrawableResId = taskItem.imageResource()
+            binding.completeButton.setImageResource(newDrawableResId)
+            val newDrawable = binding.completeButton.drawable
+            if (newDrawable is Animatable) {
+                newDrawable.start()
+            }
         }
         binding.taskCellContainer.setOnClickListener {
             clickListener.editTaskItem(taskItem)
         }
+
 
         if (taskItem.dueDateTime >= 0) {
             val calender = Calendar.getInstance()
@@ -136,7 +149,7 @@ class TaskItemViewHolder(
             binding.highImportanceIcon.visibility = View.GONE
         }
 
-// Check if highestImportance exists and set visibility of highestImportanceIcon
+        // Check if highestImportance exists and set visibility of highestImportanceIcon
         if (taskItem.isHighestImportance()) {
             binding.highestImportanceIcon.visibility = View.VISIBLE
         } else {

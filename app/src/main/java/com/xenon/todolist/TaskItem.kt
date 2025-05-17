@@ -1,8 +1,5 @@
 package com.xenon.todolist
 
-import android.content.Context
-import androidx.core.content.ContextCompat
-import com.xenon.commons.accesspoint.R
 import com.xenon.todolist.viewmodel.LiveListItem
 import kotlinx.serialization.Serializable
 import java.text.DateFormat
@@ -47,11 +44,6 @@ data class TaskItem(
     fun imageResource(): Int =
         if (isCompleted()) R.drawable.checked else R.drawable.unchecked
 
-    fun imageColor(context: Context): Int =
-        if (isCompleted()) checkedColor(context) else uncheckedColor(context)
-
-    private fun checkedColor(context: Context) = ContextCompat.getColor(context, R.color.primary)
-    private fun uncheckedColor(context: Context) = ContextCompat.getColor(context, R.color.checkbox)
 
     val dueDateTime: Long
         get() = dueTime + dueDate
@@ -63,7 +55,7 @@ data class TaskItem(
         get() = timeFormat.format(dueTime)
 
     val description: String
-        get() = desc.ifEmpty { "No description" }
+        get() = desc.ifEmpty { "" }
 
     fun isHighImportance() = importance == Importance.HIGH_IMPORTANCE
     fun isHighestImportance() = importance == Importance.HIGHEST_IMPORTANCE
