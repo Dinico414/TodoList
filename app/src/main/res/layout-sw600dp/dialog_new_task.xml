@@ -8,11 +8,12 @@
     android:orientation="vertical"
     tools:context=".fragments.NewTaskDialogFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="10dp">
 
         <TextView
@@ -42,12 +43,11 @@
             app:tint="@color/onSurface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <View
         android:id="@+id/task_dialog_divider_1"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="15dp"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
 
@@ -126,11 +126,10 @@
                 tools:ignore="TextContrastCheck" />
 
             <LinearLayout
+                android:id="@+id/moreOptionsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,10 +137,6 @@
                     android:text="@string/priority"
                     android:textColor="@color/onSurface"
                     android:textSize="20sp" />
-
-                <Space
-                    android:layout_width="15dp"
-                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/importanceToggleGroup"
@@ -180,7 +175,6 @@
                         tools:ignore="VisualLintButtonSize" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -189,7 +183,7 @@
         android:id="@+id/task_dialog_divider_2"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="15dp"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
 

@@ -54,9 +54,9 @@
     <ScrollView
         android:id="@+id/task_dialog_scrollview"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginHorizontal="15dp"
         android:scrollbarSize="6dp"
         android:scrollbarThumbVertical="@drawable/scrollhandle"
         android:scrollbarTrackVertical="@color/surfaceContainer">
@@ -128,11 +128,10 @@
                 tools:ignore="TextContrastCheck" />
 
             <LinearLayout
+                android:id="@+id/moreOptionsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -140,10 +139,6 @@
                     android:text="@string/priority"
                     android:textColor="@color/onSurface"
                     android:textSize="20sp" />
-
-                <Space
-                    android:layout_width="15dp"
-                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/importanceToggleGroup"
@@ -182,7 +177,6 @@
                         tools:ignore="VisualLintButtonSize" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

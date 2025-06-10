@@ -16,7 +16,6 @@
             android:id="@+id/coordinatorLayoutMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/border_margin"
             android:background="@drawable/tile_cutout"
             android:clipToOutline="true">
 
@@ -66,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="14dp"
+                android:layout_marginBottom="@dimen/fab_margin"
                 android:backgroundTint="@color/primary"
                 android:padding="5dp"
                 app:icon="@drawable/add"
