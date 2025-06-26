@@ -182,10 +182,6 @@ class TaskItemViewModel : LiveListViewModel<TaskItem>() {
     }
 
     override fun move(from: Int, to: Int): Boolean {
-        // Consider if manual reordering should be allowed when a specific sort is active.
-        // If not, you might return false here based on the current sortType.
-        // If allowed, you'll need to ensure the move maintains the sorting order as much as possible,
-        // or handle how a manual move affects the sorted state.
         if (sortType == SortType.BY_COMPLETENESS && items[from].isCompleted() != items[to].isCompleted()) {
             return false
         }
